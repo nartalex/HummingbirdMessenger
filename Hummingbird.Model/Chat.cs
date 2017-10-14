@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hummingbird.Model
 {
-    class Chat
+    public class Chat
     {
         public Guid ID { get; set; }
         public byte[] Avatar { get; set; }
         public string Name { get; set; }
-        public IEnumerable<User> Members { get; set; }
+        [Required] public ICollection<User> Members { get; set; }
     }
 }

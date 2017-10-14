@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Model", "Hummingbird.Model\Hummingbird.Model.csproj", "{EBDCE515-9336-4D0D-B000-CC3DA6885F00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.DataLayer", "Hummingbird.DataLayer\Hummingbird.DataLayer.csproj", "{CFB5183A-0CF9-4E42-9B20-D36703161AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hummingbird.DBInitializer", "DBInitializer\hummingbird.DBInitializer.csproj", "{845456B1-46CD-416B-B17A-65BE8F6612EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{EBDCE515-9336-4D0D-B000-CC3DA6885F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBDCE515-9336-4D0D-B000-CC3DA6885F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBDCE515-9336-4D0D-B000-CC3DA6885F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFB5183A-0CF9-4E42-9B20-D36703161AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB5183A-0CF9-4E42-9B20-D36703161AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB5183A-0CF9-4E42-9B20-D36703161AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB5183A-0CF9-4E42-9B20-D36703161AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845456B1-46CD-416B-B17A-65BE8F6612EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845456B1-46CD-416B-B17A-65BE8F6612EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845456B1-46CD-416B-B17A-65BE8F6612EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845456B1-46CD-416B-B17A-65BE8F6612EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

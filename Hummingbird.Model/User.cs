@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hummingbird.Model
 {
     public class User
     {
         public Guid ID { get; set; }
-        public string Nickname { get; set; }
+        [Required] public string Nickname { get; set; }
         public byte[] Avatar { get; set; }
-        public string Login { get; set; }
-        public string PasswordHash { get; set; }
+        [Required] public string Login { get; set; }
+        [Required] public string PasswordHash { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

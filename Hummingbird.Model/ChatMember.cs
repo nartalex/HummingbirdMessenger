@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hummingbird.Model
 {
-    class ChatMember
+    public class ChatMember
     {
-        public Chat ChatID { get; set; }
-        public User UserID { get; set; }
+        [Key, Column(Order = 0), Required] public Guid ChatID { get; set; }
+        [ForeignKey("ChatID")] public Chat Chat { get; set; }
+
+        [Key, Column(Order = 1), Required] public Guid UserID { get; set; }
+        [ForeignKey("UserID")] public User User { get; set; }
     }
 }
