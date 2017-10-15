@@ -23,7 +23,7 @@ namespace Hummingbird.DBInitializer
                 Console.WriteLine("Успешно. ");
 
                 Console.Write("Добавление данных. ");
-                db.Users.Add(new User { ID = Guid.NewGuid(), Nickname = "a1", Login = "a1", PasswordHash = "a1" });
+                db.Users.Add(new User { ID = Guid.NewGuid(), Nickname = "Default User", Login = "Default", PasswordHash = "Default" });
                 db.SaveChanges();
                 if (db.Users.Count() == 0)
                     Console.WriteLine("Неудача.");

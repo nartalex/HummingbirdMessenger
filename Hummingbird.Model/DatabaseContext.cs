@@ -14,7 +14,7 @@ namespace Hummingbird.Model
             
         }
     }
-    public class AppDbInitializer : DropCreateDatabaseIfModelChanges<DatabaseContext>
+    public class AppDbInitializer : DropCreateDatabaseAlways<DatabaseContext>
     {
         protected override void Seed(DatabaseContext context)
         {
