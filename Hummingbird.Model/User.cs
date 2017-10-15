@@ -15,7 +15,8 @@ namespace Hummingbird.Model
         public byte[] Avatar { get; set; }
         [Required] public string Login { get; set; }
         [Required] public string PasswordHash { get; set; }
+        public bool Disabled { get; set; }
 
-        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<ChatMember> Chats { get; set; }
     }
 }

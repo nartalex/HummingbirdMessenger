@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using Hummingbird.Model;
 
-namespace DBInitializer
+namespace Hummingbird.DBInitializer
 {
     class Program
     {
@@ -34,8 +34,8 @@ namespace DBInitializer
             {
                 Console.WriteLine("Неудача. \r\nОшибка: " + e.Message);
             }
-            Console.WriteLine("Любая клавиша для выхода...");
-            Console.Read();
+            Console.Write("Любая клавиша для выхода...");
+            Console.ReadKey();
         }
     }
 }

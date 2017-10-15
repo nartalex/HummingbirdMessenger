@@ -13,8 +13,8 @@ namespace Hummingbird.Model
         public Guid ID { get; set; }
         public byte[] Avatar { get; set; }
         public string Name { get; set; }
-        [Required] public ICollection<User> Members { get; set; }
+        [Required] public ICollection<ChatMember> Members { get; set; }
 
-        public virtual ICollection<Chat> Messages { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 }
