@@ -11,7 +11,6 @@ namespace Hummingbird.DataLayer.SQL.Tests
     [TestClass]
     public class UsersRepositoryTests
     {
-        List<User> _tempUsers = new List<User>();
         DatabaseContext DB = new DatabaseContext();
         UsersRepository usersRepository = new UsersRepository();
 
@@ -48,19 +47,112 @@ namespace Hummingbird.DataLayer.SQL.Tests
             Assert.AreEqual(shouldBeFail, false);
         }
 
-        [TestCleanup]
-        public void Clean()
+        [TestMethod]
+        public void ShouldDisable()
         {
-            DB.Users.RemoveRange(DB.Users);
+            var userId = Guid.NewGuid();
+            var user = new User
+            {
+                ID = userId,
+                Nickname = "User1",
+                Login = userId.ToString(),
+                PasswordHash = "password1",
+                Disabled = false
+            };
+
+            usersRepository.Register(user);
+            usersRepository.DisableUser(userId);
+
+            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+
+            Assert.AreEqual(true, gottenUser.Disabled);
         }
 
-        void ClearTable()
+
+        [TestMethod]
+        public void ShouldGetUser()
         {
-            foreach (var i in DB.Users)
+            var userId = Guid.NewGuid();
+            var user = new User
             {
-                DB.Users.Remove(i);
-            }
-            DB.SaveChanges();
+                ID = userId,
+                Nickname = "User1",
+                Login = userId.ToString(),
+                PasswordHash = "password1",
+                Disabled = false
+            };
+
+            usersRepository.Register(user);
+
+            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+
+            Assert.AreEqual(user.Login, gottenUser.Login);
+        }
+
+        [TestMethod]
+        public void ShouldChangePassword()
+        {
+            var userId = Guid.NewGuid();
+            var user = new User
+            {
+                ID = userId,
+                Nickname = "User1",
+                Login = userId.ToString(),
+                PasswordHash = "password1",
+                Disabled = false
+            };
+
+            usersRepository.Register(user);
+            usersRepository.ChangePassword(userId, "password2");
+
+            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+
+            Assert.AreEqual("password2", gottenUser.PasswordHash);
+        }
+
+        [TestMethod]
+        public void ShouldChangeAvatar()
+        {
+            var userId = Guid.NewGuid();
+            var user = new User
+            {
+                ID = userId,
+                Nickname = "User1",
+                Login = userId.ToString(),
+                PasswordHash = "password1",
+                Disabled = false
+            };
+
+            usersRepository.Register(user);
+
+            byte[] newAvatar = { 1, 2, 3, 4 };
+            usersRepository.ChangeAvatar(userId, newAvatar);
+
+            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+
+            //Assert.AreEqual(newAvatar,  gottenUser.Avatar);
+            Assert.IsTrue(gottenUser.Avatar.SequenceEqual(newAvatar));
+        }
+
+        [TestMethod]
+        public void ShouldChangeNickname()
+        {
+            var userId = Guid.NewGuid();
+            var user = new User
+            {
+                ID = userId,
+                Nickname = "User1",
+                Login = userId.ToString(),
+                PasswordHash = "password1",
+                Disabled = false
+            };
+
+            usersRepository.Register(user);
+            usersRepository.ChangeNickname(userId, "ChangedNickname");
+
+            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+
+            Assert.AreEqual("ChangedNickname", gottenUser.Nickname);
         }
     }
 }
