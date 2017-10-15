@@ -10,8 +10,8 @@ namespace Hummingbird.DataLayer
     interface IMessagesRepository
     {
         Message GetLastMessage(Guid userId, Guid chatId);
-        IEnumerable<Message> GetAmountOfMessages(Guid chatId, int amount);
+        IEnumerable<Message> GetAmountOfMessages(Guid chatId, int amount, int skip);
         void DeleteMessage(Guid id);
-        void EditMessage(Guid id);
+        void EditMessage(Guid id, Message newMessage);
     }
 }

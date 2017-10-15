@@ -16,6 +16,6 @@ namespace Hummingbird.Model
         [Required] public string Login { get; set; }
         [Required] public string PasswordHash { get; set; }
 
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; }
     }
 }
