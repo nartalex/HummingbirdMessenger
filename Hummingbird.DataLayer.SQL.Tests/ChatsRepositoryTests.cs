@@ -153,12 +153,13 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldDeleteMembers()
         {
-            Chat chat = CreateChat(3);
+            int usersBefore = 3;
+            Chat chat = CreateChat(usersBefore);
 
             chatsRepository.DeleteMembers(chat.ID, new[] { chat.Members.ToArray()[0].UserID });
             Chat gottenChat = DB.Chats.Include(c=>c.Members).First(c=>c.ID==chat.ID);
 
-            Assert.IsTrue(chat.Members.Count > gottenChat.Members.Count);
+            Assert.IsTrue(usersBefore > gottenChat.Members.Count);
         }
     }
 }
