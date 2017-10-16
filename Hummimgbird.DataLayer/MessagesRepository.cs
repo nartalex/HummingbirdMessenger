@@ -41,7 +41,7 @@ namespace Hummingbird.DataLayer.SQL
         public Message GetLastMessage(Guid chatId)
             => DB.Messages
             .Where(m => m.ChatToID == chatId)
-            .OrderByDescending(m => m.Time)
+            .OrderBy(m => m.Time)
             .ToArray()
             .Last();
 
