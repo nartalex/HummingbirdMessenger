@@ -14,34 +14,39 @@ namespace Hummingbird.DataLayer.SQL.Tests
         DatabaseContext DB = new DatabaseContext();
         UsersRepository usersRepository = new UsersRepository();
 
+        private User CreateUser()
+        {
+            var userId = Guid.NewGuid();
+            var user = new User
+            {
+                ID = userId,
+                Nickname = "TestUser",
+                Login = userId.ToString(),
+                PasswordHash = "TestPassword",
+                Disabled = false
+            };
+            usersRepository.Register(user);
+            return user;
+        }
+
         [TestMethod]
         public void ShouldCreateUsers()
         {
-            var userId = Guid.NewGuid();
-            var user1 = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
+            var user = CreateUser();
 
-            usersRepository.Register(user1);
+            User result = DB.Users.Where(u => u.ID == user.ID).First();
 
-            User result = DB.Users.Where(u => u.ID == user1.ID).First();
-
-            Assert.AreEqual(user1.ID, result.ID);
-            Assert.AreEqual(user1.Nickname, result.Nickname);
+            Assert.AreEqual(user.ID, result.ID);
+            Assert.AreEqual(user.Nickname, result.Nickname);
         }
 
         [TestMethod]
         public void ShouldLogin()
         {
-            User def = DB.Users.Where(u => u.Login == "Default").First();
+            User user = CreateUser();
 
-            var shouldBeSuccess = usersRepository.Login(def.Login, def.PasswordHash);
-            var shouldBeFail = usersRepository.Login(def.Login, def.PasswordHash + "1");
+            var shouldBeSuccess = usersRepository.Login(user.Login, user.PasswordHash);
+            var shouldBeFail = usersRepository.Login(user.Login, user.PasswordHash + "1");
 
             Assert.AreEqual(shouldBeSuccess, true);
             Assert.AreEqual(shouldBeFail, false);
@@ -50,41 +55,21 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldDisable()
         {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
+            var user = CreateUser();
 
-            usersRepository.Register(user);
-            usersRepository.DisableUser(userId);
+            usersRepository.DisableUser(user.ID);
 
-            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+            User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
 
             Assert.AreEqual(true, gottenUser.Disabled);
         }
 
-
         [TestMethod]
         public void ShouldGetUser()
         {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
+            var user = CreateUser();
 
-            usersRepository.Register(user);
-
-            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+            User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
 
             Assert.AreEqual(user.Login, gottenUser.Login);
         }
@@ -92,20 +77,11 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldChangePassword()
         {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
+            var user = CreateUser();
 
-            usersRepository.Register(user);
-            usersRepository.ChangePassword(userId, "password2");
+            usersRepository.ChangePassword(user.ID, "password2");
 
-            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+            User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
 
             Assert.AreEqual("password2", gottenUser.PasswordHash);
         }
@@ -113,44 +89,24 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldChangeAvatar()
         {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
-
-            usersRepository.Register(user);
+            var user = CreateUser();
 
             byte[] newAvatar = { 1, 2, 3, 4 };
-            usersRepository.ChangeAvatar(userId, newAvatar);
+            usersRepository.ChangeAvatar(user.ID, newAvatar);
 
-            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+            User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
 
-            //Assert.AreEqual(newAvatar,  gottenUser.Avatar);
             Assert.IsTrue(gottenUser.Avatar.SequenceEqual(newAvatar));
         }
 
         [TestMethod]
         public void ShouldChangeNickname()
         {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "User1",
-                Login = userId.ToString(),
-                PasswordHash = "password1",
-                Disabled = false
-            };
+            var user = CreateUser();
 
-            usersRepository.Register(user);
-            usersRepository.ChangeNickname(userId, "ChangedNickname");
+            usersRepository.ChangeNickname(user.ID, "ChangedNickname");
 
-            User gottenUser = DB.Users.Where(u => u.ID == userId).First();
+            User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
 
             Assert.AreEqual("ChangedNickname", gottenUser.Nickname);
         }

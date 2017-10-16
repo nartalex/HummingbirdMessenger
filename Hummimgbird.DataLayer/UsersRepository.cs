@@ -16,34 +16,34 @@ namespace Hummingbird.DataLayer.SQL
 
         public void ChangeAvatar(Guid userId, byte[] newAvatar)
         {
-            DB.Users.Where(u => u.ID == userId).First().Avatar = newAvatar;
+            DB.Users.First(u => u.ID == userId).Avatar = newAvatar;
             DB.SaveChanges();
         }
 
         public void ChangeNickname(Guid userId, string newNickname)
         {
-            DB.Users.Where(u => u.ID == userId).First().Nickname = newNickname;
+            DB.Users.First(u => u.ID == userId).Nickname = newNickname;
             DB.SaveChanges();
         }
 
         public void ChangePassword(Guid userId, string newPasswordHash)
         {
-            DB.Users.Where(u => u.ID == userId).First().PasswordHash = newPasswordHash;
+            DB.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
             DB.SaveChanges();
         }
 
         public void DisableUser(Guid userId)
         {
-            DB.Users.Where(u => u.ID == userId).First().Disabled = true;
+            DB.Users.First(u => u.ID == userId).Disabled = true;
             DB.SaveChanges();
         }
 
         public User Get(Guid userId)
-            => DB.Users.Where(u => u.ID == userId).First();
+            => DB.Users.First(u => u.ID == userId);
 
         public bool Login(string login, string passwordHash)
         {
-            int users = DB.Users.Where(u => u.Login == login && u.PasswordHash == passwordHash).Count();
+            int users = DB.Users.Count(u => u.Login == login && u.PasswordHash == passwordHash);
 
             if (users > 1)
                 throw new Exception("More than one user found.");

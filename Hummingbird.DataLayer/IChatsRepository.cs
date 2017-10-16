@@ -12,9 +12,9 @@ namespace Hummingbird.DataLayer
         void Create(Chat chat);
         IEnumerable<Chat> GetUserChats(Guid userId);
         void DeleteChat(Guid chatId);
-        void ChangeName(Guid chatId);
-        void ChangeAvatar(Guid chatId);
-        void AddMembers(Guid[] userIds);
-        void DeleteMembers(Guid[] userIds);
+        void ChangeName(Guid chatId, string newName);
+        void ChangeAvatar(Guid chatId, byte[] newAvatar);
+        void AddMembers(Guid chatId, Guid[] userIds);
+        void DeleteMembers(Guid chatId, Guid[] userIds);
     }
 }
