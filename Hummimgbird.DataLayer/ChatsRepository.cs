@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Hummingbird.Model;
 using System.Data.Entity;
 
@@ -29,13 +27,13 @@ namespace Hummingbird.DataLayer.SQL
 
         public void ChangeAvatar(Guid chatId, byte[] newAvatar)
         {
-            DB.Chats.First(c => c.ID == chatId).Avatar = newAvatar;
+            DB.Chats.Include(m => m.Members).First(c => c.ID == chatId).Avatar = newAvatar;
             DB.SaveChanges();
         }
 
         public void ChangeName(Guid chatId, string newName)
         {
-            DB.Chats.First(c => c.ID == chatId).Name = newName;
+            DB.Chats.Include(m=>m.Members).First(c => c.ID == chatId).Name = newName;
             DB.SaveChanges();
         }
 

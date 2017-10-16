@@ -14,53 +14,12 @@ namespace Hummingbird.DataLayer.SQL.Tests
         ChatsRepository chatsRepository = new ChatsRepository();
         UsersRepository usersRepository = new UsersRepository();
 
-        private User CreateUser()
-        {
-            var userId = Guid.NewGuid();
-            var user = new User
-            {
-                ID = userId,
-                Nickname = "TestUser",
-                Login = userId.ToString(),
-                PasswordHash = "TestPassword",
-                Disabled = false
-            };
-            usersRepository.Register(user);
-            return user;
-        }
-        private Chat CreateChat(int usersAmount = 2)
-        {
-            Guid chatId = Guid.NewGuid();
-
-            List<ChatMember> members = new List<ChatMember>();
-            for (int i = 0; i < usersAmount; i++)
-            {
-                members.Add(
-                    new ChatMember
-                    {
-                        ChatID = chatId,
-                        UserID = CreateUser().ID
-                    }
-                );
-            }
-
-            Chat chat = new Chat
-            {
-                ID = chatId,
-                Name = "TestChat",
-                Members = members
-            };
-
-            chatsRepository.Create(chat);
-            return chat;
-        }
-
         [TestMethod]
         public void ShouldCreateChat()
         {
             int usersAmount = 5;
 
-            Chat chat = CreateChat(usersAmount);
+            Chat chat = Create.Chat(usersAmount);
 
             Chat gottenChat = DB.Chats.Include(c => c.Members).Where(c => c.ID == chat.ID).First();
 
@@ -77,13 +36,12 @@ namespace Hummingbird.DataLayer.SQL.Tests
         {
             int usersAmount = 2;
 
-            Chat chat = CreateChat(usersAmount);
-            User userToAdd = CreateUser();
+            Chat chat = Create.Chat(usersAmount);
+            User userToAdd = Create.User();
 
             chatsRepository.AddMembers(chat.ID, new[] { userToAdd.ID });
             Chat gottenChat = DB.Chats.Include(c => c.Members).Where(c => c.ID == chat.ID).First();
 
-            Assert.AreEqual(chat.Members.Count, gottenChat.Members.Count);
             Assert.IsTrue(gottenChat.Members.Count > usersAmount);
         }
 
@@ -92,12 +50,12 @@ namespace Hummingbird.DataLayer.SQL.Tests
         {
             Chat[] chats =
             {
-                CreateChat(),
-                CreateChat()
+                Create.Chat(),
+                Create.Chat()
             };
             chats = chats.OrderBy(c => c.ID).ToArray();
 
-            User user = CreateUser();
+            User user = Create.User();
 
             chatsRepository.AddMembers(chats[0].ID, new[] { user.ID });
             chatsRepository.AddMembers(chats[1].ID, new[] { user.ID });
@@ -113,7 +71,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldDeleteChat()
         {
-            Chat chat = CreateChat();
+            Chat chat = Create.Chat();
 
             int countBefore = DB.Chats.Count();
 
@@ -128,7 +86,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldChangeName()
         {
-            Chat chat = CreateChat();
+            Chat chat = Create.Chat();
 
             chatsRepository.ChangeName(chat.ID, "changedName");
 
@@ -140,7 +98,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         [TestMethod]
         public void ShouldChangeAvatar()
         {
-            Chat chat = CreateChat();
+            Chat chat = Create.Chat();
 
             byte[] newAvatar = { 1, 2, 3, 4 };
             chatsRepository.ChangeAvatar(chat.ID, newAvatar);
@@ -154,7 +112,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         public void ShouldDeleteMembers()
         {
             int usersBefore = 3;
-            Chat chat = CreateChat(usersBefore);
+            Chat chat = Create.Chat(usersBefore);
 
             chatsRepository.DeleteMembers(chat.ID, new[] { chat.Members.ToArray()[0].UserID });
             Chat gottenChat = DB.Chats.Include(c=>c.Members).First(c=>c.ID==chat.ID);
