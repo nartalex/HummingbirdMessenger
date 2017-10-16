@@ -7,10 +7,11 @@ using Hummingbird.Model;
 
 namespace Hummingbird.DataLayer
 {
-    interface IMessagesRepository
+    public interface IMessagesRepository
     {
-        Message GetLastMessage(Guid userId, Guid chatId);
+        Message GetLastMessage(Guid chatId);
         IEnumerable<Message> GetAmountOfMessages(Guid chatId, int amount, int skip);
+        void SendMessage(Message message);
         void DeleteMessage(Guid id);
         void EditMessage(Guid id, Message newMessage);
     }
