@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.DataLayer.SQL.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.DataLayer.SQL", "Hummingbird.DataLayer.SQL\Hummingbird.DataLayer.SQL.csproj", "{42006684-21B1-43B1-95D5-49B70C39881B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.API", "Hummingbird.API\Hummingbird.API.csproj", "{DF3E1722-CD9E-4A68-B516-5CB2289067AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{42006684-21B1-43B1-95D5-49B70C39881B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42006684-21B1-43B1-95D5-49B70C39881B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42006684-21B1-43B1-95D5-49B70C39881B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF3E1722-CD9E-4A68-B516-5CB2289067AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF3E1722-CD9E-4A68-B516-5CB2289067AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF3E1722-CD9E-4A68-B516-5CB2289067AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF3E1722-CD9E-4A68-B516-5CB2289067AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
