@@ -97,11 +97,10 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                User user = DB.Users.First(u => u.ID == userId);
-                if (user == null)
+                if (DB.Users.Count(u => u.ID == userId) == 0)
                     return new Exception("No user found");
                 else
-                    return user;
+                    return DB.Users.First(u => u.ID == userId);
             }
             catch (Exception e)
             {
@@ -119,7 +118,7 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                if(DB.Users.Count(u => u.Login == login) == 0)
+                if (DB.Users.Count(u => u.Login == login) == 0)
                     return new Exception("Login is incorrect");
 
                 User user = DB.Users.First(u => u.Login == login);

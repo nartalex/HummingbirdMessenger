@@ -26,8 +26,6 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
         internal static object Chat(int usersAmount = 2)
         {
-            Guid chatId = Guid.NewGuid();
-
             List<Guid> members = new List<Guid>();
             for (int i = 0; i < usersAmount; i++)
             {
@@ -36,12 +34,10 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
             Chat chat = new Chat
             {
-                ID = chatId,
                 Name = "TestChat"
             };
 
-            chatsRepository.Create(chat, members.ToArray());
-            return chat;
+            return chatsRepository.Create(chat, members.ToArray());
         }
         //internal static Message Message(User from, Chat to)
         //{

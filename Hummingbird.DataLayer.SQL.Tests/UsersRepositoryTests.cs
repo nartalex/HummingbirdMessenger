@@ -24,7 +24,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
             User user = (User)shouldBeUser;
 
-            User result = DB.Users.Where(u => u.ID == user.ID).First();
+            User result = DB.Users.First(u => u.ID == user.ID);
 
             Assert.AreEqual(user.ID, result.ID);
             Assert.AreEqual(user.Nickname, result.Nickname);
@@ -48,66 +48,68 @@ namespace Hummingbird.DataLayer.SQL.Tests
             Assert.IsInstanceOfType(shouldBeFail2, typeof(Exception));
             Assert.AreEqual("Login is incorrect", ((Exception)shouldBeFail2).Message);
         }
-        /*
-       [TestMethod]
-       public void ShouldDisable()
-       {
-           var user = CreateUser();
 
-           usersRepository.DisableUser(user.ID);
+        [TestMethod]
+        public void ShouldDisable()
+        {
+            var user = Create.User();
 
-           User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
+            var shouldBeTrue = usersRepository.DisableUser(((User)user).ID);
+            Assert.AreEqual(true, shouldBeTrue);
 
-           Assert.AreEqual(true, gottenUser.Disabled);
-       }
+            User gottenUser = DB.Users.First(u => u.ID == ((User)user).ID);
+            Assert.AreEqual(true, gottenUser.Disabled);
+        }
 
-       [TestMethod]
-       public void ShouldGetUser()
-       {
-           var user = CreateUser();
+        [TestMethod]
+        public void ShouldGetUser()
+        {
+            var user = Create.User();
 
-           User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
+            var shouldBeUser = usersRepository.Get(((User)user).ID);
+            Assert.IsInstanceOfType(shouldBeUser, typeof(User));
+            Assert.AreEqual(((User)user).Login, ((User)shouldBeUser).Login);
 
-           Assert.AreEqual(user.Login, gottenUser.Login);
-       }
+            var shouldBeException = usersRepository.Get(Guid.NewGuid());
+            Assert.IsInstanceOfType(shouldBeException, typeof(Exception));
+            Assert.AreEqual("No user found", ((Exception)shouldBeException).Message);
+        }
 
-       [TestMethod]
-       public void ShouldChangePassword()
-       {
-           var user = CreateUser();
+        [TestMethod]
+        public void ShouldChangePassword()
+        {
+            User user = (User)Create.User();
 
-           usersRepository.ChangePassword(user.ID, "password2");
+            var shouldBeTrue = usersRepository.ChangePassword(user.ID, "password2");
+            Assert.AreEqual(true, shouldBeTrue);
 
-           User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
+            User gottenUser = DB.Users.First(u => u.ID == user.ID);
+            Assert.AreEqual("password2", gottenUser.PasswordHash);
+        }
+        
+        [TestMethod]
+        public void ShouldChangeAvatar()
+        {
+            User user = (User)Create.User();
 
-           Assert.AreEqual("password2", gottenUser.PasswordHash);
-       }
+            byte[] newAvatar = { 1, 2, 3, 4 };
+            var shouldBeTrue = usersRepository.ChangeAvatar(user.ID, newAvatar);
+            Assert.AreEqual(true, shouldBeTrue);
 
-       [TestMethod]
-       public void ShouldChangeAvatar()
-       {
-           var user = CreateUser();
+            User gottenUser = DB.Users.First(u => u.ID == user.ID);
+            Assert.IsTrue(gottenUser.Avatar.SequenceEqual(newAvatar));
+        }
 
-           byte[] newAvatar = { 1, 2, 3, 4 };
-           usersRepository.ChangeAvatar(user.ID, newAvatar);
+        [TestMethod]
+        public void ShouldChangeNickname()
+        {
+            User user = (User)Create.User();
+            
+            var shouldBeTrue = usersRepository.ChangeNickname(user.ID, "ChangedNickname");
+            Assert.AreEqual(true, shouldBeTrue);
 
-           User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
-
-           Assert.IsTrue(gottenUser.Avatar.SequenceEqual(newAvatar));
-       }
-
-       [TestMethod]
-       public void ShouldChangeNickname()
-       {
-           var user = CreateUser();
-
-           usersRepository.ChangeNickname(user.ID, "ChangedNickname");
-
-           User gottenUser = DB.Users.Where(u => u.ID == user.ID).First();
-
-           Assert.AreEqual("ChangedNickname", gottenUser.Nickname);
-       }
-
-       */
+            User gottenUser = DB.Users.First(u => u.ID == user.ID);
+            Assert.AreEqual("ChangedNickname", gottenUser.Nickname);
+        }
     }
 }

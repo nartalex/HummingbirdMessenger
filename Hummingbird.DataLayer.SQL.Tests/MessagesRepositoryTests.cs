@@ -17,112 +17,114 @@ namespace Hummingbird.DataLayer.SQL.Tests
         UsersRepository usersRepository = new UsersRepository();
         MessagesRepository messagesRepository = new MessagesRepository();
 
-        /*
+
         [TestMethod]
         public void ShouldSendSimpleMessage()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
             Message message = new Message
             {
-                ID = Guid.NewGuid(),
                 UserFromID = chat.Members.ToArray()[0].UserID,
                 ChatToID = chat.ID,
-                Text = "TextMessage"
+                Text = "Текст"
             };
 
-            messagesRepository.SendMessage(message);
+            var shouldBeMessage = messagesRepository.SendMessage(message);
+            Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
 
-            Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);
+            Message gottenMessage = DB.Messages.First(m => m.ID == ((Message)shouldBeMessage).ID);
 
             Assert.AreEqual(chat.ID, gottenMessage.ChatToID);
             Assert.AreEqual(message.UserFromID, gottenMessage.UserFromID);
-            Assert.IsTrue(gottenMessage.Time != null);
             Assert.AreEqual(message.Text, gottenMessage.Text);
+            Assert.IsNotNull(gottenMessage.Time);
+            Assert.IsNotNull(gottenMessage.ID);
         }
 
         [TestMethod]
         public void ShouldSendMessageWithAttach()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
             Message message = new Message
             {
-                ID = Guid.NewGuid(),
                 UserFromID = chat.Members.ToArray()[0].UserID,
                 ChatToID = chat.ID,
                 AttachType = Message.AttachTypes.Image,
                 AttachPath = "path"
             };
 
-            messagesRepository.SendMessage(message);
+            var shouldBeMessage = messagesRepository.SendMessage(message);
+            Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
 
-            Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);
+            Message gottenMessage = DB.Messages.First(m => m.ID == ((Message)shouldBeMessage).ID);
 
             Assert.AreEqual(chat.ID, gottenMessage.ChatToID);
             Assert.AreEqual(message.UserFromID, gottenMessage.UserFromID);
             Assert.IsNotNull(gottenMessage.Time);
             Assert.IsNull(gottenMessage.Text);
             Assert.AreEqual("path", gottenMessage.AttachPath);
-
         }
 
         [TestMethod]
         public void ShouldDeleteMessage()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
             Message message = new Message
             {
-                ID = Guid.NewGuid(),
                 UserFromID = chat.Members.ToArray()[0].UserID,
                 ChatToID = chat.ID,
                 Text = "TextMessage"
             };
 
-            messagesRepository.SendMessage(message);
+            var shouldBeMessage = messagesRepository.SendMessage(message);
+            Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
+            Guid messageID = ((Message)shouldBeMessage).ID;
 
-            int countBefore = DB.Messages.Count(m => m.ID == message.ID);
-
-            messagesRepository.DeleteMessage(message.ID);
-
-            int countAfter = DB.Messages.Count(m => m.ID == message.ID);
-
+            int countBefore = DB.Messages.Count(m => m.ID == messageID);
             Assert.AreEqual(1, countBefore);
+
+            var shouldBeTrue = messagesRepository.DeleteMessage(messageID);
+            Assert.AreEqual(true, shouldBeTrue);
+
+            int countAfter = DB.Messages.Count(m => m.ID == messageID);
             Assert.AreEqual(0, countAfter);
         }
+
+
 
         [TestMethod]
         public void ShouldEditMessage()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
             Message message = new Message
             {
-                ID = Guid.NewGuid(),
                 UserFromID = chat.Members.ToArray()[0].UserID,
                 ChatToID = chat.ID,
                 Text = "TextMessage"
             };
 
-            messagesRepository.SendMessage(message);
+            message = (Message)messagesRepository.SendMessage(message);
 
             message.AttachType = Message.AttachTypes.Image;
             message.AttachPath = "path";
 
-            messagesRepository.EditMessage(message.ID, message);
+            var shouldBeTrue = messagesRepository.EditMessage(message.ID, message);
+            Assert.AreEqual(true, shouldBeTrue);
 
             Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);
-
             Assert.IsNotNull(gottenMessage.AttachPath);
         }
 
         [TestMethod]
         public void ShouldGetLastMessage()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
-            Guid id = Guid.Empty;
+            Message last = null;
             string text = String.Empty;
             for (int i = 0; i < 10; i++)
             {
@@ -134,46 +136,40 @@ namespace Hummingbird.DataLayer.SQL.Tests
                     ChatToID = chat.ID
                 };
 
-                id = message.ID;
                 text = message.Text;
 
-                messagesRepository.SendMessage(message);
+                last = (Message)messagesRepository.SendMessage(message);
             }
 
-            Message gottenMessage = messagesRepository.GetLastMessage(chat.ID);
+            Message gottenMessage = (Message)messagesRepository.GetLastMessage(chat.ID);
 
-            Assert.AreEqual(id, gottenMessage.ID);
+            Assert.AreEqual(last.ID, gottenMessage.ID);
             Assert.AreEqual(text, gottenMessage.Text);
         }
 
         [TestMethod]
         public void ShouldGetAmountOfMessages()
         {
-            Chat chat = Create.Chat();
+            Chat chat = (Chat)Create.Chat();
 
             string text7 = String.Empty;
             for (int i = 0; i < 10; i++)
             {
                 Message message = new Message
                 {
-                    ID = Guid.NewGuid(),
                     Text = "Message" + i,
                     UserFromID = chat.Members.ToArray()[0].UserID,
                     ChatToID = chat.ID
                 };
-
-                if (i == 7)
-                    text7 = message.Text;
 
                 messagesRepository.SendMessage(message);
 
                 Thread.Sleep(2000);
             }
 
-            Message[] gottenMessages = messagesRepository.GetAmountOfMessages(chat.ID, 5, 2).ToArray();
+            Message[] gottenMessages = ((Message[])messagesRepository.GetAmountOfMessages(chat.ID, 5, 2)).ToArray();
 
             Assert.AreEqual(5, gottenMessages.Length);
         }
-        */
     }
 }

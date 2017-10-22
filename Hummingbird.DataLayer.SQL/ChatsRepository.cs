@@ -171,13 +171,27 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                return DB.ChatMembers.Include(c => c.Chat).Where(u => u.UserID == userId).ToArray();
+                return DB.ChatMembers.Include(c => c.Chat).Where(u => u.UserID == userId).Select(c => c.Chat).ToArray();
             }
             catch (Exception e)
             {
                 return e;
             }
+        }
 
+        public object GetChat(Guid id)
+        {
+            try
+            {
+                if (DB.Chats.Count(c => c.ID == id) == 0)
+                    throw new Exception("No chat found");
+                else
+                    return DB.Chats.First(c => c.ID == id);
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
         public void Dispose()

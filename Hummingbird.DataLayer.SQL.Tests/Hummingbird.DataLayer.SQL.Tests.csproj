@@ -66,10 +66,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hummimgbird.DataLayer\Hummingbird.DataLayer.SQL.csproj">
-      <Project>{42006684-21b1-43b1-95d5-49b70c39881b}</Project>
-      <Name>Hummingbird.DataLayer.SQL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Hummingbird.DataLayer\Hummingbird.DataLayer.csproj">
       <Project>{cfb5183a-0cf9-4e42-9b20-d36703161aa9}</Project>
       <Name>Hummingbird.DataLayer</Name>
