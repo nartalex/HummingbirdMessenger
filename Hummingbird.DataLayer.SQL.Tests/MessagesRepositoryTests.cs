@@ -17,6 +17,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         UsersRepository usersRepository = new UsersRepository();
         MessagesRepository messagesRepository = new MessagesRepository();
 
+        /*
         [TestMethod]
         public void ShouldSendSimpleMessage()
         {
@@ -173,5 +174,6 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
             Assert.AreEqual(5, gottenMessages.Length);
         }
+        */
     }
 }

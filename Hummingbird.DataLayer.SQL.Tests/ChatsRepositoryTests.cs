@@ -13,7 +13,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
         DatabaseContext DB = new DatabaseContext();
         ChatsRepository chatsRepository = new ChatsRepository();
         UsersRepository usersRepository = new UsersRepository();
-
+        /*
         [TestMethod]
         public void ShouldCreateChat()
         {
@@ -119,5 +119,6 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
             Assert.IsTrue(usersBefore > gottenChat.Members.Count);
         }
+        */
     }
 }

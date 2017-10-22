@@ -1,60 +1,174 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hummingbird.DataLayer;
-using Hummingbird.Model;
-using System.Data.Entity;
 
+using Hummingbird.Model;
 
 namespace Hummingbird.DataLayer.SQL
 {
-    public class UsersRepository : IUsersRepository
+    public class UsersRepository : IUsersRepository, IDisposable
     {
         DatabaseContext DB = new DatabaseContext();
 
-        public void ChangeAvatar(Guid userId, byte[] newAvatar)
+        /// <summary>
+        /// Меняет аватар указанного пользователя
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <param name="newAvatar">Новый аватар</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object ChangeAvatar(Guid userId, byte[] newAvatar)
         {
-            DB.Users.First(u => u.ID == userId).Avatar = newAvatar;
-            DB.SaveChanges();
+            try
+            {
+                DB.Users.First(u => u.ID == userId).Avatar = newAvatar;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
-        public void ChangeNickname(Guid userId, string newNickname)
+        /// <summary>
+        /// Меняет псевдоним указанного пользователя
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <param name="newNickname">Новый псевдоним</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object ChangeNickname(Guid userId, string newNickname)
         {
-            DB.Users.First(u => u.ID == userId).Nickname = newNickname;
-            DB.SaveChanges();
+            try
+            {
+                DB.Users.First(u => u.ID == userId).Nickname = newNickname;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
-        public void ChangePassword(Guid userId, string newPasswordHash)
+        /// <summary>
+        /// Меняет пароль указанного пользователя
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <param name="newPasswordHash">Новый пароль</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object ChangePassword(Guid userId, string newPasswordHash)
         {
-            DB.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
-            DB.SaveChanges();
+            try
+            {
+                DB.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
-        public void DisableUser(Guid userId)
+        /// <summary>
+        /// Отключает учетную запись указанного пользователя
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object DisableUser(Guid userId)
         {
-            DB.Users.First(u => u.ID == userId).Disabled = true;
-            DB.SaveChanges();
+            try
+            {
+                DB.Users.First(u => u.ID == userId).Disabled = true;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
-        public User Get(Guid userId)
-            => DB.Users.First(u => u.ID == userId);
-
-        public bool Login(string login, string passwordHash)
+        /// <summary>
+        /// Возвращает информацию о пользователе
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
+        public object Get(Guid userId)
         {
-            int users = DB.Users.Count(u => u.Login == login && u.PasswordHash == passwordHash);
-
-            if (users > 1)
-                throw new Exception("More than one user found.");
-            else
-                return Convert.ToBoolean(users);
+            try
+            {
+                User user = DB.Users.First(u => u.ID == userId);
+                if (user == null)
+                    return new Exception("No user found");
+                else
+                    return user;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
-        public void Register(User user)
+        /// <summary>
+        /// Вход в учетную запись
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="passwordHash">Пароль пользователя</param>
+        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
+        public object Login(string login, string passwordHash)
         {
-            DB.Users.Add(user);
-            DB.SaveChanges();
+            try
+            {
+                if(DB.Users.Count(u => u.Login == login) == 0)
+                    return new Exception("Login is incorrect");
+
+                User user = DB.Users.First(u => u.Login == login);
+
+                if (user.PasswordHash != passwordHash)
+                    return new Exception("Password is incorrect");
+
+                return user;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Регистрация
+        /// </summary>
+        /// <param name="user">Объект User</param>
+        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
+        public object Register(User user, bool test = false)
+        {
+            try
+            {
+                Guid newID = Guid.NewGuid();
+
+                User newUser = new User
+                {
+                    ID = newID,
+                    Nickname = user.Nickname,
+                    Avatar = user.Avatar,
+                    Login = test ? newID.ToString() : user.Login,
+                    PasswordHash = user.PasswordHash,
+                    Disabled = false
+                };
+
+                DB.Users.Add(newUser);
+                DB.SaveChanges();
+                return newUser;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        public void Dispose()
+        {
+            DB.Dispose();
         }
     }
 }

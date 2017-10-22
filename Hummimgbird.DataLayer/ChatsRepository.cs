@@ -1,76 +1,188 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Hummingbird.Model;
 using System.Data.Entity;
+using System.Linq;
 
+using Hummingbird.Model;
 
 namespace Hummingbird.DataLayer.SQL
 {
-    public class ChatsRepository : IChatsRepository
+    public class ChatsRepository : IChatsRepository, IDisposable
     {
         DatabaseContext DB = new DatabaseContext();
 
-        public void AddMembers(Guid chatId, Guid[] userIds)
+        /// <summary>
+        /// Добавление пользователей в чат
+        /// </summary>
+        /// <param name="chatId">ID чата</param>
+        /// <param name="userIds">Массив с ID пользователей</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object AddMembers(Guid chatId, Guid[] userIds)
         {
-            foreach (var u in userIds)
+            try
             {
-                ChatMember member = new ChatMember
+                foreach (var u in userIds)
                 {
-                    ChatID = chatId,
-                    UserID = u
+                    ChatMember member = new ChatMember
+                    {
+                        ChatID = chatId,
+                        UserID = u
+                    };
+                    DB.ChatMembers.Add(member);
+                }
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Изменение аватара в указанном чате
+        /// </summary>
+        /// <param name="chatId">ID чата</param>
+        /// <param name="newAvatar">Новый аватар</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object ChangeAvatar(Guid chatId, byte[] newAvatar)
+        {
+            try
+            {
+                DB.Chats.Include(m => m.Members).First(c => c.ID == chatId).Avatar = newAvatar;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Изменение названия указанного чата
+        /// </summary>
+        /// <param name="chatId">ID чата</param>
+        /// <param name="newName">Новое название</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object ChangeName(Guid chatId, string newName)
+        {
+            try
+            {
+                DB.Chats.Include(m => m.Members).First(c => c.ID == chatId).Name = newName;
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Создание чата
+        /// </summary>
+        /// <param name="chat">Объект Chat</param>
+        /// <returns>Объект Chat в случае успеха, Exceprion в случае ошибки</returns>
+        public object Create(Chat chat, Guid[] members)
+        {
+            try
+            {
+                Guid newChatID = Guid.NewGuid();
+                List<ChatMember> chatMembers = new List<ChatMember>();
+
+                foreach (var m in members)
+                {
+                    chatMembers.Add(new ChatMember
+                    {
+                        ChatID = newChatID,
+                        UserID = m
+                    }
+                    );
+                }
+
+                Chat newChat = new Chat
+                {
+                    ID = newChatID,
+                    Name = chat.Name,
+                    Avatar = chat.Avatar,
+                    Members = chatMembers
                 };
-                DB.ChatMembers.Add(member);
+
+                DB.Chats.Add(newChat);
+                DB.SaveChanges();
+                return newChat;
             }
-            DB.SaveChanges();
-        }
-
-        public void ChangeAvatar(Guid chatId, byte[] newAvatar)
-        {
-            DB.Chats.Include(m => m.Members).First(c => c.ID == chatId).Avatar = newAvatar;
-            DB.SaveChanges();
-        }
-
-        public void ChangeName(Guid chatId, string newName)
-        {
-            DB.Chats.Include(m=>m.Members).First(c => c.ID == chatId).Name = newName;
-            DB.SaveChanges();
-        }
-
-        public void Create(Chat chat)
-        {
-            DB.Chats.Add(chat);
-            DB.SaveChanges();
-        }
-
-        public void DeleteChat(Guid chatId)
-        {
-            DB.Messages.RemoveRange(DB.Messages.Where(c => c.ChatToID == chatId));
-            DB.Chats.Remove(DB.Chats.First(c => c.ID == chatId));
-            DB.SaveChanges();
-        }
-
-        public void DeleteMembers(Guid chatId, Guid[] userIds)
-        {
-            foreach(var u in userIds)
+            catch (Exception e)
             {
-                DB.ChatMembers.Remove(DB.ChatMembers.First(m => m.UserID == u && m.ChatID == chatId));
+                return e;
             }
-            DB.SaveChanges();
         }
 
-        public IEnumerable<Chat> GetUserChats(Guid userId)
+        /// <summary>
+        /// Удаление чата
+        /// Также удаляются все сообщения
+        /// </summary>
+        /// <param name="chatId">ID чата</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object DeleteChat(Guid chatId)
         {
-            // UNDONE
-            var chats = new List<Chat>();
-            var ids = DB.ChatMembers.Where(c => c.UserID == userId);
-
-            foreach (var i in ids)
+            try
             {
-                chats.Add(DB.Chats.First(c => c.ID == i.ChatID));
+                DB.Messages.RemoveRange(DB.Messages.Where(c => c.ChatToID == chatId));
+                DB.Chats.Remove(DB.Chats.First(c => c.ID == chatId));
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Удаление пользователей из чата
+        /// </summary>
+        /// <param name="chatId">ID чата</param>
+        /// <param name="userIds">Массив с ID пользователей</param>
+        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
+        public object DeleteMembers(Guid chatId, Guid[] userIds)
+        {
+            try
+            {
+                foreach (var u in userIds)
+                    DB.ChatMembers.Remove(DB.ChatMembers.First(m => m.UserID == u && m.ChatID == chatId));
+
+                DB.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает массив с чатами пользователя
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <returns>Массив с объектами Chat в случае успеха, Exceprion в случае ошибки</returns>
+        public object GetUserChats(Guid userId)
+        {
+            try
+            {
+                return DB.ChatMembers.Include(c => c.Chat).Where(u => u.UserID == userId).ToArray();
+            }
+            catch (Exception e)
+            {
+                return e;
             }
 
-            return chats;
+        }
+
+        public void Dispose()
+        {
+            DB.Dispose();
         }
     }
 }
