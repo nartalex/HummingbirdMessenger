@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
 using Hummingbird.Model;
 
 namespace Hummingbird.DBInitializer
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             Console.Write("Установка инициализатора. ");
             Database.SetInitializer(new AppDbInitializer());
@@ -25,10 +22,7 @@ namespace Hummingbird.DBInitializer
                 Console.Write("Добавление данных. ");
                 db.Users.Add(new User { ID = Guid.NewGuid(), Nickname = "Default User", Login = "Default", PasswordHash = "Default" });
                 db.SaveChanges();
-                if (db.Users.Count() == 0)
-                    Console.WriteLine("Неудача.");
-                else
-                    Console.WriteLine("Успешно.");
+                Console.WriteLine(!db.Users.Any() ? "Неудача." : "Успешно.");
             }
             catch (Exception e)
             {

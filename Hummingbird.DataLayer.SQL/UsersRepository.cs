@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Data.Entity;
 
 using Hummingbird.Model;
 
@@ -19,7 +20,7 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                DB.Users.First(u => u.ID == userId).Avatar = newAvatar;
+                DB.Users.First(u => u.ID == userId).Avatar = (newAvatar.Any() ? newAvatar : null);
                 DB.SaveChanges();
                 return true;
             }
@@ -27,6 +28,10 @@ namespace Hummingbird.DataLayer.SQL
             {
                 return e;
             }
+        }
+        public object ChangeAvatar(User user)
+        {
+            return ChangeAvatar(user.ID, user.Avatar);
         }
 
         /// <summary>
@@ -37,6 +42,9 @@ namespace Hummingbird.DataLayer.SQL
         /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
         public object ChangeNickname(Guid userId, string newNickname)
         {
+            if (!newNickname.Any())
+                return new Exception("Nickname can't be empty");
+
             try
             {
                 DB.Users.First(u => u.ID == userId).Nickname = newNickname;
@@ -47,6 +55,10 @@ namespace Hummingbird.DataLayer.SQL
             {
                 return e;
             }
+        }
+        public object ChangeNickname(User user)
+        {
+            return ChangeNickname(user.ID, user.Nickname);
         }
 
         /// <summary>
@@ -67,6 +79,10 @@ namespace Hummingbird.DataLayer.SQL
             {
                 return e;
             }
+        }
+        public object ChangePassword(User user)
+        {
+            return ChangePassword(user.ID, user.PasswordHash);
         }
 
         /// <summary>
@@ -108,6 +124,29 @@ namespace Hummingbird.DataLayer.SQL
             }
         }
 
+        /*
+        /// <summary>
+        /// Возвращает чаты пользователя
+        /// </summary>
+        /// <param name="userId">ID пользоваля</param>
+        /// <returns>Массив Chat в случае успеха, Exception в случае ошибки</returns>
+        public object GetChats(Guid userId)
+        {
+            try
+            {
+                return DB.ChatMembers
+                    .Include(c => c.Chat)
+                    .Where(c => c.UserID == userId)
+                    .Select(c => c.Chat)
+                    .ToArray();
+            }
+            catch(Exception e)
+            {
+                return e;
+            }
+        }
+*/
+
         /// <summary>
         /// Вход в учетную запись
         /// </summary>
@@ -132,6 +171,10 @@ namespace Hummingbird.DataLayer.SQL
             {
                 return e;
             }
+        }
+        public object Login(User user)
+        {
+            return Login(user.Login, user.PasswordHash);
         }
 
         /// <summary>

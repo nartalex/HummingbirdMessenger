@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Hummingbird.Model;
@@ -9,7 +10,7 @@ namespace Hummingbird.DataLayer.SQL
 {
     public class ChatsRepository : IChatsRepository, IDisposable
     {
-        DatabaseContext DB = new DatabaseContext();
+        [SuppressMessage("ReSharper", "InconsistentNaming")] private readonly DatabaseContext DB = new DatabaseContext();
 
         /// <summary>
         /// Добавление пользователей в чат
@@ -17,7 +18,7 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="chatId">ID чата</param>
         /// <param name="userIds">Массив с ID пользователей</param>
         /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object AddMembers(Guid chatId, Guid[] userIds)
+        public object AddMembers(Guid chatId, IEnumerable<Guid> userIds)
         {
             try
             {
@@ -38,6 +39,13 @@ namespace Hummingbird.DataLayer.SQL
                 return e;
             }
         }
+        public object AddMembers(Chat chat)
+        {
+            if (!chat.Members.Any())
+                return new Exception("Can't add zero members");
+
+            return AddMembers(chat.ID, chat.Members.Select(m => m.UserID));
+        }
 
         /// <summary>
         /// Изменение аватара в указанном чате
@@ -49,7 +57,10 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                DB.Chats.Include(m => m.Members).First(c => c.ID == chatId).Avatar = newAvatar;
+                DB.Chats.
+                    Include(m => m.Members)
+                    .First(c => c.ID == chatId)
+                    .Avatar = (newAvatar.Any() ? newAvatar : null);
                 DB.SaveChanges();
                 return true;
             }
@@ -57,6 +68,10 @@ namespace Hummingbird.DataLayer.SQL
             {
                 return e;
             }
+        }
+        public object ChangeAvatar(Chat chat)
+        {
+            return ChangeAvatar(chat.ID, chat.Avatar);
         }
 
         /// <summary>
@@ -78,13 +93,21 @@ namespace Hummingbird.DataLayer.SQL
                 return e;
             }
         }
+        public object ChangeName(Chat chat)
+        {
+            if (!chat.Name.Any())
+                return new Exception("Chat name can't be empty");
+
+            return ChangeName(chat.ID, chat.Name);
+        }
 
         /// <summary>
         /// Создание чата
         /// </summary>
         /// <param name="chat">Объект Chat</param>
+        /// <param name="members">Список участников</param>
         /// <returns>Объект Chat в случае успеха, Exceprion в случае ошибки</returns>
-        public object Create(Chat chat, Guid[] members)
+        public object Create(Chat chat, IEnumerable<Guid> members)
         {
             try
             {
@@ -118,6 +141,13 @@ namespace Hummingbird.DataLayer.SQL
                 return e;
             }
         }
+        public object Create(Chat chat)
+        {
+            if (!chat.Members.Any())
+                return new Exception("Can't create chat with no members");
+
+            return Create(chat, chat.Members.Select(m => m.UserID));
+        }
 
         /// <summary>
         /// Удаление чата
@@ -146,7 +176,7 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="chatId">ID чата</param>
         /// <param name="userIds">Массив с ID пользователей</param>
         /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object DeleteMembers(Guid chatId, Guid[] userIds)
+        public object DeleteMembers(Guid chatId, IEnumerable<Guid> userIds)
         {
             try
             {
@@ -161,6 +191,13 @@ namespace Hummingbird.DataLayer.SQL
                 return e;
             }
         }
+        public object DeleteMembers(Chat chat)
+        {
+            if (!chat.Members.Any())
+                return new Exception("Can't delete zero members");
+
+            return DeleteMembers(chat.ID, chat.Members.Select(m => m.UserID));
+        }
 
         /// <summary>
         /// Возвращает массив с чатами пользователя
@@ -171,7 +208,11 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                return DB.ChatMembers.Include(c => c.Chat).Where(u => u.UserID == userId).Select(c => c.Chat).ToArray();
+                return DB.ChatMembers
+                    .Include(c => c.Chat)
+                    .Where(u => u.UserID == userId)
+                    .Select(c => c.Chat)
+                    .ToArray();
             }
             catch (Exception e)
             {
@@ -183,10 +224,12 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                if (DB.Chats.Count(c => c.ID == id) == 0)
+                if (!DB.Chats.Any(c => c.ID == id))
                     throw new Exception("No chat found");
                 else
-                    return DB.Chats.First(c => c.ID == id);
+                    return DB.Chats
+                        .Include(c => c.Members.Select(m => m.User))
+                        .First(c => c.ID == id);
             }
             catch (Exception e)
             {

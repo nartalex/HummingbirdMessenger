@@ -11,14 +11,11 @@ namespace Hummingbird.Model
 
         public DatabaseContext() : base("name=DefaultConnection")
         {
-            
+            this.Configuration.LazyLoadingEnabled = false;
         }
     }
     public class AppDbInitializer : DropCreateDatabaseAlways<DatabaseContext>
     {
-        protected override void Seed(DatabaseContext context)
-        {
-            base.Seed(context);
-        }
+
     }
 }

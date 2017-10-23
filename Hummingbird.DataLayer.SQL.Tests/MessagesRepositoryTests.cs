@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Hummingbird.Model;
-using Hummingbird.DataLayer.SQL;
-using System.Data.Entity;
 using System.Threading;
 
 namespace Hummingbird.DataLayer.SQL.Tests

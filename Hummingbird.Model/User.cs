@@ -13,6 +13,6 @@ namespace Hummingbird.Model
         [Required] public string PasswordHash { get; set; }
         public bool Disabled { get; set; }
 
-        public virtual ICollection<ChatMember> Chats { get; set; }
+        public ICollection<ChatMember> Chats { get; set; }
     }
 }

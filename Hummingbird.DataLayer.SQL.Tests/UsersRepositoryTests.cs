@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Hummingbird.Model;
-using Hummingbird.DataLayer.SQL;
-using System.Data.Entity;
 
 namespace Hummingbird.DataLayer.SQL.Tests
 {
     [TestClass]
     public class UsersRepositoryTests
     {
-        DatabaseContext DB = new DatabaseContext();
-        UsersRepository usersRepository = new UsersRepository();
+        private readonly DatabaseContext DB = new DatabaseContext();
+        private readonly UsersRepository usersRepository = new UsersRepository();
 
         [TestMethod]
         public void ShouldCreateUsers()
