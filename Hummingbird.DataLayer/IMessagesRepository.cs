@@ -10,6 +10,6 @@ namespace Hummingbird.DataLayer
         object GetAmountOfMessages(Guid chatId, int amount, int skip);
         object SendMessage(Message message);
         object DeleteMessage(Guid id);
-        object EditMessage(Guid id, Message newMessage);
+        object EditMessage(Message edits);
     }
 }

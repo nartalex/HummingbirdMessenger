@@ -109,7 +109,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
             message.AttachType = Message.AttachTypes.Image;
             message.AttachPath = "path";
 
-            var shouldBeTrue = messagesRepository.EditMessage(message.ID, message);
+            var shouldBeTrue = messagesRepository.EditMessage(message);
             Assert.AreEqual(true, shouldBeTrue);
 
             Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);

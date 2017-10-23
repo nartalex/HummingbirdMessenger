@@ -32,23 +32,22 @@ namespace Hummingbird.DataLayer.SQL
         /// <summary>
         /// Изменение сообщения
         /// </summary>
-        /// <param name="id">ID сообщения</param>
-        /// <param name="newMessage">Объект Message, содержащий только исправления</param>
+        /// <param name="edits">Исправленное сообщение</param>
         /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object EditMessage(Guid id, Message newMessage)
+        public object EditMessage(Message edits)
         {
             try
             {
-                Message toEdit = DB.Messages.First(m => m.ID == id);
+                Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
                 // toEdit.Text = newMessage.Text ??;
-                if (newMessage.Text != null)
-                    toEdit.Text = newMessage.Text;
+                if (edits.Text != null)
+                    toEdit.Text = edits.Text;
 
-                if (newMessage.AttachType != null)
-                    toEdit.AttachType = newMessage.AttachType;
+                if (edits.AttachType != null)
+                    toEdit.AttachType = edits.AttachType;
 
-                if (newMessage.AttachPath != null)
-                    toEdit.AttachPath = newMessage.AttachPath;
+                if (edits.AttachPath != null)
+                    toEdit.AttachPath = edits.AttachPath;
 
                 toEdit.Edited = true;
 
@@ -70,7 +69,7 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="amount">Количество возвращаемых сообщений</param>
         /// <param name="skip">Количество пропускаемых сообщений</param>
         /// <returns>Массив с сообщениями в случае успеха, Exceprion в случае ошибки</returns>
-        public object GetAmountOfMessages(Guid chatId, int amount, int skip)
+        public object GetAmountOfMessages(Guid chatId, int skip, int amount)
         {
             try
             {

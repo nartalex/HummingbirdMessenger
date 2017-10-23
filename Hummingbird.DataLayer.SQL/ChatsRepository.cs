@@ -10,7 +10,8 @@ namespace Hummingbird.DataLayer.SQL
 {
     public class ChatsRepository : IChatsRepository, IDisposable
     {
-        [SuppressMessage("ReSharper", "InconsistentNaming")] private readonly DatabaseContext DB = new DatabaseContext();
+        private readonly DatabaseContext DB = new DatabaseContext();
+        private readonly MessagesRepository _messagesRepository = new MessagesRepository();
 
         /// <summary>
         /// Добавление пользователей в чат
@@ -208,11 +209,18 @@ namespace Hummingbird.DataLayer.SQL
         {
             try
             {
-                return DB.ChatMembers
+                var chats = DB.ChatMembers
                     .Include(c => c.Chat)
                     .Where(u => u.UserID == userId)
                     .Select(c => c.Chat)
                     .ToArray();
+
+                foreach (var c in chats)
+                {
+                    c.Messages = new[] { (Message)_messagesRepository.GetLastMessage(c.ID) };
+                }
+
+                return chats.OrderBy(c => c.Messages.OrderBy(m => m.Time));
             }
             catch (Exception e)
             {
