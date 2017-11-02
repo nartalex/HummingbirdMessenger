@@ -1,37 +1,38 @@
 ﻿using System;
 using System.Linq;
 using System.Data.Entity;
-
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Collections.Generic;
 using Hummingbird.Model;
+using System.Diagnostics;
 
 namespace Hummingbird.DataLayer.SQL
 {
     public class UsersRepository : IUsersRepository, IDisposable
     {
-        DatabaseContext DB = new DatabaseContext();
+        private readonly DatabaseContext DB = new DatabaseContext();
+        //private readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Stopwatch timer = new Stopwatch();
 
         /// <summary>
         /// Меняет аватар указанного пользователя
         /// </summary>
         /// <param name="userId">ID пользователя</param>
         /// <param name="newAvatar">Новый аватар</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object ChangeAvatar(Guid userId, byte[] newAvatar)
+        public void ChangeAvatar(Guid userId, byte[] newAvatar)
         {
-            try
-            {
-                DB.Users.First(u => u.ID == userId).Avatar = (newAvatar.Any() ? newAvatar : null);
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
-        public object ChangeAvatar(User user)
-        {
-            return ChangeAvatar(user.ID, user.Avatar);
+            CheckUser(userId);
+
+            //logger.Info($"Изменение аватара пользователя {userId}, размер аватара: {newAvatar.Length}");
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            DB.Users.First(u => u.ID == userId).Avatar = (newAvatar.Any() ? newAvatar : null);
+            DB.SaveChanges();
+            timer.Stop();
+            //logger.Info($"Изменение аватара пользователя {userId} - успешно за {timer.ElapsedMilliseconds} мс");
+            //if (timer.ElapsedMilliseconds > 1000) logger.Warn($"Изменение аватара пользователя {userId} заняло {timer.ElapsedMilliseconds}");
         }
 
         /// <summary>
@@ -39,26 +40,14 @@ namespace Hummingbird.DataLayer.SQL
         /// </summary>
         /// <param name="userId">ID пользователя</param>
         /// <param name="newNickname">Новый псевдоним</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object ChangeNickname(Guid userId, string newNickname)
+        public void ChangeNickname(Guid userId, string newNickname)
         {
+            CheckUser(userId);
             if (!newNickname.Any())
-                return new Exception("Nickname can't be empty");
+                throw GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
 
-            try
-            {
-                DB.Users.First(u => u.ID == userId).Nickname = newNickname;
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
-        public object ChangeNickname(User user)
-        {
-            return ChangeNickname(user.ID, user.Nickname);
+            DB.Users.First(u => u.ID == userId).Nickname = newNickname;
+            DB.SaveChanges();
         }
 
         /// <summary>
@@ -66,62 +55,38 @@ namespace Hummingbird.DataLayer.SQL
         /// </summary>
         /// <param name="userId">ID пользователя</param>
         /// <param name="newPasswordHash">Новый пароль</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object ChangePassword(Guid userId, string newPasswordHash)
+        public void ChangePassword(Guid userId, string newPasswordHash)
         {
-            try
-            {
-                DB.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
-        public object ChangePassword(User user)
-        {
-            return ChangePassword(user.ID, user.PasswordHash);
+            CheckUser(userId);
+            if (!newPasswordHash.Any())
+                throw GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
+
+            DB.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
+            DB.SaveChanges();
         }
 
         /// <summary>
         /// Отключает учетную запись указанного пользователя
         /// </summary>
         /// <param name="userId">ID пользователя</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object DisableUser(Guid userId)
+        public void DisableUser(Guid userId)
         {
-            try
-            {
-                DB.Users.First(u => u.ID == userId).Disabled = true;
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            CheckUser(userId);
+
+            DB.Users.First(u => u.ID == userId).Disabled = true;
+            DB.SaveChanges();
         }
 
         /// <summary>
         /// Возвращает информацию о пользователе
         /// </summary>
         /// <param name="userId">ID пользователя</param>
-        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
-        public object Get(Guid userId)
+        /// <returns>Объект User в случае успеха</returns>
+        public User Get(Guid userId)
         {
-            try
-            {
-                if (DB.Users.Count(u => u.ID == userId) == 0)
-                    return new Exception("No user found");
-                else
-                    return DB.Users.First(u => u.ID == userId);
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            CheckUser(userId);
+
+            return DB.Users.First(u => u.ID == userId);
         }
 
         /*
@@ -152,65 +117,83 @@ namespace Hummingbird.DataLayer.SQL
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <param name="passwordHash">Пароль пользователя</param>
-        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
-        public object Login(string login, string passwordHash)
+        /// <returns>Объект User в случае успеха</returns>
+        public User Login(string login, string passwordHash)
         {
-            try
-            {
-                if (DB.Users.Count(u => u.Login == login) == 0)
-                    return new Exception("Login is incorrect");
+            if (!DB.Users.Any(u => u.Login == login))
+                throw GenerateException("Login is invalid", HttpStatusCode.BadRequest);
 
-                User user = DB.Users.First(u => u.Login == login);
+            User user = DB.Users.First(u => u.Login == login);
 
-                if (user.PasswordHash != passwordHash)
-                    return new Exception("Password is incorrect");
+            if (user.PasswordHash != passwordHash)
+                throw GenerateException("Password is invalid", HttpStatusCode.BadRequest);
 
-                return user;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
-        public object Login(User user)
-        {
-            return Login(user.Login, user.PasswordHash);
+            return user;
         }
 
         /// <summary>
         /// Регистрация
         /// </summary>
         /// <param name="user">Объект User</param>
-        /// <returns>Объект User в случае успеха, Exceprion в случае ошибки</returns>
-        public object Register(User user, bool test = false)
+        /// <returns>Объект User в случае успеха</returns>
+        public User Register(User user)
         {
-            try
-            {
-                Guid newID = Guid.NewGuid();
+            if (!user.Login.Any())
+                throw GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
+            if (DB.Users.Any(u => u.Login == user.Login))
+                throw GenerateException("Login is already taken", HttpStatusCode.BadRequest);
+            if (!user.Nickname.Any())
+                throw GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
+            if (!user.PasswordHash.Any())
+                throw GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
 
-                User newUser = new User
-                {
-                    ID = newID,
-                    Nickname = user.Nickname,
-                    Avatar = user.Avatar,
-                    Login = test ? newID.ToString() : user.Login,
-                    PasswordHash = user.PasswordHash,
-                    Disabled = false
-                };
-
-                DB.Users.Add(newUser);
-                DB.SaveChanges();
-                return newUser;
-            }
-            catch (Exception e)
+            User newUser = new User
             {
-                return e;
-            }
+                ID = Guid.NewGuid(),
+                Nickname = user.Nickname,
+                Avatar = user.Avatar,
+                Login = user.Login,
+                PasswordHash = user.PasswordHash,
+                Disabled = false
+            };
+
+            DB.Users.Add(newUser);
+            DB.SaveChanges();
+            return newUser;
+        }
+
+        /// <summary>
+        /// Возвращает массив пользователей с указанным логином
+        /// </summary>
+        /// <param name="login">Логин, по которому идет поиск</param>
+        /// <returns>Массив пользователей</returns>
+        public IEnumerable<User> Search(string login)
+        {
+            if (!login.Any())
+                throw GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
+
+            return DB.Users.Where(u => u.Login.Contains(login)).ToArray();
         }
 
         public void Dispose()
         {
             DB.Dispose();
+        }
+
+        private Exception GenerateException(string message, HttpStatusCode code)
+        {
+            var ex = new HttpResponseMessage(code)
+            {
+                Content = new StringContent(message)
+            };
+
+            return new HttpResponseException(ex);
+        }
+
+        private void CheckUser(Guid id)
+        {
+            if (!DB.Users.Any(u => u.ID == id))
+                throw GenerateException("User ID is invalid", HttpStatusCode.BadRequest);
         }
     }
 }

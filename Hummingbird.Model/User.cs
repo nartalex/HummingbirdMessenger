@@ -10,9 +10,14 @@ namespace Hummingbird.Model
         [Required] public string Nickname { get; set; }
         public byte[] Avatar { get; set; }
         [Required] public string Login { get; set; }
-        [Required] public string PasswordHash { get; set; }
+        [Required] public string PasswordHash { get;  set; }
         public bool Disabled { get; set; }
 
         public ICollection<ChatMember> Chats { get; set; }
+
+        public override string ToString()
+        {
+            return $"ID: {ID}, Nickname: {Nickname}, Login: {Login}, Disabled: {Disabled}";
+        }
     }
 }
