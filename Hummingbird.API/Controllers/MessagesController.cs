@@ -32,7 +32,5 @@ namespace Hummingbird.API.Controllers
         [HttpGet, Route("api/messages/{chatId}/{skip}/{amount}")]
         public IEnumerable<Message> GetMessages(Guid chatId, int skip, int amount)
             => _messagesRepository.GetAmountOfMessages(chatId, skip, amount);
-
-
     }
 }
