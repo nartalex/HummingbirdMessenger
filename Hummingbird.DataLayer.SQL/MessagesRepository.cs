@@ -15,7 +15,6 @@ namespace Hummingbird.DataLayer.SQL
     public class MessagesRepository : IMessagesRepository
     {
         DatabaseContext DB = new DatabaseContext();
-        ChatsRepository _chatsRepository = new ChatsRepository();
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Stopwatch timer = new Stopwatch();
         private readonly int MAX_TIME = 1000;
@@ -94,7 +93,6 @@ namespace Hummingbird.DataLayer.SQL
             }
         }
 
-        //UNDONE: OrderBy Time не работает
         /// <summary>
         /// Возвращает указанное количество сообщений
         /// </summary>
@@ -109,6 +107,7 @@ namespace Hummingbird.DataLayer.SQL
 
             try
             {
+                ChatsRepository _chatsRepository = new ChatsRepository();
                 _chatsRepository.CheckChat(chatId);
                 if (amount <= 0)
                 {
@@ -151,12 +150,12 @@ namespace Hummingbird.DataLayer.SQL
 
             try
             {
+                ChatsRepository _chatsRepository = new ChatsRepository();
                 _chatsRepository.CheckChat(chatId);
-
                 var ret = DB.Messages
                            .Where(m => m.ChatToID == chatId)
-                           .OrderBy(m => m.Time)
-                           .Last();
+                           .OrderByDescending(m => m.Time)
+                           .First();
 
                 logger.Info($"Получение последнего сообщения в чате {chatId} - успешно за {timer.ElapsedMilliseconds} мс");
                 if (timer.ElapsedMilliseconds > MAX_TIME)

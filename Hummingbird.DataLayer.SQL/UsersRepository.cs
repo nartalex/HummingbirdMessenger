@@ -229,7 +229,11 @@ namespace Hummingbird.DataLayer.SQL
         /// <returns>Объект User в случае успеха</returns>
         public User Register(User user)
         {
-            logger.Info($"Попытка регистрации с логином {user.Login}, именем {user.Nickname}, хэшем {user.PasswordHash}, аватаром длиной {user.Avatar.Length}");
+            string log = $"Попытка регистрации с логином {user.Login}, именем {user.Nickname}, хэшем {user.PasswordHash}";
+            if (user.Avatar != null)
+                log += $", аватаром длиной { user.Avatar.Length}";
+
+            logger.Info(log);
 
             try
             {

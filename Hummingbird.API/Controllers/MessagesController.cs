@@ -25,7 +25,7 @@ namespace Hummingbird.API.Controllers
         public void EditMessage(Message edits)
             => _messagesRepository.EditMessage(edits);
 
-        [HttpGet, Route("api/messages/last/{id}")]
+        [HttpGet, Route("api/messages/last/{chatId}")]
         public Message LastMessage(Guid chatId)
             => _messagesRepository.GetLastMessage(chatId);
 

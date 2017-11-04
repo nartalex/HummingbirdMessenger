@@ -15,7 +15,6 @@ namespace Hummingbird.DataLayer.SQL
     public class ChatsRepository : IChatsRepository
     {
         private readonly DatabaseContext DB = new DatabaseContext();
-        private readonly MessagesRepository _messagesRepository = new MessagesRepository();
         private readonly UsersRepository _usersRepository = new UsersRepository();
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Stopwatch timer = new Stopwatch();
@@ -158,15 +157,16 @@ namespace Hummingbird.DataLayer.SQL
             try
             {
                 _usersRepository.CheckUser(userId);
+                MessagesRepository _messagesRepository = new MessagesRepository();
 
                 var chats = DB.ChatMembers
-                    .Include(c => c.Chat)
-                    .Where(u => u.UserID == userId)
-                    .Select(c => c.Chat)
-                    .ToArray();
+                            .Include(c => c.Chat)
+                            .Where(u => u.UserID == userId)
+                            .Select(c => c.Chat)
+                            .ToArray();
                 foreach (var c in chats)
                 {
-                    c.Messages = new[] { (Message)_messagesRepository.GetLastMessage(c.ID) };
+                    c.Messages = new[] { _messagesRepository.GetLastMessage(c.ID) };
                 }
                 var ret = chats.OrderBy(c => c.Messages.OrderBy(m => m.Time));
 
