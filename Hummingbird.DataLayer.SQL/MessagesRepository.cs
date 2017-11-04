@@ -5,8 +5,10 @@ using System.Data.Entity;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics;
 
 using Hummingbird.Model;
+using NLog;
 
 namespace Hummingbird.DataLayer.SQL
 {
@@ -14,6 +16,9 @@ namespace Hummingbird.DataLayer.SQL
     {
         DatabaseContext DB = new DatabaseContext();
         ChatsRepository _chatsRepository = new ChatsRepository();
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Stopwatch timer = new Stopwatch();
+        private readonly int MAX_TIME = 1000;
 
         /// <summary>
         /// Удаляет сообщение с указанным ID
@@ -21,10 +26,28 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="id">ID сообщения</param>
         public void DeleteMessage(Guid id)
         {
-            CheckMessage(id);
+            logger.Info($"Удаление сообщения {id}");
+            timer.Restart();
 
-            DB.Messages.Remove(DB.Messages.First(m => m.ID == id));
-            DB.SaveChanges();
+            try
+            {
+                CheckMessage(id);
+                DB.Messages.Remove(DB.Messages.First(m => m.ID == id));
+                DB.SaveChanges();
+
+                logger.Info($"Удаление сообщения {id} - успешно за {timer.ElapsedMilliseconds} мс");
+                if (timer.ElapsedMilliseconds > MAX_TIME)
+                    logger.Warn($"Удаление сообщения {id} заняло {timer.ElapsedMilliseconds} мс");
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"Ошибка при удалении сообщения {id}");
+                throw e;
+            }
+            finally
+            {
+                timer.Stop();
+            }
         }
 
         /// <summary>
@@ -33,22 +56,42 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="edits">Исправления</param>
         public void EditMessage(Message edits)
         {
-            CheckMessage(edits.ID);
-
-            Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
-
+            string log = $"Изменение сообщения {edits.ID} с исправлениями: ";
             if (edits.Text.Any())
-                toEdit.Text = edits.Text;
-
+                log += "текста, ";
             if (edits.AttachType != null)
-                toEdit.AttachType = edits.AttachType;
-
+                log += "типа аттача, ";
             if (edits.AttachPath.Any())
-                toEdit.AttachPath = edits.AttachPath;
+                log += "аттача";
+            logger.Info(log.TrimEnd(new[] { ',', ' ' }));
+            timer.Restart();
 
-            toEdit.Edited = true;
+            try
+            {
+                CheckMessage(edits.ID);
+                Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
+                if (edits.Text.Any())
+                    toEdit.Text = edits.Text;
+                if (edits.AttachType != null)
+                    toEdit.AttachType = edits.AttachType;
+                if (edits.AttachPath.Any())
+                    toEdit.AttachPath = edits.AttachPath;
+                toEdit.Edited = true;
+                DB.SaveChanges();
 
-            DB.SaveChanges();
+                logger.Info($"Изменение сообщения {edits.ID} - успешно за {timer.ElapsedMilliseconds} мс");
+                if (timer.ElapsedMilliseconds > MAX_TIME)
+                    logger.Warn($"Изменение сообщения {edits.ID} заняло {timer.ElapsedMilliseconds} мс");
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"Ошибка при изменении сообщения {edits.ID}");
+                throw e;
+            }
+            finally
+            {
+                timer.Stop();
+            }
         }
 
         //UNDONE: OrderBy Time не работает
@@ -61,16 +104,39 @@ namespace Hummingbird.DataLayer.SQL
         /// <returns>Массив с сообщениями в случае успеха</returns>
         public IEnumerable<Message> GetAmountOfMessages(Guid chatId, int skip, int amount)
         {
-            _chatsRepository.CheckChat(chatId);
-            if (amount <= 0)
-                throw GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
+            logger.Info($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip}");
+            timer.Restart();
 
-            return DB.Messages
-             .Where(m => m.ChatToID == chatId)
-             .OrderBy(m => m.Time)
-             .Skip(skip)
-             .Take(amount)
-             .ToArray();
+            try
+            {
+                _chatsRepository.CheckChat(chatId);
+                if (amount <= 0)
+                {
+                    logger.Info($"Получение сообщений в чате {chatId}: ноль сообщений запрошено. Создаем исключение.");
+                    throw GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
+                }
+                var ret = DB.Messages
+                  .Where(m => m.ChatToID == chatId)
+                  .OrderBy(m => m.Time)
+                  .Skip(skip)
+                  .Take(amount)
+                  .ToArray();
+
+                logger.Info($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip} - успешно за {timer.ElapsedMilliseconds} мс");
+                if (timer.ElapsedMilliseconds > MAX_TIME)
+                    logger.Warn($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip} заняло {timer.ElapsedMilliseconds} мс");
+
+                return ret;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"Ошибка при получении сообщений в чате {chatId}");
+                throw e;
+            }
+            finally
+            {
+                timer.Stop();
+            }
         }
 
         /// <summary>
@@ -80,13 +146,33 @@ namespace Hummingbird.DataLayer.SQL
         /// <returns>Объект Message в случае успеха</returns>
         public Message GetLastMessage(Guid chatId)
         {
-            _chatsRepository.CheckChat(chatId);
+            logger.Info($"Получение последнего сообщения в чате {chatId}");
+            timer.Restart();
 
-            return DB.Messages
-                       .Where(m => m.ChatToID == chatId)
-                       .OrderBy(m => m.Time)
-                       .Last();
+            try
+            {
+                _chatsRepository.CheckChat(chatId);
 
+                var ret = DB.Messages
+                           .Where(m => m.ChatToID == chatId)
+                           .OrderBy(m => m.Time)
+                           .Last();
+
+                logger.Info($"Получение последнего сообщения в чате {chatId} - успешно за {timer.ElapsedMilliseconds} мс");
+                if (timer.ElapsedMilliseconds > MAX_TIME)
+                    logger.Warn($"Получение последнего сообщения в чате {chatId} заняло {timer.ElapsedMilliseconds} мс");
+
+                return ret;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"Ошибка при получении последнего сообщения в чате  {chatId}");
+                throw e;
+            }
+            finally
+            {
+                timer.Stop();
+            }
         }
 
         /// <summary>
@@ -95,28 +181,51 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="message">Отправляемое сообщение</param>
         public Message SendMessage(Message message)
         {
-            Message newMessage = new Message
-            {
-                ID = Guid.NewGuid(),
-                UserFromID = message.UserFromID,
-                ChatToID = message.ChatToID,
-                Time = DateTime.Now,
-                TimeToLive = message.TimeToLive,
-                AttachType = message.AttachType,
-                AttachPath = message.AttachPath,
-                Text = message.Text,
-                Edited = false
-            };
+            logger.Info($"Отправление сообщения в чат {message.ChatToID} от пользователя {message.UserFromID}");
+            timer.Restart();
 
-            DB.Messages.Add(newMessage);
-            DB.SaveChanges();
-            return newMessage;
+            try
+            {
+                Message newMessage = new Message
+                {
+                    ID = Guid.NewGuid(),
+                    UserFromID = message.UserFromID,
+                    ChatToID = message.ChatToID,
+                    Time = DateTime.Now,
+                    TimeToLive = message.TimeToLive,
+                    AttachType = message.AttachType,
+                    AttachPath = message.AttachPath,
+                    Text = message.Text,
+                    Edited = false
+                };
+
+                DB.Messages.Add(newMessage);
+                DB.SaveChanges();
+
+                logger.Info($"Отправление сообщения в чат - успешно за {timer.ElapsedMilliseconds} мс");
+                if (timer.ElapsedMilliseconds > MAX_TIME)
+                    logger.Warn($"Отправление сообщения в чат заняло {timer.ElapsedMilliseconds} мс");
+
+                return newMessage;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, $"Ошибка при отправлении сообщения в чат {message.ChatToID} от пользователя {message.UserFromID}");
+                throw e;
+            }
+            finally
+            {
+                timer.Stop();
+            }
         }
 
         private void CheckMessage(Guid id)
         {
             if (DB.Messages.Any(m => m.ID == id))
+            {
+                logger.Error($"Message ID is invalid: {id}");
                 throw GenerateException("Message ID is invalid", HttpStatusCode.BadRequest);
+            }
         }
 
         private Exception GenerateException(string message, HttpStatusCode code)
