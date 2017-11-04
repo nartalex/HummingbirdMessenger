@@ -9,24 +9,24 @@ namespace Hummingbird.DataLayer.SQL.Tests
         static ChatsRepository chatsRepository = new ChatsRepository();
         static UsersRepository usersRepository = new UsersRepository();
 
-        internal static object User()
+        internal static User User()
         {
-            var userId = Guid.NewGuid();
             var user = new User
             {
                 Nickname = "TestUser",
-                PasswordHash = "TestPassword",
+                Login = Guid.NewGuid().ToString(),
+                PasswordHash = "TestPassword"
             };
 
-            return usersRepository.Register(user, true);
+            return usersRepository.Register(user);
         }
 
-        internal static object Chat(int usersAmount = 2)
+        internal static Chat Chat(int usersAmount = 2)
         {
             List<Guid> members = new List<Guid>();
             for (int i = 0; i < usersAmount; i++)
             {
-                members.Add(((User)User()).ID);
+                members.Add(User().ID);
             }
 
             Chat chat = new Chat

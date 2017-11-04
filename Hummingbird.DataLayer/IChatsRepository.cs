@@ -6,12 +6,12 @@ namespace Hummingbird.DataLayer
 {
     public interface IChatsRepository
     {
-        object Create(Chat chat, IEnumerable<Guid> members);
-        object GetUserChats(Guid userId);
-        object DeleteChat(Guid chatId);
-        object ChangeName(Guid chatId, string newName);
-        object ChangeAvatar(Guid chatId, byte[] newAvatar);
-        object AddMembers(Guid chatId, IEnumerable<Guid> userIds);
-        object DeleteMembers(Guid chatId, IEnumerable<Guid> userIds);
+        Chat Create(Chat chat, IEnumerable<Guid> members);
+        IEnumerable<Chat> GetUserChats(Guid userId);
+        void DeleteChat(Guid chatId);
+        void ChangeName(Guid chatId, string newName);
+        void ChangeAvatar(Guid chatId, byte[] newAvatar);
+        void AddMembers(Guid chatId, IEnumerable<Guid> userIds);
+        void DeleteMembers(Guid chatId, IEnumerable<Guid> userIds);
     }
 }

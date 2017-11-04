@@ -1,64 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 using Hummingbird.Model;
 
 namespace Hummingbird.DataLayer.SQL
 {
-    public class MessagesRepository : IMessagesRepository, IDisposable
+    public class MessagesRepository : IMessagesRepository
     {
         DatabaseContext DB = new DatabaseContext();
+        ChatsRepository _chatsRepository = new ChatsRepository();
 
         /// <summary>
         /// Удаляет сообщение с указанным ID
         /// </summary>
         /// <param name="id">ID сообщения</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object DeleteMessage(Guid id)
+        public void DeleteMessage(Guid id)
         {
-            try
-            {
-                DB.Messages.Remove(DB.Messages.First(m => m.ID == id));
-                DB.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            CheckMessage(id);
+
+            DB.Messages.Remove(DB.Messages.First(m => m.ID == id));
+            DB.SaveChanges();
         }
 
         /// <summary>
         /// Изменение сообщения
         /// </summary>
-        /// <param name="edits">Исправленное сообщение</param>
-        /// <returns>True в случае успеха, Exceprion в случае ошибки</returns>
-        public object EditMessage(Message edits)
+        /// <param name="edits">Исправления</param>
+        public void EditMessage(Message edits)
         {
-            try
-            {
-                Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
-                // toEdit.Text = newMessage.Text ??;
-                if (edits.Text != null)
-                    toEdit.Text = edits.Text;
+            CheckMessage(edits.ID);
 
-                if (edits.AttachType != null)
-                    toEdit.AttachType = edits.AttachType;
+            Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
 
-                if (edits.AttachPath != null)
-                    toEdit.AttachPath = edits.AttachPath;
+            if (edits.Text.Any())
+                toEdit.Text = edits.Text;
 
-                toEdit.Edited = true;
+            if (edits.AttachType != null)
+                toEdit.AttachType = edits.AttachType;
 
-                DB.SaveChanges();
+            if (edits.AttachPath.Any())
+                toEdit.AttachPath = edits.AttachPath;
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            toEdit.Edited = true;
+
+            DB.SaveChanges();
         }
 
         //UNDONE: OrderBy Time не работает
@@ -68,80 +58,75 @@ namespace Hummingbird.DataLayer.SQL
         /// <param name="chatId">ID чата</param>
         /// <param name="amount">Количество возвращаемых сообщений</param>
         /// <param name="skip">Количество пропускаемых сообщений</param>
-        /// <returns>Массив с сообщениями в случае успеха, Exceprion в случае ошибки</returns>
-        public object GetAmountOfMessages(Guid chatId, int skip, int amount)
+        /// <returns>Массив с сообщениями в случае успеха</returns>
+        public IEnumerable<Message> GetAmountOfMessages(Guid chatId, int skip, int amount)
         {
-            try
-            {
-                return DB.Messages
-                           .Where(m => m.ChatToID == chatId)
-                           .OrderBy(m => m.Time)
-                           .Skip(skip)
-                           .Take(amount)
-                           .ToArray();
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            _chatsRepository.CheckChat(chatId);
+            if (amount <= 0)
+                throw GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
+
+            return DB.Messages
+             .Where(m => m.ChatToID == chatId)
+             .OrderBy(m => m.Time)
+             .Skip(skip)
+             .Take(amount)
+             .ToArray();
         }
 
         /// <summary>
         /// Возвращает последнее сообщение в указанном чате
         /// </summary>
         /// <param name="chatId">ID чата</param>
-        /// <returns>Объект Message в случае успеха, Exceprion в случае ошибки</returns>
-        public object GetLastMessage(Guid chatId)
+        /// <returns>Объект Message в случае успеха</returns>
+        public Message GetLastMessage(Guid chatId)
         {
-            try
-            {
-                return DB.Messages
-                           .Where(m => m.ChatToID == chatId)
-                           .OrderBy(m => m.Time)
-                           .ToArray()
-                           .Last();
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            _chatsRepository.CheckChat(chatId);
+
+            return DB.Messages
+                       .Where(m => m.ChatToID == chatId)
+                       .OrderBy(m => m.Time)
+                       .Last();
+
         }
 
         /// <summary>
         /// Отправление сообщения
         /// </summary>
         /// <param name="message">Отправляемое сообщение</param>
-        /// <returns>Объект Message в случае успеха, Exceprion в случае ошибки</returns>
-        public object SendMessage(Message message)
+        public Message SendMessage(Message message)
         {
-            try
+            Message newMessage = new Message
             {
-                Message newMessage = new Message
-                {
-                    ID = Guid.NewGuid(),
-                    UserFromID = message.UserFromID,
-                    ChatToID = message.ChatToID,
-                    Time = DateTime.Now,
-                    TimeToLive = message.TimeToLive,
-                    AttachType = message.AttachType,
-                    AttachPath = message.AttachPath,
-                    Text = message.Text,
-                    Edited = false
-                };
+                ID = Guid.NewGuid(),
+                UserFromID = message.UserFromID,
+                ChatToID = message.ChatToID,
+                Time = DateTime.Now,
+                TimeToLive = message.TimeToLive,
+                AttachType = message.AttachType,
+                AttachPath = message.AttachPath,
+                Text = message.Text,
+                Edited = false
+            };
 
-                DB.Messages.Add(newMessage);
-                DB.SaveChanges();
-                return newMessage;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
+            DB.Messages.Add(newMessage);
+            DB.SaveChanges();
+            return newMessage;
         }
 
-        public void Dispose()
+        private void CheckMessage(Guid id)
         {
-            DB.Dispose();
+            if (DB.Messages.Any(m => m.ID == id))
+                throw GenerateException("Message ID is invalid", HttpStatusCode.BadRequest);
+        }
+
+        private Exception GenerateException(string message, HttpStatusCode code)
+        {
+            var ex = new HttpResponseMessage(code)
+            {
+                Content = new StringContent(message)
+            };
+
+            return new HttpResponseException(ex);
         }
     }
 }

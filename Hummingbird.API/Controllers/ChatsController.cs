@@ -15,35 +15,35 @@ namespace Hummingbird.API.Controllers
         private readonly ChatsRepository _chatsRepository = new ChatsRepository();
 
         [HttpPost, Route("api/chats/create")]
-        public object Create([FromBody] Chat chat)
-            => _chatsRepository.Create(chat);
+        public Chat Create([FromBody] Chat chat)
+            => _chatsRepository.Create(chat, chat.Members.Select(m => m.UserID));
 
         [HttpGet, Route("api/chats/{id}")]
-        public object GetChat(Guid id) 
+        public Chat GetChat(Guid id) 
             => _chatsRepository.GetChat(id);
 
         [HttpDelete, Route("api/chats/{id}")]
-        public object DeleteChat(Guid id)
+        public void DeleteChat(Guid id)
             => _chatsRepository.DeleteChat(id);
 
         [HttpGet, Route("api/chats/userchats/{id}")]
-        public object GetUserChats(Guid id)
+        public IEnumerable<Chat> GetUserChats(Guid id)
             => _chatsRepository.GetUserChats(id);
 
         [HttpPost, Route("api/chats/addMembers")]
-        public object AddMembers([FromBody] Chat chat)
-            => _chatsRepository.AddMembers(chat);
+        public void AddMembers([FromBody] Chat chat)
+            => _chatsRepository.AddMembers(chat.ID, chat.Members.Select(m => m.UserID));
 
         [HttpPost, Route("api/chats/deleteMembers")]
-        public object DeleteMembers([FromBody] Chat chat)
-            => _chatsRepository.DeleteMembers(chat);
+        public void DeleteMembers([FromBody] Chat chat)
+            => _chatsRepository.DeleteMembers(chat.ID, chat.Members.Select(m => m.UserID));
 
         [HttpPost, Route("api/chats/changeAvatar")]
-        public object ChangeAvatar([FromBody] Chat chat)
-            => _chatsRepository.ChangeAvatar(chat);
+        public void ChangeAvatar([FromBody] Chat chat)
+            => _chatsRepository.ChangeAvatar(chat.ID, chat.Avatar);
 
         [HttpPost, Route("api/chats/changeName")]
-        public object ChangeName([FromBody] Chat chat)
-            => _chatsRepository.ChangeName(chat);
+        public void ChangeName([FromBody] Chat chat)
+            => _chatsRepository.ChangeName(chat.ID, chat.Name);
     }
 }

@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Hummingbird.DataLayer.SQL
 {
-    public class UsersRepository : IUsersRepository, IDisposable
+    public class UsersRepository : IUsersRepository
     {
         private readonly DatabaseContext DB = new DatabaseContext();
         //private readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
@@ -173,11 +173,6 @@ namespace Hummingbird.DataLayer.SQL
                 throw GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
 
             return DB.Users.Where(u => u.Login.Contains(login)).ToArray();
-        }
-
-        public void Dispose()
-        {
-            DB.Dispose();
         }
 
         private Exception GenerateException(string message, HttpStatusCode code)

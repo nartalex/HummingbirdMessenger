@@ -14,23 +14,23 @@ namespace Hummingbird.API.Controllers
         MessagesRepository _messagesRepository = new MessagesRepository();
 
         [HttpPost, Route("api/messages/send")]
-        public object SendMessage(Message message)
+        public Message SendMessage(Message message)
             => _messagesRepository.SendMessage(message);
 
         [HttpDelete, Route("api/messages/{id}")]
-        public object DeleteMessage(Guid id)
+        public void DeleteMessage(Guid id)
             => _messagesRepository.DeleteMessage(id);
 
         [HttpPost, Route("api/messages/edit")]
-        public object EditMessage(Message edits)
+        public void EditMessage(Message edits)
             => _messagesRepository.EditMessage(edits);
 
         [HttpGet, Route("api/messages/last/{id}")]
-        public object LastMessage(Guid chatId)
+        public Message LastMessage(Guid chatId)
             => _messagesRepository.GetLastMessage(chatId);
 
         [HttpGet, Route("api/messages/{chatId}/{skip}/{amount}")]
-        public object GetMessages(Guid chatId, int skip, int amount)
+        public IEnumerable<Message> GetMessages(Guid chatId, int skip, int amount)
             => _messagesRepository.GetAmountOfMessages(chatId, skip, amount);
 
 
