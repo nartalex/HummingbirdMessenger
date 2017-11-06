@@ -12,8 +12,6 @@ namespace Hummingbird.WinFormsClient.Controls
 {
     public partial class StartControl : UserControl
     {
-        Form Owner;
-
         public StartControl()
         {
             InitializeComponent();
@@ -21,7 +19,14 @@ namespace Hummingbird.WinFormsClient.Controls
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            Form parentForm = (this.Parent as Form);
+            var parentForm = (this.Parent as StartForm);
+            parentForm.ShowLoginForm();
+        }
+
+        private void RegisterButton_Click(object sender, EventArgs e)
+        {
+            var parentForm = (this.Parent as StartForm);
+            parentForm.ShowRegisterForm();
         }
     }
 }

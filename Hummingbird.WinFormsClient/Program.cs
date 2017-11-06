@@ -14,6 +14,7 @@ namespace Hummingbird.WinFormsClient
         [STAThread]
         static void Main()
         {
+            ServiceClient.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new StartForm());

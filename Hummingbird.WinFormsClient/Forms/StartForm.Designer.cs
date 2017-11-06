@@ -32,7 +32,7 @@ namespace Hummingbird.WinFormsClient
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartForm));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.startControl1 = new Hummingbird.WinFormsClient.Controls.StartControl();
+            this.StartControl = new Hummingbird.WinFormsClient.Controls.StartControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,20 +49,20 @@ namespace Hummingbird.WinFormsClient
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // startControl1
+            // StartControl
             // 
-            this.startControl1.BackColor = System.Drawing.Color.Transparent;
-            this.startControl1.Location = new System.Drawing.Point(21, 338);
-            this.startControl1.Name = "startControl1";
-            this.startControl1.Size = new System.Drawing.Size(360, 300);
-            this.startControl1.TabIndex = 1;
+            this.StartControl.BackColor = System.Drawing.Color.Transparent;
+            this.StartControl.Location = new System.Drawing.Point(17, 259);
+            this.StartControl.Name = "StartControl";
+            this.StartControl.Size = new System.Drawing.Size(360, 300);
+            this.StartControl.TabIndex = 1;
             // 
             // StartForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(3)))), ((int)(((byte)(169)))), ((int)(((byte)(244)))));
+            this.BackColor = Properties.Settings.Default.PrimaryColor;
             this.ClientSize = new System.Drawing.Size(384, 561);
-            this.Controls.Add(this.startControl1);
+            this.Controls.Add(this.StartControl);
             this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -79,7 +79,7 @@ namespace Hummingbird.WinFormsClient
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private Controls.StartControl startControl1;
+        private Controls.StartControl StartControl;
     }
 }
 

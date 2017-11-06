@@ -79,5 +79,23 @@ namespace Hummingbird.WinFormsClient.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Логин.
+        /// </summary>
+        internal static string LoginPlaceholder {
+            get {
+                return ResourceManager.GetString("LoginPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пароль.
+        /// </summary>
+        internal static string PasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
     }
 }

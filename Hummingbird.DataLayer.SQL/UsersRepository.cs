@@ -281,7 +281,7 @@ namespace Hummingbird.DataLayer.SQL
             }
             catch (Exception e)
             {
-                logger.Error(e, $"Ошибка при регистрации пользователя с логином {user.Login}, именем {user.Nickname}, хэшем {user.PasswordHash}, аватаром длиной {user.Avatar.Length}");
+                logger.Error(e, $"Ошибка при регистрации пользователя.");
                 throw e;
             }
             finally
