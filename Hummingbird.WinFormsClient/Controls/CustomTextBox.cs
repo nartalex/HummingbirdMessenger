@@ -13,7 +13,7 @@ namespace Hummingbird.WinFormsClient
             AutoSize = false; //Allows you to change height to have bottom padding
             Controls.Add(new Label()
             {
-                Height = 3,
+                Height = 1,
                 Dock = DockStyle.Bottom,
                 BackColor = Properties.Settings.Default.PrimaryColorDark
             });
@@ -24,10 +24,10 @@ namespace Hummingbird.WinFormsClient
             if (Text != placeholder)
                 return;
 
-            var regularFont = new Font("Segoe UI", 18f, FontStyle.Regular);
+            //var regularFont = new Font("Segoe UI", 18f, FontStyle.Regular);
 
-            ForeColor = Color.Black;
-            Font = regularFont;
+            ForeColor = Color.White;
+            //Font = regularFont;
 
             this.Text = "";
         }
@@ -36,10 +36,10 @@ namespace Hummingbird.WinFormsClient
         {
             if (String.IsNullOrWhiteSpace(this.Text))
             {
-                var placeholderFont = new Font("Segoe UI Light", 18f, FontStyle.Italic);
+                //var placeholderFont = new Font("Segoe UI Light", 18f, FontStyle.Italic);
 
                 ForeColor = Properties.Settings.Default.PrimaryColorDark;
-                Font = placeholderFont;
+                //Font = placeholderFont;
 
                 this.Text = placeholder;
             }

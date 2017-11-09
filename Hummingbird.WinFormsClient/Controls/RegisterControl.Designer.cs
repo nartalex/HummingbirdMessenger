@@ -84,7 +84,7 @@
             // 
             this.NicknameTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
             this.NicknameTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.NicknameTextbox.Font = new System.Drawing.Font("Segoe UI Light", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.NicknameTextbox.Font = Properties.Settings.Default.StartFormFont;
             this.NicknameTextbox.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColorDark;
             this.NicknameTextbox.Location = new System.Drawing.Point(50, 50);
             this.NicknameTextbox.Margin = new System.Windows.Forms.Padding(15, 5, 5, 5);
@@ -99,7 +99,7 @@
             // 
             this.PasswordTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
             this.PasswordTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PasswordTextbox.Font = new System.Drawing.Font("Segoe UI Light", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.PasswordTextbox.Font = Properties.Settings.Default.StartFormFont;
             this.PasswordTextbox.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColorDark;
             this.PasswordTextbox.Location = new System.Drawing.Point(50, 170);
             this.PasswordTextbox.Margin = new System.Windows.Forms.Padding(5);
@@ -114,7 +114,7 @@
             // 
             this.LoginTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
             this.LoginTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.LoginTextbox.Font = new System.Drawing.Font("Segoe UI Light", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LoginTextbox.Font = Properties.Settings.Default.StartFormFont;
             this.LoginTextbox.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColorDark;
             this.LoginTextbox.Location = new System.Drawing.Point(50, 110);
             this.LoginTextbox.Margin = new System.Windows.Forms.Padding(15, 5, 5, 5);

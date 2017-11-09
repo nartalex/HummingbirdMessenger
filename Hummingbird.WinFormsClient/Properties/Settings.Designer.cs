@@ -106,5 +106,14 @@ namespace Hummingbird.WinFormsClient.Properties {
                 return ((global::System.Drawing.Color)(this["WarnColorDark"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI, 18pt")]
+        public global::System.Drawing.Font StartFormFont {
+            get {
+                return ((global::System.Drawing.Font)(this["StartFormFont"]));
+            }
+        }
     }
 }
