@@ -36,18 +36,19 @@
             // 
             this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LoginButton.BackColor = Properties.Settings.Default.SecondaryColor;
+            this.LoginButton.BackColor = System.Drawing.Color.Transparent;
+            this.LoginButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.LoginButton.FlatAppearance.BorderSize = 0;
-            this.LoginButton.FlatAppearance.MouseDownBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.LoginButton.FlatAppearance.MouseOverBackColor = Properties.Settings.Default.PrimaryColorLight;
+            this.LoginButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.LoginButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LoginButton.ForeColor = System.Drawing.Color.Black;
-            this.LoginButton.Location = new System.Drawing.Point(50, 50);
+            this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.LoginButton.Location = new System.Drawing.Point(130, 50);
             this.LoginButton.Margin = new System.Windows.Forms.Padding(0);
             this.LoginButton.Name = "LoginButton";
-            this.LoginButton.Size = new System.Drawing.Size(250, 50);
+            this.LoginButton.Size = new System.Drawing.Size(100, 50);
             this.LoginButton.TabIndex = 2;
             this.LoginButton.Text = "Войти";
             this.LoginButton.UseVisualStyleBackColor = false;
@@ -57,17 +58,18 @@
             // 
             this.RegisterButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RegisterButton.BackColor = Properties.Settings.Default.SecondaryColor;
+            this.RegisterButton.BackColor = System.Drawing.Color.Transparent;
+            this.RegisterButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.RegisterButton.FlatAppearance.BorderSize = 0;
-            this.RegisterButton.FlatAppearance.MouseDownBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.RegisterButton.FlatAppearance.MouseOverBackColor = Properties.Settings.Default.PrimaryColorLight;
+            this.RegisterButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.RegisterButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.RegisterButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RegisterButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.RegisterButton.ForeColor = System.Drawing.Color.Black;
-            this.RegisterButton.Location = new System.Drawing.Point(50, 125);
+            this.RegisterButton.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RegisterButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.RegisterButton.Location = new System.Drawing.Point(30, 125);
             this.RegisterButton.Margin = new System.Windows.Forms.Padding(0);
             this.RegisterButton.Name = "RegisterButton";
-            this.RegisterButton.Size = new System.Drawing.Size(250, 50);
+            this.RegisterButton.Size = new System.Drawing.Size(300, 50);
             this.RegisterButton.TabIndex = 3;
             this.RegisterButton.Text = "Зарегистрироваться";
             this.RegisterButton.UseVisualStyleBackColor = false;
@@ -76,7 +78,7 @@
             // StartControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.Transparent;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.RegisterButton);
             this.Controls.Add(this.LoginButton);
             this.Name = "StartControl";

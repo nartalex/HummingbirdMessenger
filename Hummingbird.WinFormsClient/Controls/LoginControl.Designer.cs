@@ -28,18 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PasswordTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
-            this.LoginTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
             this.LoginButton = new System.Windows.Forms.Button();
             this.BackToStartButton = new System.Windows.Forms.Button();
+            this.PasswordTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
+            this.LoginTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
             this.SuspendLayout();
+            // 
+            // LoginButton
+            // 
+            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoginButton.BackColor = System.Drawing.Color.Transparent;
+            this.LoginButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.LoginButton.FlatAppearance.BorderSize = 0;
+            this.LoginButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.LoginButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LoginButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+            this.LoginButton.Location = new System.Drawing.Point(260, 240);
+            this.LoginButton.Margin = new System.Windows.Forms.Padding(0);
+            this.LoginButton.Name = "LoginButton";
+            this.LoginButton.Size = new System.Drawing.Size(100, 40);
+            this.LoginButton.TabIndex = 3;
+            this.LoginButton.Text = "Войти";
+            this.LoginButton.UseVisualStyleBackColor = false;
+            this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
+            // 
+            // BackToStartButton
+            // 
+            this.BackToStartButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BackToStartButton.BackColor = System.Drawing.Color.Transparent;
+            this.BackToStartButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BackToStartButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.BackToStartButton.FlatAppearance.BorderSize = 0;
+            this.BackToStartButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.BackToStartButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.BackToStartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BackToStartButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BackToStartButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+            this.BackToStartButton.Location = new System.Drawing.Point(0, 240);
+            this.BackToStartButton.Margin = new System.Windows.Forms.Padding(0);
+            this.BackToStartButton.Name = "BackToStartButton";
+            this.BackToStartButton.Size = new System.Drawing.Size(100, 40);
+            this.BackToStartButton.TabIndex = 4;
+            this.BackToStartButton.Text = "Назад";
+            this.BackToStartButton.UseVisualStyleBackColor = false;
+            this.BackToStartButton.Click += new System.EventHandler(this.BackToStartButton_Click);
             // 
             // PasswordTextbox
             // 
-            this.PasswordTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+            this.PasswordTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.BackgroundColor;
             this.PasswordTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PasswordTextbox.Font = Properties.Settings.Default.StartFormFont;
-            this.PasswordTextbox.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColorDark;
+            this.PasswordTextbox.Font = new System.Drawing.Font("Segoe UI Light", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.PasswordTextbox.ForeColor = System.Drawing.Color.Gray;
             this.PasswordTextbox.Location = new System.Drawing.Point(50, 110);
             this.PasswordTextbox.Margin = new System.Windows.Forms.Padding(5);
             this.PasswordTextbox.Name = "PasswordTextbox";
@@ -51,10 +95,10 @@
             // 
             // LoginTextbox
             // 
-            this.LoginTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+            this.LoginTextbox.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.BackgroundColor;
             this.LoginTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.LoginTextbox.Font = Properties.Settings.Default.StartFormFont;
-            this.LoginTextbox.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColorDark;
+            this.LoginTextbox.Font = new System.Drawing.Font("Segoe UI Light", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LoginTextbox.ForeColor = System.Drawing.Color.Gray;
             this.LoginTextbox.Location = new System.Drawing.Point(50, 50);
             this.LoginTextbox.Margin = new System.Windows.Forms.Padding(15, 5, 5, 5);
             this.LoginTextbox.Name = "LoginTextbox";
@@ -63,48 +107,6 @@
             this.LoginTextbox.Text = "Логин";
             this.LoginTextbox.Enter += new System.EventHandler(this.LoginTextbox_Enter);
             this.LoginTextbox.Leave += new System.EventHandler(this.LoginTextbox_Leave);
-            // 
-            // LoginButton
-            // 
-            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LoginButton.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.SecondaryColor;
-            this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.LoginButton.FlatAppearance.BorderSize = 0;
-            this.LoginButton.FlatAppearance.MouseDownBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.LoginButton.FlatAppearance.MouseOverBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LoginButton.ForeColor = System.Drawing.Color.Black;
-            this.LoginButton.Location = new System.Drawing.Point(253, 257);
-            this.LoginButton.Margin = new System.Windows.Forms.Padding(0);
-            this.LoginButton.Name = "LoginButton";
-            this.LoginButton.Size = new System.Drawing.Size(98, 31);
-            this.LoginButton.TabIndex = 3;
-            this.LoginButton.Text = "Войти";
-            this.LoginButton.UseVisualStyleBackColor = false;
-            this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
-            // 
-            // BackToStartButton
-            // 
-            this.BackToStartButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BackToStartButton.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.SecondaryColor;
-            this.BackToStartButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.BackToStartButton.FlatAppearance.BorderSize = 0;
-            this.BackToStartButton.FlatAppearance.MouseDownBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.BackToStartButton.FlatAppearance.MouseOverBackColor = Properties.Settings.Default.PrimaryColorLight;
-            this.BackToStartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BackToStartButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BackToStartButton.ForeColor = System.Drawing.Color.Black;
-            this.BackToStartButton.Location = new System.Drawing.Point(9, 257);
-            this.BackToStartButton.Margin = new System.Windows.Forms.Padding(0);
-            this.BackToStartButton.Name = "BackToStartButton";
-            this.BackToStartButton.Size = new System.Drawing.Size(98, 31);
-            this.BackToStartButton.TabIndex = 4;
-            this.BackToStartButton.Text = "Назад";
-            this.BackToStartButton.UseVisualStyleBackColor = false;
-            this.BackToStartButton.Click += new System.EventHandler(this.BackToStartButton_Click);
             // 
             // LoginControl
             // 

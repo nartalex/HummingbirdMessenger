@@ -130,4 +130,10 @@
   <data name="PasswordPlaceholder" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="logo_teal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo_teal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="transparent_bird" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\transparent_bird.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

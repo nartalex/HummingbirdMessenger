@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Text;
 using System;
+using System.Linq;
 
 namespace Hummingbird.WinFormsClient
 {
@@ -13,9 +14,10 @@ namespace Hummingbird.WinFormsClient
             AutoSize = false; //Allows you to change height to have bottom padding
             Controls.Add(new Label()
             {
-                Height = 1,
+                Height = 2,
                 Dock = DockStyle.Bottom,
-                BackColor = Properties.Settings.Default.PrimaryColorDark
+                BackColor = System.Drawing.Color.Gray,
+                Name = "TextboxUnderline"
             });
         }
 
@@ -24,24 +26,22 @@ namespace Hummingbird.WinFormsClient
             if (Text != placeholder)
                 return;
 
-            //var regularFont = new Font("Segoe UI", 18f, FontStyle.Regular);
-
-            ForeColor = Color.White;
-            //Font = regularFont;
+            ForeColor = Properties.Settings.Default.PrimaryColor;
+            Font = new Font("Segoe UI", 16f, FontStyle.Regular);
 
             this.Text = "";
+            this.Controls.Find("TextboxUnderline", true).First().BackColor = Properties.Settings.Default.PrimaryColor;
         }
 
         public void AddText(string placeholder)
         {
             if (String.IsNullOrWhiteSpace(this.Text))
             {
-                //var placeholderFont = new Font("Segoe UI Light", 18f, FontStyle.Italic);
-
-                ForeColor = Properties.Settings.Default.PrimaryColorDark;
-                //Font = placeholderFont;
+                ForeColor = Color.Gray;
+                Font = new Font("Segoe UI Light", 16f, FontStyle.Regular);
 
                 this.Text = placeholder;
+                this.Controls.Find("TextboxUnderline", true).First().BackColor = Color.Gray;
             }
         }
     }

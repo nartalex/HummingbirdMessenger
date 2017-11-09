@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ReactiveAnimation;
 
 namespace Hummingbird.WinFormsClient
 {
@@ -17,13 +18,13 @@ namespace Hummingbird.WinFormsClient
         public StartForm()
         {
             InitializeComponent();
-            h = StartControl.Top;
-            w = StartControl.Left;
+            h = startControl.Top;
+            w = startControl.Left;
         }
 
         public void ShowLoginForm()
-        {           
-            StartControl.Hide();
+        {
+            startControl.Hide();
 
             LoginControl loginControl = new LoginControl
             {
@@ -35,7 +36,7 @@ namespace Hummingbird.WinFormsClient
 
         public void ShowRegisterForm()
         {
-            StartControl.Hide();
+            startControl.Hide();
 
             RegisterControl registerControl = new RegisterControl
             {
@@ -45,9 +46,14 @@ namespace Hummingbird.WinFormsClient
             this.Controls.Add(registerControl);
         }
 
+        private void StartForm_Shown(object sender, EventArgs e)
+        {
+
+        }
+
         public void BackToStartForm()
         {
-            StartControl.Show();
+            startControl.Show();
         }
     }
 }

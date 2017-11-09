@@ -37,7 +37,7 @@ namespace Hummingbird.WinFormsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1, 169, 244")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 150, 136")]
         public global::System.Drawing.Color PrimaryColor {
             get {
                 return ((global::System.Drawing.Color)(this["PrimaryColor"]));
@@ -46,52 +46,7 @@ namespace Hummingbird.WinFormsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("250, 250, 250")]
-        public global::System.Drawing.Color SecondaryColor {
-            get {
-                return ((global::System.Drawing.Color)(this["SecondaryColor"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("103, 218, 255")]
-        public global::System.Drawing.Color PrimaryColorLight {
-            get {
-                return ((global::System.Drawing.Color)(this["PrimaryColorLight"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 122, 193")]
-        public global::System.Drawing.Color PrimaryColorDark {
-            get {
-                return ((global::System.Drawing.Color)(this["PrimaryColorDark"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color SecondaryColorLight {
-            get {
-                return ((global::System.Drawing.Color)(this["SecondaryColorLight"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("199, 199, 199")]
-        public global::System.Drawing.Color SecondaryColorDark {
-            get {
-                return ((global::System.Drawing.Color)(this["SecondaryColorDark"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255, 138, 128")]
+        [global::System.Configuration.DefaultSettingValueAttribute("244, 81, 30")]
         public global::System.Drawing.Color WarnColor {
             get {
                 return ((global::System.Drawing.Color)(this["WarnColor"]));
@@ -100,19 +55,10 @@ namespace Hummingbird.WinFormsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("200, 90, 84")]
-        public global::System.Drawing.Color WarnColorDark {
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color BackgroundColor {
             get {
-                return ((global::System.Drawing.Color)(this["WarnColorDark"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI, 18pt")]
-        public global::System.Drawing.Font StartFormFont {
-            get {
-                return ((global::System.Drawing.Font)(this["StartFormFont"]));
+                return ((global::System.Drawing.Color)(this["BackgroundColor"]));
             }
         }
     }
