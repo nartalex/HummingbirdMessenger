@@ -34,8 +34,9 @@
             // 
             // LoginButton
             // 
-            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top 
+                | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.LoginButton.BackColor = System.Drawing.Color.Transparent;
             this.LoginButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
@@ -44,7 +45,7 @@
             this.LoginButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.LoginButton.ForeColor = Properties.Settings.Default.PrimaryColor;
             this.LoginButton.Location = new System.Drawing.Point(130, 50);
             this.LoginButton.Margin = new System.Windows.Forms.Padding(0);
             this.LoginButton.Name = "LoginButton";
@@ -65,7 +66,7 @@
             this.RegisterButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.RegisterButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.RegisterButton.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RegisterButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.RegisterButton.ForeColor = Properties.Settings.Default.PrimaryColor;
             this.RegisterButton.Location = new System.Drawing.Point(30, 125);
             this.RegisterButton.Margin = new System.Windows.Forms.Padding(0);
             this.RegisterButton.Name = "RegisterButton";

@@ -41,7 +41,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при удалении сообщения {id}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -85,7 +85,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении сообщения {edits.ID}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -130,7 +130,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при получении сообщений в чате {chatId}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -166,7 +166,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при получении последнего сообщения в чате  {chatId}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -210,7 +210,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при отправлении сообщения в чат {message.ChatToID} от пользователя {message.UserFromID}");
-                throw e;
+                throw;
             }
             finally
             {

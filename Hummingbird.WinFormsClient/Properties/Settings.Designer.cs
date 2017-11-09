@@ -37,7 +37,7 @@ namespace Hummingbird.WinFormsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 150, 136")]
+        [global::System.Configuration.DefaultSettingValueAttribute("103, 58, 183")]
         public global::System.Drawing.Color PrimaryColor {
             get {
                 return ((global::System.Drawing.Color)(this["PrimaryColor"]));

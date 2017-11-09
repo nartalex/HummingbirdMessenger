@@ -75,7 +75,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при cоздании чата с именем {chat.Name} и количеством участников {members.Count()}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -104,7 +104,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при получении информации о чате {id}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -136,7 +136,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при удалении чата {id}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -179,7 +179,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при получении списка чатов для пользователя {userId}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -220,7 +220,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при добавлении в чат {chatId} пользователей в количестве {userIds.Count()}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -257,7 +257,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при удалении из чата {chatId} пользователей в количестве {userIds.Count()}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -291,7 +291,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении аватара в чате {chatId}, размер нового аватара {newAvatar.Length}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -328,7 +328,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении имени чата {chatId}, новое имя: {newName}");
-                throw e;
+                throw;
             }
             finally
             {

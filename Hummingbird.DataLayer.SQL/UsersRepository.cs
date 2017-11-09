@@ -43,7 +43,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении аватара пользователя {userId} при аватаре размером {newAvatar.Length}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -80,7 +80,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении имени пользователя {userId} при новом имени {newNickname}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -117,7 +117,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при изменении пароля пользователя {userId} при новом хэше {newPasswordHash}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -148,7 +148,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при отключении пользователя {userId}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -181,7 +181,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Oшибка при получении информации о пользователе {userId}");
-                throw e;
+                throw;
             }
             finally
             {
@@ -218,7 +218,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при попытке входа с логином {login} и хэшем {passwordHash}");
-                throw e;
+                throw;
             }
         }
 
@@ -282,7 +282,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при регистрации пользователя.");
-                throw e;
+                throw;
             }
             finally
             {
@@ -320,7 +320,7 @@ namespace Hummingbird.DataLayer.SQL
             catch (Exception e)
             {
                 logger.Error(e, $"Ошибка при поиске пользователей по логину {login}");
-                throw e;
+                throw;
             }
             finally
             {

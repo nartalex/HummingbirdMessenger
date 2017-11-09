@@ -47,14 +47,34 @@ namespace Hummingbird.WinFormsClient
             try
             {
                 user = responce.ReadAsAsync<User>().Result;
-                Properties.Settings.Default.CurrentUserID = user.ID;
                 return user;
             }
-            catch (UnsupportedMediaTypeException e)
+            catch (UnsupportedMediaTypeException)
             {
                 return responce.ReadAsStringAsync().Result;
             }
             catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return new User();
+        }
+
+        public static object LoginUser(User user)
+        {
+            var responce = _client.PostAsJsonAsync(@"users/login", user).Result.Content;
+
+            try
+            {
+                user = responce.ReadAsAsync<User>().Result;
+                return user;
+            }
+            catch (UnsupportedMediaTypeException)
+            {
+                return responce.ReadAsStringAsync().Result;
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }

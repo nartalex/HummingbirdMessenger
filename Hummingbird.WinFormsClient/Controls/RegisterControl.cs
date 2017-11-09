@@ -39,7 +39,8 @@ namespace Hummingbird.WinFormsClient.Controls
             object result=ServiceClient.RegisterUser(user);
             if (result is User)
             {
-                MessageBox.Show(((User)result).ID.ToString());
+                Properties.Settings.Default.CurrentUserID = (result as User).ID;
+                (Parent as StartForm).CloseAndContinue();
             }
             else if (result is string)
             {
@@ -54,37 +55,38 @@ namespace Hummingbird.WinFormsClient.Controls
 
             if (NicknameTextbox.Text == NicknamePlaceholder || String.IsNullOrWhiteSpace(NicknameTextbox.Text))
             {
-                NicknameTextbox.BackColor = Properties.Settings.Default.WarnColor;
+                NicknameTextbox.ForeColor = Properties.Settings.Default.WarnColor;
                 ret = false;
             }
             else
             {
-                NicknameTextbox.BackColor = Properties.Settings.Default.PrimaryColor;
+                NicknameTextbox.ForeColor = Properties.Settings.Default.PrimaryColor;
             }
 
             if (LoginTextbox.Text == LoginPlaceholder || String.IsNullOrWhiteSpace(LoginTextbox.Text))
             {
-                LoginTextbox.BackColor = Properties.Settings.Default.WarnColor;
+                LoginTextbox.ForeColor = Properties.Settings.Default.WarnColor;
                 ret = false;
             }
             else
             {
-                LoginTextbox.BackColor = Properties.Settings.Default.PrimaryColor;
+                LoginTextbox.ForeColor = Properties.Settings.Default.PrimaryColor;
             }
 
             if (PasswordTextbox.Text == PasswordPlaceholder || String.IsNullOrWhiteSpace(PasswordTextbox.Text))
             {
-                PasswordTextbox.BackColor = Properties.Settings.Default.WarnColor;
+                PasswordTextbox.ForeColor = Properties.Settings.Default.WarnColor;
                 ret = false;
             }
             else
             {
-                PasswordTextbox.BackColor = Properties.Settings.Default.PrimaryColor;
+                PasswordTextbox.ForeColor = Properties.Settings.Default.PrimaryColor;
             }
             return ret;
         }
 
         #region Управление контролами
+
         private void LoginTextbox_Enter(object sender, EventArgs e)
         {
             LoginTextbox.RemoveText(LoginPlaceholder);
@@ -124,6 +126,7 @@ namespace Hummingbird.WinFormsClient.Controls
         {
             NicknameTextbox.AddText(NicknamePlaceholder);
         }
+
         #endregion
     }
 }

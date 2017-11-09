@@ -49,7 +49,7 @@
             this.BackToStartButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.BackToStartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BackToStartButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BackToStartButton.ForeColor = Properties.Settings.Default.PrimaryColor;
+            this.BackToStartButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
             this.BackToStartButton.Location = new System.Drawing.Point(0, 240);
             this.BackToStartButton.Margin = new System.Windows.Forms.Padding(0);
             this.BackToStartButton.Name = "BackToStartButton";
@@ -72,7 +72,7 @@
             this.RegisterButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.RegisterButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.RegisterButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.RegisterButton.ForeColor = Properties.Settings.Default.PrimaryColor;
+            this.RegisterButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
             this.RegisterButton.Location = new System.Drawing.Point(215, 240);
             this.RegisterButton.Margin = new System.Windows.Forms.Padding(0);
             this.RegisterButton.Name = "RegisterButton";
@@ -88,7 +88,7 @@
             this.NicknameTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.NicknameTextbox.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.NicknameTextbox.ForeColor = System.Drawing.Color.Gray;
-            this.NicknameTextbox.Location = new System.Drawing.Point(50, 50);
+            this.NicknameTextbox.Location = new System.Drawing.Point(50, 30);
             this.NicknameTextbox.Margin = new System.Windows.Forms.Padding(15, 5, 5, 5);
             this.NicknameTextbox.Name = "NicknameTextbox";
             this.NicknameTextbox.Size = new System.Drawing.Size(250, 35);
@@ -103,7 +103,7 @@
             this.PasswordTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.PasswordTextbox.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.PasswordTextbox.ForeColor = System.Drawing.Color.Gray;
-            this.PasswordTextbox.Location = new System.Drawing.Point(50, 170);
+            this.PasswordTextbox.Location = new System.Drawing.Point(50, 150);
             this.PasswordTextbox.Margin = new System.Windows.Forms.Padding(5);
             this.PasswordTextbox.Name = "PasswordTextbox";
             this.PasswordTextbox.Size = new System.Drawing.Size(250, 35);
@@ -118,7 +118,7 @@
             this.LoginTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LoginTextbox.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.LoginTextbox.ForeColor = System.Drawing.Color.Gray;
-            this.LoginTextbox.Location = new System.Drawing.Point(50, 110);
+            this.LoginTextbox.Location = new System.Drawing.Point(50, 90);
             this.LoginTextbox.Margin = new System.Windows.Forms.Padding(15, 5, 5, 5);
             this.LoginTextbox.Name = "LoginTextbox";
             this.LoginTextbox.Size = new System.Drawing.Size(250, 35);
@@ -129,10 +129,9 @@
             // 
             // WarningLabel
             // 
-            this.WarningLabel.AutoSize = true;
             this.WarningLabel.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Bold);
             this.WarningLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.WarnColor;
-            this.WarningLabel.Location = new System.Drawing.Point(47, 215);
+            this.WarningLabel.Location = new System.Drawing.Point(45, 200);
             this.WarningLabel.Name = "WarningLabel";
             this.WarningLabel.Size = new System.Drawing.Size(0, 25);
             this.WarningLabel.TabIndex = 5;
@@ -150,7 +149,6 @@
             this.Name = "RegisterControl";
             this.Size = new System.Drawing.Size(360, 300);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

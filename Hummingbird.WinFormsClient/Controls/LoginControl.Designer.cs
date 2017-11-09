@@ -32,6 +32,7 @@
             this.BackToStartButton = new System.Windows.Forms.Button();
             this.PasswordTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
             this.LoginTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
+            this.WarningLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LoginButton
@@ -40,6 +41,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LoginButton.BackColor = System.Drawing.Color.Transparent;
             this.LoginButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.LoginButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.LoginButton.FlatAppearance.BorderSize = 0;
             this.LoginButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
@@ -108,10 +110,21 @@
             this.LoginTextbox.Enter += new System.EventHandler(this.LoginTextbox_Enter);
             this.LoginTextbox.Leave += new System.EventHandler(this.LoginTextbox_Leave);
             // 
+            // WarningLabel
+            // 
+            this.WarningLabel.AutoSize = true;
+            this.WarningLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.WarningLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.WarnColor;
+            this.WarningLabel.Location = new System.Drawing.Point(45, 200);
+            this.WarningLabel.Name = "WarningLabel";
+            this.WarningLabel.Size = new System.Drawing.Size(0, 25);
+            this.WarningLabel.TabIndex = 5;
+            // 
             // LoginControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.WarningLabel);
             this.Controls.Add(this.BackToStartButton);
             this.Controls.Add(this.LoginButton);
             this.Controls.Add(this.PasswordTextbox);
@@ -119,6 +132,7 @@
             this.Name = "LoginControl";
             this.Size = new System.Drawing.Size(360, 300);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,5 +142,6 @@
         private CustomTextBox PasswordTextbox;
         private System.Windows.Forms.Button LoginButton;
         private System.Windows.Forms.Button BackToStartButton;
+        private System.Windows.Forms.Label WarningLabel;
     }
 }

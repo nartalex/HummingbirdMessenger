@@ -3,6 +3,9 @@ using System.Windows.Forms;
 using System.Text;
 using System;
 using System.Linq;
+using ReactiveAnimation;
+using VisualEffects;
+using VisualEffects.Animations.Effects;
 
 namespace Hummingbird.WinFormsClient
 {
@@ -44,5 +47,6 @@ namespace Hummingbird.WinFormsClient
                 this.Controls.Find("TextboxUnderline", true).First().BackColor = Color.Gray;
             }
         }
+
     }
 }

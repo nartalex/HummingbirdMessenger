@@ -17,7 +17,11 @@ namespace Hummingbird.WinFormsClient
             ServiceClient.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new StartForm());
+
+            var startForm = new StartForm();
+            startForm.Show();
+            
+            Application.Run();
         }
     }
 }

@@ -1,14 +1,8 @@
-﻿using Hummingbird.WinFormsClient.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
-using ReactiveAnimation;
+
+using Hummingbird.WinFormsClient.Controls;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient
 {
@@ -54,6 +48,14 @@ namespace Hummingbird.WinFormsClient
         public void BackToStartForm()
         {
             startControl.Show();
+        }
+
+        public void CloseAndContinue()
+        {
+            Close();
+            var newForm = new MessengerForm();
+            
+            newForm.Show();
         }
     }
 }

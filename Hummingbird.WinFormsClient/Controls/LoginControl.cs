@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Resources;
+using Hummingbird.Model;
 
 namespace Hummingbird.WinFormsClient.Controls
 {
@@ -20,6 +21,58 @@ namespace Hummingbird.WinFormsClient.Controls
         {
             InitializeComponent();
         }
+
+        private void LoginButton_Click(object sender, EventArgs e)
+        {
+            if (!CheckFields())
+                return;
+
+            User user = new User
+            {
+                Login = LoginTextbox.Text,
+                PasswordHash = ServiceClient.GetSHA512Hash(PasswordTextbox.Text)
+            };
+
+            object result = ServiceClient.LoginUser(user);
+            if (result is User)
+            {
+                Properties.Settings.Default.CurrentUserID = (result as User).ID;
+                (Parent as StartForm).CloseAndContinue();
+            }
+            else if (result is string)
+            {
+                WarningLabel.Text = (string)result;
+            }
+        }
+
+        private bool CheckFields()
+        {
+            bool ret = true;
+            //WarningLabel.Text = "";
+
+            if (LoginTextbox.Text == LoginPlaceholder || String.IsNullOrWhiteSpace(LoginTextbox.Text))
+            {
+                LoginTextbox.ForeColor = Properties.Settings.Default.WarnColor;
+                ret = false;
+            }
+            else
+            {
+                LoginTextbox.ForeColor = Properties.Settings.Default.PrimaryColor;
+            }
+
+            if (PasswordTextbox.Text == PasswordPlaceholder || String.IsNullOrWhiteSpace(PasswordTextbox.Text))
+            {
+                PasswordTextbox.ForeColor = Properties.Settings.Default.WarnColor;
+                ret = false;
+            }
+            else
+            {
+                PasswordTextbox.ForeColor = Properties.Settings.Default.PrimaryColor;
+            }
+            return ret;
+        }
+
+        #region Управление контролами
 
         private void LoginTextbox_Enter(object sender, EventArgs e)
         {
@@ -51,9 +104,6 @@ namespace Hummingbird.WinFormsClient.Controls
             parentForm.BackToStartForm();
         }
 
-        private void LoginButton_Click(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
     }
 }
