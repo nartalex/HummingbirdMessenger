@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient
 {
@@ -18,10 +19,19 @@ namespace Hummingbird.WinFormsClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var startForm = new StartForm();
-            startForm.Show();
-            
-            Application.Run();
+	        if(Properties.Settings.Default.CurrentUserID != null
+	           && Properties.Settings.Default.CurrentUserID.ToString() == Guid.Empty.ToString())
+	        {
+		        var startForm = new StartForm();
+		        startForm.Show();
+	        }
+	        else
+	        {
+		        var messengerForm = new MessengerForm();
+				messengerForm.Show();
+	        }
+
+	        Application.Run();
         }
     }
 }

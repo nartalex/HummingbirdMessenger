@@ -37,6 +37,7 @@ namespace Hummingbird.WinFormsClient.Controls
             if (result is User)
             {
                 Properties.Settings.Default.CurrentUserID = (result as User).ID;
+				Properties.Settings.Default.Save();
                 (Parent as StartForm).CloseAndContinue();
             }
             else if (result is string)

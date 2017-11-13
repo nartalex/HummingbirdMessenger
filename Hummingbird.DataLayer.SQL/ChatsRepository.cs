@@ -29,6 +29,12 @@ namespace Hummingbird.DataLayer.SQL
         /// <returns>Объект Chat в случае успеха</returns>
         public Chat Create(Chat chat, IEnumerable<Guid> members)
         {
+	        if(members.Count() == 2 && String.IsNullOrEmpty(chat.Name))
+	        {
+		        var m = members.ToArray();
+				chat.Name = DB.Users.First(x=>x.ID==m[0]).Nickname + " - " + DB.Users.First(x => x.ID == m[1]).Nickname;
+	        }
+
             logger.Info($"Создание чата с именем {chat.Name} и количеством участников {members.Count()}");
             timer.Restart();
 

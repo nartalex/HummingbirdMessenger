@@ -63,6 +63,26 @@ namespace Hummingbird.WinFormsClient.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add_friend {
+            get {
+                object obj = ResourceManager.GetObject("add_friend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap empty_avatar {
+            get {
+                object obj = ResourceManager.GetObject("empty_avatar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap hummingbird_icon {
             get {
                 object obj = ResourceManager.GetObject("hummingbird_icon", resourceCulture);
@@ -105,6 +125,16 @@ namespace Hummingbird.WinFormsClient.Properties {
         internal static string PasswordPlaceholder {
             get {
                 return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap plus_png_image_59147 {
+            get {
+                object obj = ResourceManager.GetObject("plus-png-image-59147", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

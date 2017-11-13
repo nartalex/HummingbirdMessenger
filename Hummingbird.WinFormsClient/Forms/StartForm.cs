@@ -9,6 +9,7 @@ namespace Hummingbird.WinFormsClient
     public partial class StartForm : Form
     {
         int h, w;
+
         public StartForm()
         {
             InitializeComponent();
@@ -57,5 +58,7 @@ namespace Hummingbird.WinFormsClient
             
             newForm.Show();
         }
+
+		
     }
 }
