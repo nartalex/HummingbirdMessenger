@@ -67,9 +67,9 @@
 			// 
 			this.LastMessageTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.LastMessageTime.Font = new System.Drawing.Font("Segoe UI Semilight", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.LastMessageTime.Location = new System.Drawing.Point(216, 6);
+			this.LastMessageTime.Location = new System.Drawing.Point(299, 6);
 			this.LastMessageTime.Name = "LastMessageTime";
-			this.LastMessageTime.Size = new System.Drawing.Size(109, 23);
+			this.LastMessageTime.Size = new System.Drawing.Size(51, 23);
 			this.LastMessageTime.TabIndex = 3;
 			this.LastMessageTime.Text = "LastMessageTime";
 			this.LastMessageTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -77,13 +77,15 @@
 			// ChatButton
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.LastMessageTime);
 			this.Controls.Add(this.LastMessageLabel);
 			this.Controls.Add(this.ChatNameLabel);
 			this.Controls.Add(this.ChatAvatar);
 			this.Name = "ChatButton";
-			this.Size = new System.Drawing.Size(325, 70);
+			this.Size = new System.Drawing.Size(350, 70);
 			this.Click += new System.EventHandler(this.ChatButton_Click);
+			this.DoubleClick += new System.EventHandler(this.ChatButton_DoubleClick);
 			((System.ComponentModel.ISupportInitialize)(this.ChatAvatar)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();

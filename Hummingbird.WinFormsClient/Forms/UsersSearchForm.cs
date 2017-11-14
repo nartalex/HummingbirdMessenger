@@ -23,16 +23,22 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			User[] users = ServiceClient.SearchUsers(SearchTB.Text) as User[];
 
-			if(users != null)
-			for(int i = 0; i < users.Length; i++)
-			{
-				UserInSearch line = new UserInSearch(users[i]);
+			if (users != null)
+				for (int i = 0; i < users.Length; i++)
+				{
+					UserInSearch line = new UserInSearch(users[i]);
 
-				line.Location = new Point(0, i*line.Height + 40);
+					line.Location = new Point(0, i * line.Height + 40);
 
-				this.Controls.Add(line);
-			}
+					this.Controls.Add(line);
+				}
 			Invalidate();
+		}
+
+		internal void AddChatToForm(Chat chat)
+		{
+			(Parent as ChatsListForm).AddChatToForm(chat);
+			Close();
 		}
 	}
 }

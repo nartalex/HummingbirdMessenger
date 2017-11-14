@@ -3,35 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hummingbird.Model;
 using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient
 {
-    static class Program
-    {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            ServiceClient.Initialize();
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+	static class Program
+	{
+		/// <summary>
+		/// The main entry point for the application.
+		/// </summary>
+		[STAThread]
+		static void Main()
+		{
+			ServiceClient.Initialize();
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
-	        if(Properties.Settings.Default.CurrentUserID != null
-	           && Properties.Settings.Default.CurrentUserID.ToString() == Guid.Empty.ToString())
-	        {
-		        var startForm = new StartForm();
-		        startForm.Show();
-	        }
-	        else
-	        {
-		        var messengerForm = new MessengerForm();
-				messengerForm.Show();
-	        }
+			Properties.Settings.Default.Upgrade();
+			if (Properties.Settings.Default.CurrentUser == null)
+			{
+				var startForm = new StartForm();
+				startForm.Show();
+			}
+			else
+			{
+				object result = ServiceClient.LoginUser(Properties.Settings.Default.CurrentUser);
+				if (result is User)
+				{
+					var messengerForm = new ChatsListForm();
+					messengerForm.Show();
+				}
+				else
+				{
+					var startForm = new StartForm();
+					startForm.Show();
+				}
+			}
 
-	        Application.Run();
-        }
-    }
+			Application.Run();
+		}
+	}
 }

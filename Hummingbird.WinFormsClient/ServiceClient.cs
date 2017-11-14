@@ -130,6 +130,30 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
+		public static Chat GetChat(Guid chatId)
+		{
+			var response = _client.GetAsync(@"chats/" + chatId).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+
+				var chat = response.Content.ReadAsAsync<Chat>().Result;
+
+				return chat;
+			}
+			catch (UnsupportedMediaTypeException)
+			{
+				MessageBox.Show(response.Content.ReadAsStringAsync().Result);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message);
+			}
+
+			return null;
+		}
+
 		public static object SearchUsers(string nick)
 		{
 			var response = _client.GetAsync(@"users/search/" + nick).Result;

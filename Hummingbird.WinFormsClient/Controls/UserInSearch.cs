@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hummingbird.Model;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient.Controls
 {
@@ -35,7 +36,7 @@ namespace Hummingbird.WinFormsClient.Controls
 				{
 					new ChatMember
 					{
-						UserID = Properties.Settings.Default.CurrentUserID,
+						UserID = Properties.Settings.Default.CurrentUser.ID,
 					},
 					new ChatMember()
 					{
@@ -45,6 +46,8 @@ namespace Hummingbird.WinFormsClient.Controls
 			};
 
 			Chat chat = ServiceClient.CreateChat(chatToSend) as Chat;
+
+			(Parent as UsersSearchForm).AddChatToForm(chat);
 		}
 	}
 }

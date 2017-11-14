@@ -6,7 +6,7 @@ namespace Hummingbird.DataLayer
 {
     public interface IChatsRepository
     {
-        Chat Create(Chat chat, IEnumerable<Guid> members);
+        Chat Create(Chat chat);
         IEnumerable<Chat> GetUserChats(Guid userId);
         void DeleteChat(Guid chatId);
         void ChangeName(Guid chatId, string newName);

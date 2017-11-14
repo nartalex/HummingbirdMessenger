@@ -127,11 +127,11 @@
     <Compile Include="Controls\UserInSearch.Designer.cs">
       <DependentUpon>UserInSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MessengerForm.cs">
+    <Compile Include="Forms\ChatsListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MessengerForm.Designer.cs">
-      <DependentUpon>MessengerForm.cs</DependentUpon>
+    <Compile Include="Forms\ChatsListForm.Designer.cs">
+      <DependentUpon>ChatsListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
@@ -167,8 +167,8 @@
     <EmbeddedResource Include="Controls\UserInSearch.resx">
       <DependentUpon>UserInSearch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MessengerForm.resx">
-      <DependentUpon>MessengerForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ChatsListForm.resx">
+      <DependentUpon>ChatsListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
@@ -233,6 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\person_add_black_2048x2048.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5736-200.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

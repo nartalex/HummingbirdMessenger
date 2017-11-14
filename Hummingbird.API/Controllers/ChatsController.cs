@@ -16,7 +16,7 @@ namespace Hummingbird.API.Controllers
 
         [HttpPost, Route("api/chats/create")]
         public Chat Create([FromBody] Chat chat)
-            => _chatsRepository.Create(chat, chat.Members.Select(m => m.UserID));
+            => _chatsRepository.Create(chat);
 
         [HttpGet, Route("api/chats/{id}")]
         public Chat GetChat(Guid id) 

@@ -23,18 +23,6 @@ namespace Hummingbird.WinFormsClient.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
-        public global::System.Guid CurrentUserID {
-            get {
-                return ((global::System.Guid)(this["CurrentUserID"]));
-            }
-            set {
-                this["CurrentUserID"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("103, 58, 183")]
@@ -59,6 +47,17 @@ namespace Hummingbird.WinFormsClient.Properties {
         public global::System.Drawing.Color BackgroundColor {
             get {
                 return ((global::System.Drawing.Color)(this["BackgroundColor"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::Hummingbird.Model.User CurrentUser {
+            get {
+                return ((global::Hummingbird.Model.User)(this["CurrentUser"]));
+            }
+            set {
+                this["CurrentUser"] = value;
             }
         }
     }

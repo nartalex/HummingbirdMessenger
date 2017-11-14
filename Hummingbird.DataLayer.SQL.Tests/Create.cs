@@ -34,7 +34,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
                 Name = "TestChat"
             };
 
-            return chatsRepository.Create(chat, members.ToArray());
+            return chatsRepository.Create(chat);
         }
         //internal static Message Message(User from, Chat to)
         //{

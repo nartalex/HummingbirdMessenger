@@ -1,6 +1,6 @@
 ﻿namespace Hummingbird.WinFormsClient.Forms
 {
-    partial class MessengerForm
+    partial class ChatsListForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,28 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.chatsList1 = new Hummingbird.WinFormsClient.Controls.ChatsList();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.UsersSearchTSM = new System.Windows.Forms.ToolStripMenuItem();
 			this.SettingsTSM = new System.Windows.Forms.ToolStripMenuItem();
+			this.ExitTSM = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// chatsList1
-			// 
-			this.chatsList1.Location = new System.Drawing.Point(0, 27);
-			this.chatsList1.Name = "chatsList1";
-			this.chatsList1.Size = new System.Drawing.Size(325, 373);
-			this.chatsList1.TabIndex = 0;
-			// 
 			// menuStrip1
 			// 
+			this.menuStrip1.BackColor = System.Drawing.Color.White;
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.UsersSearchTSM,
-            this.SettingsTSM});
+            this.SettingsTSM,
+            this.ExitTSM});
+			this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(717, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(334, 24);
 			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -66,15 +62,23 @@
 			this.SettingsTSM.Size = new System.Drawing.Size(79, 20);
 			this.SettingsTSM.Text = "Настройки";
 			// 
-			// MessengerForm
+			// ExitTSM
+			// 
+			this.ExitTSM.Name = "ExitTSM";
+			this.ExitTSM.Size = new System.Drawing.Size(53, 20);
+			this.ExitTSM.Text = "Выход";
+			this.ExitTSM.Click += new System.EventHandler(this.ExitTSM_Click);
+			// 
+			// ChatsListForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(717, 400);
-			this.Controls.Add(this.chatsList1);
+			this.AutoScroll = true;
+			this.ClientSize = new System.Drawing.Size(334, 401);
 			this.Controls.Add(this.menuStrip1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MainMenuStrip = this.menuStrip1;
-			this.MinimumSize = new System.Drawing.Size(0, 439);
-			this.Name = "MessengerForm";
+			this.MinimumSize = new System.Drawing.Size(350, 440);
+			this.Name = "ChatsListForm";
 			this.Text = "MessengerForm";
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -84,10 +88,9 @@
         }
 
 		#endregion
-
-		private Controls.ChatsList chatsList1;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem UsersSearchTSM;
 		private System.Windows.Forms.ToolStripMenuItem SettingsTSM;
+		private System.Windows.Forms.ToolStripMenuItem ExitTSM;
 	}
 }

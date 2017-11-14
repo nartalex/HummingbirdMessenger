@@ -39,7 +39,7 @@ namespace Hummingbird.WinFormsClient.Controls
             object result=ServiceClient.RegisterUser(user);
             if (result is User)
             {
-                Properties.Settings.Default.CurrentUserID = (result as User).ID;
+                Properties.Settings.Default.CurrentUser = result as User;
 	            Properties.Settings.Default.Save();
 				(Parent as StartForm).CloseAndContinue();
             }
