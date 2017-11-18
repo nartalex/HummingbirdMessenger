@@ -87,12 +87,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Animation.cs" />
     <Compile Include="Controls\ChatButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ChatButton.Designer.cs">
       <DependentUpon>ChatButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ChatHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ChatHeader.Designer.cs">
+      <DependentUpon>ChatHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChatsList.cs">
       <SubType>UserControl</SubType>
@@ -133,6 +138,12 @@
     <Compile Include="Forms\ChatsListForm.Designer.cs">
       <DependentUpon>ChatsListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MessengerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessengerForm.Designer.cs">
+      <DependentUpon>MessengerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +163,9 @@
     <EmbeddedResource Include="Controls\ChatButton.resx">
       <DependentUpon>ChatButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ChatHeader.resx">
+      <DependentUpon>ChatHeader.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ChatsList.resx">
       <DependentUpon>ChatsList.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChatsListForm.resx">
       <DependentUpon>ChatsListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessengerForm.resx">
+      <DependentUpon>MessengerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
@@ -214,10 +231,6 @@
       <Project>{ebdce515-9336-4d0d-b000-cc3da6885f00}</Project>
       <Name>Hummingbird.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Nartalex\Desktop\VisualEffects\VisualEffects.csproj">
-      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
-      <Name>VisualEffects</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo_teal.png" />
@@ -236,6 +249,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\5736-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\multiple-users-silhouette_318-49546.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\send.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\send_purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

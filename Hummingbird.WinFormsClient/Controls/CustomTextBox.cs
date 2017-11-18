@@ -3,9 +3,6 @@ using System.Windows.Forms;
 using System.Text;
 using System;
 using System.Linq;
-using ReactiveAnimation;
-using VisualEffects;
-using VisualEffects.Animations.Effects;
 
 namespace Hummingbird.WinFormsClient
 {

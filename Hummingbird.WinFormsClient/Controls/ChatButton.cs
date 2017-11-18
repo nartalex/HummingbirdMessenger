@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hummingbird.Model;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient.Controls
 {
@@ -56,7 +57,7 @@ namespace Hummingbird.WinFormsClient.Controls
 
 		private void ChatButton_DoubleClick(object sender, EventArgs e)
 		{
-			MessageBox.Show("dclick");
+			((ChatsListForm)Parent).OpenChat(thisChat);
 		}
 	}
 }

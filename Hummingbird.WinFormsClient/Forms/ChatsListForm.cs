@@ -54,5 +54,11 @@ namespace Hummingbird.WinFormsClient.Forms
 			Close();
 			(new StartForm()).Show();
 		}
+
+		public void OpenChat(Chat chat)
+		{
+			var f = new MessengerForm(chat);
+			f.Show();
+		}
 	}
 }

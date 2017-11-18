@@ -85,7 +85,7 @@ namespace Hummingbird.WinFormsClient
 			return new User();
 		}
 
-		public static object GetUserChats(Guid id)
+		public static IEnumerable<Chat> GetUserChats(Guid id)
 		{
 			var response = _client.GetAsync(@"chats/userchats/" + id).Result;
 
@@ -109,7 +109,7 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
-		public static object CreateChat(Chat chat)
+		public static Chat CreateChat(Chat chat)
 		{
 			var pesponse = _client.PostAsJsonAsync(@"chats/create/", chat).Result.Content;
 
@@ -154,7 +154,7 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
-		public static object SearchUsers(string nick)
+		public static IEnumerable<User> SearchUsers(string nick)
 		{
 			var response = _client.GetAsync(@"users/search/" + nick).Result;
 
@@ -163,6 +163,30 @@ namespace Hummingbird.WinFormsClient
 				response.EnsureSuccessStatusCode();
 				var ret = response.Content.ReadAsAsync<User[]>().Result;
 				return ret;
+			}
+			catch (UnsupportedMediaTypeException)
+			{
+				MessageBox.Show(response.Content.ReadAsStringAsync().Result);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message);
+			}
+
+			return null;
+		}
+
+		public static IEnumerable<Model.Message> GetMessages(Guid chatId, int skip, int amount)
+		{
+			var response = _client.GetAsync($"messages/{chatId}/{skip}/{amount}").Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+
+				var m = response.Content.ReadAsAsync<Model.Message[]>().Result;
+
+				return m;
 			}
 			catch (UnsupportedMediaTypeException)
 			{

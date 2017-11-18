@@ -114,12 +114,18 @@ namespace Hummingbird.DataLayer.SQL
 					logger.Info($"Получение сообщений в чате {chatId}: ноль сообщений запрошено. Создаем исключение.");
 					throw GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
 				}
-				var ret = DB.Messages
-				  .Where(m => m.ChatToID == chatId)
-				  .OrderBy(m => m.Time)
-				  .Skip(skip)
-				  .Take(amount)
-				  .ToArray();
+
+				var ret = DB.Messages.Any(m => m.ChatToID == chatId)
+						?
+							DB.Messages
+								.Where(m => m.ChatToID == chatId)
+								.OrderByDescending(m => m.Time)
+								.Skip(skip)
+								.Take(amount)
+								.ToArray()
+								.Reverse()
+						:
+							new Message[0];
 
 				logger.Info($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip} - успешно за {timer.ElapsedMilliseconds} мс");
 				if (timer.ElapsedMilliseconds > MAX_TIME)
@@ -152,15 +158,15 @@ namespace Hummingbird.DataLayer.SQL
 			{
 				ChatsRepository _chatsRepository = new ChatsRepository();
 				_chatsRepository.CheckChat(chatId);
-				Message ret;
-				if (DB.Messages.Any(m => m.ChatToID == chatId))
-					ret = DB.Messages
-						   .Where(m => m.ChatToID == chatId)
-						   .OrderByDescending(m => m.Time)
-						   .First();
-				else
-					ret = null;
 
+				Message ret = DB.Messages.Any(m => m.ChatToID == chatId)
+							?
+								DB.Messages
+								   .Where(m => m.ChatToID == chatId)
+								   .OrderByDescending(m => m.Time)
+								   .First()
+							:
+								null;
 
 				logger.Info($"Получение последнего сообщения в чате {chatId} - успешно за {timer.ElapsedMilliseconds} мс");
 				if (timer.ElapsedMilliseconds > MAX_TIME)
