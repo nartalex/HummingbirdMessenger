@@ -14,10 +14,10 @@ namespace Hummingbird.WinFormsClient.Forms
 	public partial class MessengerForm : Form
 	{
 		private Chat _chat;
-		private const int PICTURE_SIZE = 32;
-		private const int LABEL_SIZEY = 32;
-		private const int PICTURE_MARGIN = 12;
-		private const int LABEL_LOCATIONX = 50;
+		private const int PictureSize = 32;
+		private const int LabelSizeY = 32;
+		private const int PictureMargin = 12;
+		private const int LabelLocationX = 50;
 		private readonly Dictionary<Guid, Bitmap> UserAvatars = new Dictionary<Guid, Bitmap>();
 
 		public MessengerForm(Chat chat)
@@ -35,6 +35,22 @@ namespace Hummingbird.WinFormsClient.Forms
 			//	x => (Bitmap)new ImageConverter().ConvertFrom(x.Avatar));
 			_chat.Messages = ServiceClient.GetMessages(chat.ID, 0, 20).ToList();
 			UpdateAllMessages(_chat.Messages.ToArray());
+
+			//Если поставить якоря при создании контрола, всё сломается
+			foreach(Control c in MessagesPanel.Controls)
+			{
+				if (c.GetType() != typeof(PictureBox))
+					continue;
+
+				if (c.Location.X == PictureMargin)
+				{
+					c.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+				}
+				else
+				{
+					c.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+				}
+			}
 		}
 
 		void UpdateAllMessages(Model.Message[] messages)
@@ -44,37 +60,38 @@ namespace Hummingbird.WinFormsClient.Forms
 			for (int i = 0; i < messages.Length; i++)
 			{
 				MessagesPanel.Controls.Add(
-										   GetLabel(
-													messages[i].ID.ToString(),
-													messages[i].Text,
-													LABEL_SIZEY * i,
-													messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
+										GetLabel(
+												messages[i].ID.ToString(),
+												messages[i].Text,
+												LabelSizeY * i,
+												messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
 
 				if (lastMessageUserID != messages[i].UserFromID)
 				{
 					lastMessageUserID = messages[i].UserFromID;
 
 					MessagesPanel.Controls.Add(
-						GetPictureBox(
-							//UserAvatars[messages[i].UserFromID],
-							Properties.Resources.empty_avatar,
-							LABEL_SIZEY * i,
-							messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
+											GetPictureBox(
+												//UserAvatars[messages[i].UserFromID],
+												Properties.Resources.empty_avatar,
+												LabelSizeY * i,
+												messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
 				}
 			}
 		}
 
-		private Label GetLabel(string name, string text, int locationY, bool right, int sizeY = LABEL_SIZEY)
+		private Label GetLabel(string name, string text, int locationY, bool right, int sizeY = LabelSizeY)
 		{
 			return new Label()
 			{
 				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
 				Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
-				Location = new Point(LABEL_LOCATIONX, locationY),
+				Location = new Point(LabelLocationX, locationY),
 				Name = name,
-				Size = new Size(ClientRectangle.Width - LABEL_LOCATIONX * 2, sizeY),
+				Size = new Size(ClientRectangle.Width - LabelLocationX * 2, sizeY),
 				Text = text,
-				TextAlign = right ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft
+				TextAlign = right ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft,
+				AutoSize = false,
 			};
 		}
 
@@ -82,13 +99,13 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			return new PictureBox()
 			{
-				Anchor = AnchorStyles.Bottom | (right ? AnchorStyles.Right : AnchorStyles.Left),
 				BackgroundImage = image,
 				BackgroundImageLayout = ImageLayout.Zoom,
 				Location = right
-						 ? new Point(ClientRectangle.Width - PICTURE_MARGIN - PICTURE_SIZE, locationY)
-						 : new Point(PICTURE_MARGIN, locationY),
-				Size = new Size(PICTURE_SIZE, PICTURE_SIZE)
+						 ? new Point(ClientRectangle.Width - PictureMargin - PictureSize, locationY)
+						 : new Point(PictureMargin, locationY),
+				Size = new Size(PictureSize, PictureSize),
+				AutoSize = false,
 			};
 		}
 	}

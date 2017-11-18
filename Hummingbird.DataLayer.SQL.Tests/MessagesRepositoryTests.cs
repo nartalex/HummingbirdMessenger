@@ -27,7 +27,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
 				{
 					ChatToID = chatid,
 					Text = "message" + i,
-					UserFromID = i % 2 == 0 ? user1.ID : user2.ID
+					UserFromID = i % 4 == 0 ? user1.ID : user2.ID
 				};
 
 				messagesRepository.SendMessage(m);

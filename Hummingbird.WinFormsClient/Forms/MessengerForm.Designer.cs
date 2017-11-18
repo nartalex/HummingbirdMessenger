@@ -106,6 +106,7 @@
 			// 
 			this.pictureBox2.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.photo;
 			this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.pictureBox2.Image = global::Hummingbird.WinFormsClient.Properties.Resources.add_friend;
 			this.pictureBox2.Location = new System.Drawing.Point(389, 259);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(32, 32);
@@ -119,15 +120,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessagesPanel.AutoScroll = true;
-			this.MessagesPanel.Location = new System.Drawing.Point(0, 49);
+			this.MessagesPanel.Location = new System.Drawing.Point(0, 12);
 			this.MessagesPanel.Name = "MessagesPanel";
 			this.MessagesPanel.Size = new System.Drawing.Size(433, 268);
 			this.MessagesPanel.TabIndex = 6;
 			// 
 			// MessengerForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(433, 360);
 			this.Controls.Add(this.MessagesPanel);
