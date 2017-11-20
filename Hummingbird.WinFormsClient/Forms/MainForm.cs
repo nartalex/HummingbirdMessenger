@@ -14,9 +14,9 @@ using Hummingbird.WinFormsClient.Controls;
 
 namespace Hummingbird.WinFormsClient.Forms
 {
-	public partial class ChatsListForm : Form
+	public partial class MainForm : Form
 	{
-		public ChatsListForm()
+		public MainForm()
 		{
 			InitializeComponent();
 
@@ -28,10 +28,10 @@ namespace Hummingbird.WinFormsClient.Forms
 				{
 					ChatButton button = new ChatButton(chats[i]);
 
-					button.Location = new Point(0, i * button.Height + 24);
+					button.Location = new Point(0, i * button.Height);
 					button.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
-					Controls.Add(button);
+					ChatsListPanel.Controls.Add(button);
 				}
 			}
 		}

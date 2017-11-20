@@ -54,7 +54,7 @@ namespace Hummingbird.WinFormsClient
         public void CloseAndContinue()
         {
             Close();
-            var newForm = new ChatsListForm();
+            var newForm = new MainForm();
             
             newForm.Show();
         }		

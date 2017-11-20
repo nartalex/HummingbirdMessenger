@@ -42,5 +42,8 @@ namespace Hummingbird.API.Controllers
         public IEnumerable<User> Search(string login) 
             => _usersRepository.Search(login);
 
+	    [HttpGet, Route("api/init")]
+		public void Initialize() 
+			=> _usersRepository.Initialize();
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
+
 using Hummingbird.Model;
 
 namespace Hummingbird.WinFormsClient.Forms
@@ -18,95 +16,170 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const int LabelSizeY = 32;
 		private const int PictureMargin = 12;
 		private const int LabelLocationX = 50;
-		private readonly Dictionary<Guid, Bitmap> UserAvatars = new Dictionary<Guid, Bitmap>();
+		private const int GapBetwenMessages = 7;
+		private const string MessageTextBoxPlaceholder = "Сообщение";
 
 		public MessengerForm(Chat chat)
 		{
 			InitializeComponent();
 			_chat = chat;
-			Text = chat.Name.Split('-').First(x => x != Properties.Settings.Default.CurrentUser.Nickname);
 
-			//UserAvatars = _chat.Members.Select(x => new
-			//{
-			//	x.User.ID,
-			//	x.User.Avatar
-			//}).ToDictionary(
-			//	x => x.ID,
-			//	x => (Bitmap)new ImageConverter().ConvertFrom(x.Avatar));
+			// Устанавливаем имя чата
+			Text = _chat.Private
+				? chat.Name.Split('-').First(x => x != Properties.Settings.Default.CurrentUser.Nickname)
+				: _chat.Name;
+
+			// Обновляем сообщения
 			_chat.Messages = ServiceClient.GetMessages(chat.ID, 0, 20).ToList();
 			UpdateAllMessages(_chat.Messages.ToArray());
+			ScrollToBottom(MessagesPanel);
 
-			//Если поставить якоря при создании контрола, всё сломается
-			foreach(Control c in MessagesPanel.Controls)
-			{
-				if (c.GetType() != typeof(PictureBox))
-					continue;
+			// Ставим плейсхолдер в поле сообщения
+			ActiveControl = MessagesPanel;
+			MessageTextBox_Leave(new Object(), EventArgs.Empty);
 
-				if (c.Location.X == PictureMargin)
-				{
-					c.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-				}
-				else
-				{
-					c.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-				}
-			}
+			var ts = new ThreadStart(BackgroundUpdate);
+			var backgroundThread = new Thread(ts);
+			//backgroundThread.Start();
 		}
 
-		void UpdateAllMessages(Model.Message[] messages)
+		#region Messages
+
+		private void UpdateAllMessages(IEnumerable<Model.Message> messages)
 		{
 			Guid lastMessageUserID = new Guid();
 
-			for (int i = 0; i < messages.Length; i++)
+			foreach (var m in messages)
 			{
-				MessagesPanel.Controls.Add(
-										GetLabel(
-												messages[i].ID.ToString(),
-												messages[i].Text,
-												LabelSizeY * i,
-												messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
-
-				if (lastMessageUserID != messages[i].UserFromID)
+				if (lastMessageUserID == m.UserFromID)
 				{
-					lastMessageUserID = messages[i].UserFromID;
-
-					MessagesPanel.Controls.Add(
-											GetPictureBox(
-												//UserAvatars[messages[i].UserFromID],
-												Properties.Resources.empty_avatar,
-												LabelSizeY * i,
-												messages[i].UserFromID == Properties.Settings.Default.CurrentUser.ID));
+					AddMessage("", m.Text);
+				}
+				else
+				{
+					lastMessageUserID = m.UserFromID;
+					AddMessage("", m.Text, avatar: _chat.Members.First(x => x.UserID == m.UserFromID).User.Avatar);
 				}
 			}
 		}
 
-		private Label GetLabel(string name, string text, int locationY, bool right, int sizeY = LabelSizeY)
+		private void BackgroundUpdate()
 		{
-			return new Label()
+			while (true)
 			{
-				Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-				Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
-				Location = new Point(LabelLocationX, locationY),
-				Name = name,
-				Size = new Size(ClientRectangle.Width - LabelLocationX * 2, sizeY),
-				Text = text,
-				TextAlign = right ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft,
-				AutoSize = false,
-			};
+				Thread.Sleep(2000);
+
+				var messages = ServiceClient.GetMessages(_chat.ID, 0, 10);
+
+				var newIDs = messages.Select(x => x.ID).Except(_chat.Messages.Select(x => x.ID));
+
+				var newMessages = new List<Model.Message>();
+				foreach (var id in newIDs)
+				{
+					newMessages.Add(messages.First(x => x.ID == id));
+				}
+
+				UpdateAllMessages(newMessages);
+			}
 		}
 
-		private PictureBox GetPictureBox(Bitmap image, int locationY, bool right)
+		#endregion
+
+		#region Getters
+
+		private void AddMessage(string name, string text, int sizeY = LabelSizeY, byte[] avatar = null)
 		{
-			return new PictureBox()
-			{
-				BackgroundImage = image,
-				BackgroundImageLayout = ImageLayout.Zoom,
-				Location = right
-						 ? new Point(ClientRectangle.Width - PictureMargin - PictureSize, locationY)
-						 : new Point(PictureMargin, locationY),
-				Size = new Size(PictureSize, PictureSize),
-				AutoSize = false,
-			};
+			MessagesPanel.RowCount++;
+			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, LabelSizeY));
+			MessagesPanel.Controls.Add(
+				new Label()
+				{
+					Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
+					Name = name,
+					MinimumSize = new Size(0, LabelSizeY),
+					//Height = sizeY,
+					Text = text,
+					TextAlign = ContentAlignment.MiddleLeft,
+				},
+				1,
+				MessagesPanel.RowCount - 1);
+
+			MessagesPanel.Controls.Add(
+				new PictureBox()
+				{
+					BackgroundImage = avatar == null ? null : (Bitmap)new ImageConverter().ConvertFrom(avatar),
+					BackgroundImageLayout = ImageLayout.Zoom,
+					Size = new Size(PictureSize, PictureSize),
+				},
+				0,
+				MessagesPanel.RowCount - 1);
 		}
+
+		#endregion
+
+		#region Controls
+
+		private void MessageTextBox_Enter(object sender, EventArgs e)
+		{
+			if (MessageTextBox.Text != MessageTextBoxPlaceholder)
+				return;
+
+			MessageTextBox.ForeColor = Color.Black;
+			MessageTextBox.Font = new Font("Segoe UI", 14f, FontStyle.Regular);
+
+			MessageTextBox.Text = "";
+		}
+
+		private void MessageTextBox_Leave(object sender, EventArgs e)
+		{
+			if (String.IsNullOrWhiteSpace(MessageTextBox.Text))
+			{
+				MessageTextBox.ForeColor = Color.Gray;
+				MessageTextBox.Font = new Font("Segoe UI Light", 14f, FontStyle.Regular);
+
+				MessageTextBox.Text = MessageTextBoxPlaceholder;
+			}
+		}
+
+		private void MessageTextBox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar != 13)
+				return;
+
+			SendMessageButton.PerformClick();
+		}
+
+		private void SendMessageButton_Click(object sender, EventArgs e)
+		{
+			if (String.IsNullOrWhiteSpace(MessageTextBox.Text) || MessageTextBox.Text == MessageTextBoxPlaceholder)
+				return;
+
+			Model.Message returned = ServiceClient.SendMessage(_chat.ID, MessageTextBox.Text);
+
+			if (!_chat.Messages.Any())
+			{
+				AddMessage(returned.ID.ToString(), returned.Text, avatar: Properties.Settings.Default.CurrentUser.Avatar);
+				return;
+			}
+
+			if (_chat.Messages.Last().UserFromID == Properties.Settings.Default.CurrentUser.ID)
+				AddMessage(returned.ID.ToString(), returned.Text);
+
+			else
+				AddMessage(returned.ID.ToString(), returned.Text, avatar: Properties.Settings.Default.CurrentUser.Avatar);
+
+			MessagesPanel.Text = "";
+		}
+
+		private void ScrollToBottom(Panel p)
+		{
+			using (Control c = new Control() { Parent = p, Dock = DockStyle.Bottom })
+			{
+				p.ScrollControlIntoView(c);
+				c.Parent = null;
+			}
+		}
+
+		#endregion
 	}
 }

@@ -124,6 +124,9 @@
   <data name="plus-png-image-59147" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\plus-png-image-59147.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="hummingbird_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color replace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="empty_chat_avatar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5736-200.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -145,11 +148,11 @@
   <data name="LoginPlaceholder" xml:space="preserve">
     <value>Логин</value>
   </data>
+  <data name="photo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\photo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="hummingbird_icon_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\humm-dribbble-mod-WHITE.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hummingbird_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\color replace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="add_friend" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\person_add_black_2048x2048.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,7 +160,7 @@
   <data name="empty_avatar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\github-256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="photo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\photo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="send (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\send (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

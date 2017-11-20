@@ -36,9 +36,9 @@ namespace Hummingbird.WinFormsClient.Controls
 			object result = ServiceClient.LoginUser(user);
 			if (result is User)
 			{
-				Properties.Settings.Default.CurrentUser = result as User;
+				Properties.Settings.Default.CurrentUser = (User)result;
+				Properties.Settings.Default.CurrentUserID = ((User)result).ID;
 				Properties.Settings.Default.Save();
-				//Properties.Settings.Default.Upgrade();
 				(Parent as StartForm).CloseAndContinue();
 			}
 			else if (result is string)

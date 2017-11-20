@@ -37,6 +37,7 @@
 			// 
 			// ChatAvatar
 			// 
+			this.ChatAvatar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.ChatAvatar.Location = new System.Drawing.Point(3, 3);
 			this.ChatAvatar.Name = "ChatAvatar";
 			this.ChatAvatar.Size = new System.Drawing.Size(64, 64);
@@ -67,12 +68,12 @@
 			// 
 			this.LastMessageTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.LastMessageTime.Font = new System.Drawing.Font("Segoe UI Semilight", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.LastMessageTime.Location = new System.Drawing.Point(299, 6);
+			this.LastMessageTime.Location = new System.Drawing.Point(234, 6);
 			this.LastMessageTime.Name = "LastMessageTime";
-			this.LastMessageTime.Size = new System.Drawing.Size(51, 23);
+			this.LastMessageTime.Size = new System.Drawing.Size(113, 23);
 			this.LastMessageTime.TabIndex = 3;
 			this.LastMessageTime.Text = "LastMessageTime";
-			this.LastMessageTime.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.LastMessageTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ChatButton
 			// 

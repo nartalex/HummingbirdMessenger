@@ -37,7 +37,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		internal void AddChatToForm(Chat chat)
 		{
-			(Parent as ChatsListForm).AddChatToForm(chat);
+			(Parent as MainForm).AddChatToForm(chat);
 			Close();
 		}
 	}

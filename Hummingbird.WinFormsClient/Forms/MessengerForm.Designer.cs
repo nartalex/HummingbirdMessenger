@@ -30,13 +30,7 @@
 		{
 			this.MessageTextBox = new System.Windows.Forms.TextBox();
 			this.SendMessageButton = new System.Windows.Forms.Button();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.pictureBox2 = new System.Windows.Forms.PictureBox();
-			this.MessagesPanel = new System.Windows.Forms.Panel();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+			this.MessagesPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.SuspendLayout();
 			// 
 			// MessageTextBox
@@ -45,17 +39,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.MessageTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.MessageTextBox.Location = new System.Drawing.Point(0, 323);
+			this.MessageTextBox.Location = new System.Drawing.Point(12, 323);
 			this.MessageTextBox.Margin = new System.Windows.Forms.Padding(0);
-			this.MessageTextBox.Multiline = true;
 			this.MessageTextBox.Name = "MessageTextBox";
-			this.MessageTextBox.Size = new System.Drawing.Size(384, 37);
-			this.MessageTextBox.TabIndex = 0;
+			this.MessageTextBox.Size = new System.Drawing.Size(372, 22);
+			this.MessageTextBox.TabIndex = 1;
+			this.MessageTextBox.Enter += new System.EventHandler(this.MessageTextBox_Enter);
+			this.MessageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageTextBox_KeyPress);
+			this.MessageTextBox.Leave += new System.EventHandler(this.MessageTextBox_Leave);
 			// 
 			// SendMessageButton
 			// 
 			this.SendMessageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.SendMessageButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.send_message_purple;
+			this.SendMessageButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.send__1_;
 			this.SendMessageButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.SendMessageButton.FlatAppearance.BorderSize = 0;
 			this.SendMessageButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
@@ -64,55 +60,9 @@
 			this.SendMessageButton.Location = new System.Drawing.Point(393, 323);
 			this.SendMessageButton.Name = "SendMessageButton";
 			this.SendMessageButton.Size = new System.Drawing.Size(32, 32);
-			this.SendMessageButton.TabIndex = 1;
+			this.SendMessageButton.TabIndex = 2;
 			this.SendMessageButton.UseVisualStyleBackColor = true;
-			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.photo;
-			this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pictureBox1.Location = new System.Drawing.Point(12, 259);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-			this.pictureBox1.TabIndex = 2;
-			this.pictureBox1.TabStop = false;
-			this.pictureBox1.Visible = false;
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label1.Location = new System.Drawing.Point(50, 259);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(333, 32);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Привет";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label1.Visible = false;
-			// 
-			// label2
-			// 
-			this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label2.Location = new System.Drawing.Point(50, 291);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100, 32);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "label2";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label2.Visible = false;
-			// 
-			// pictureBox2
-			// 
-			this.pictureBox2.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.photo;
-			this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pictureBox2.Image = global::Hummingbird.WinFormsClient.Properties.Resources.add_friend;
-			this.pictureBox2.Location = new System.Drawing.Point(389, 259);
-			this.pictureBox2.Name = "pictureBox2";
-			this.pictureBox2.Size = new System.Drawing.Size(32, 32);
-			this.pictureBox2.TabIndex = 5;
-			this.pictureBox2.TabStop = false;
-			this.pictureBox2.Visible = false;
+			this.SendMessageButton.Click += new System.EventHandler(this.SendMessageButton_Click);
 			// 
 			// MessagesPanel
 			// 
@@ -120,27 +70,29 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessagesPanel.AutoScroll = true;
-			this.MessagesPanel.Location = new System.Drawing.Point(0, 12);
+			this.MessagesPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+			this.MessagesPanel.ColumnCount = 2;
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.MessagesPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.MessagesPanel.Location = new System.Drawing.Point(0, 0);
 			this.MessagesPanel.Name = "MessagesPanel";
-			this.MessagesPanel.Size = new System.Drawing.Size(433, 268);
-			this.MessagesPanel.TabIndex = 6;
+			this.MessagesPanel.RowCount = 1;
+			this.MessagesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.MessagesPanel.Size = new System.Drawing.Size(433, 317);
+			this.MessagesPanel.TabIndex = 3;
 			// 
 			// MessengerForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
+			this.BackColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(433, 360);
 			this.Controls.Add(this.MessagesPanel);
-			this.Controls.Add(this.pictureBox2);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.SendMessageButton);
 			this.Controls.Add(this.MessageTextBox);
 			this.Name = "MessengerForm";
 			this.Text = "MessengerForm";
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -150,10 +102,6 @@
 
 		private System.Windows.Forms.TextBox MessageTextBox;
 		private System.Windows.Forms.Button SendMessageButton;
-		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.PictureBox pictureBox2;
-		private System.Windows.Forms.Panel MessagesPanel;
+		private System.Windows.Forms.TableLayoutPanel MessagesPanel;
 	}
 }

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hummingbird.Model;
 using Hummingbird.WinFormsClient.Forms;
@@ -26,7 +21,7 @@ namespace Hummingbird.WinFormsClient.Controls
 			{
 				var otherPerson = chat.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User;
 
-				ChatAvatar.Image = chat.Avatar != null && chat.Avatar.Any()
+				ChatAvatar.BackgroundImage = otherPerson.Avatar.Any()
 									   ? (Bitmap)new ImageConverter().ConvertFrom(otherPerson.Avatar)
 									   : Properties.Resources.empty_avatar;
 
@@ -43,6 +38,7 @@ namespace Hummingbird.WinFormsClient.Controls
 			LastMessageLabel.Text = thisChat.Messages.Any()
 									? thisChat.Messages.First().Text
 									: String.Empty;
+
 			LastMessageTime.Text = thisChat.Messages.Any()
 									   ? (DateTime.Now - thisChat.Messages.Last().Time).Days < 1
 											 ? thisChat.Messages.Last().Time.ToShortTimeString()
@@ -57,7 +53,9 @@ namespace Hummingbird.WinFormsClient.Controls
 
 		private void ChatButton_DoubleClick(object sender, EventArgs e)
 		{
-			((ChatsListForm)Parent).OpenChat(thisChat);
+			
+
+			((MainForm)Parent.Parent).OpenChat(thisChat);
 		}
 	}
 }

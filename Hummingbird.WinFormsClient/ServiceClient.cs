@@ -25,6 +25,7 @@ namespace Hummingbird.WinFormsClient
 				BaseAddress = new Uri(@"http://localhost:12345/api/")
 			};
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			_client.GetAsync(@"init");
 		}
 
 		public static string GetSHA512Hash(string input)
@@ -191,6 +192,34 @@ namespace Hummingbird.WinFormsClient
 			catch (UnsupportedMediaTypeException)
 			{
 				MessageBox.Show(response.Content.ReadAsStringAsync().Result);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message);
+			}
+
+			return null;
+		}
+
+		public static Model.Message SendMessage(Guid chatId, string text)
+		{
+			Model.Message m = new Model.Message()
+			{
+				Text = text,
+				ChatToID = chatId,
+				UserFromID = Properties.Settings.Default.CurrentUser.ID
+			};
+
+			var pesponse = _client.PostAsJsonAsync(@"messages/send", m).Result.Content;
+
+			try
+			{
+				var ret = pesponse.ReadAsAsync<Model.Message>().Result;
+				return ret;
+			}
+			catch (UnsupportedMediaTypeException)
+			{
+				MessageBox.Show(pesponse.ReadAsStringAsync().Result);
 			}
 			catch (Exception e)
 			{

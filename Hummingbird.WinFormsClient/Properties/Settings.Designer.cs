@@ -60,5 +60,17 @@ namespace Hummingbird.WinFormsClient.Properties {
                 this["CurrentUser"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        public global::System.Guid CurrentUserID {
+            get {
+                return ((global::System.Guid)(this["CurrentUserID"]));
+            }
+            set {
+                this["CurrentUserID"] = value;
+            }
+        }
     }
 }
