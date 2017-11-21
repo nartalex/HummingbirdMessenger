@@ -19,6 +19,8 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const int GapBetwenMessages = 7;
 		private const string MessageTextBoxPlaceholder = "Сообщение";
 
+		private delegate void UpdateMessages(IEnumerable<Model.Message> messages);
+
 		public MessengerForm(Chat chat)
 		{
 			InitializeComponent();
@@ -40,7 +42,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			var ts = new ThreadStart(BackgroundUpdate);
 			var backgroundThread = new Thread(ts);
-			//backgroundThread.Start();
+			//backgroundThread.Start();		
 		}
 
 		#region Messages
@@ -65,6 +67,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void BackgroundUpdate()
 		{
+
 			while (true)
 			{
 				Thread.Sleep(2000);
@@ -73,11 +76,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 				var newIDs = messages.Select(x => x.ID).Except(_chat.Messages.Select(x => x.ID));
 
-				var newMessages = new List<Model.Message>();
-				foreach (var id in newIDs)
-				{
-					newMessages.Add(messages.First(x => x.ID == id));
-				}
+				var newMessages = newIDs.Select(id => messages.First(x => x.ID == id)).ToList();
 
 				UpdateAllMessages(newMessages);
 			}
@@ -168,7 +167,7 @@ namespace Hummingbird.WinFormsClient.Forms
 			else
 				AddMessage(returned.ID.ToString(), returned.Text, avatar: Properties.Settings.Default.CurrentUser.Avatar);
 
-			MessagesPanel.Text = "";
+			MessageTextBox.Text = "";
 		}
 
 		private void ScrollToBottom(Panel p)

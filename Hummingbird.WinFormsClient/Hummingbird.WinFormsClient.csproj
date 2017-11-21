@@ -265,5 +265,14 @@
   <ItemGroup>
     <None Include="Resources\send %281%29.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\31914-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons8-Windows-8-User-Interface-Logout-0.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

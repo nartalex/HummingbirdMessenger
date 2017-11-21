@@ -21,25 +21,25 @@ namespace Hummingbird.WinFormsClient
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			//Properties.Settings.Default.Upgrade();
-			if (Properties.Settings.Default.CurrentUserID == new Guid())
-			{
+			//if (Properties.Settings.Default.CurrentUserID == new Guid())
+			//{
 				var startForm = new StartForm();
 				startForm.Show();
-			}
-			else
-			{
-				object result = ServiceClient.LoginUser(Properties.Settings.Default.CurrentUser);
-				if (result is User)
-				{
-					var messengerForm = new MainForm();
-					messengerForm.Show();
-				}
-				else
-				{
-					var startForm = new StartForm();
-					startForm.Show();
-				}
-			}
+			//}
+			//else
+			//{
+				//object result = ServiceClient.LoginUser(Properties.Settings.Default.CurrentUser);
+				//if (result is User)
+				//{
+					//var messengerForm = new MainForm();
+					//messengerForm.Show();
+				//}
+				//else
+				//{
+				//	var startForm = new StartForm();
+				//	startForm.Show();
+				//}
+			//}
 
 			Application.Run();
 		}

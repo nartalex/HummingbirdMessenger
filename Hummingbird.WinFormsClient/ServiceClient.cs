@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,7 +17,18 @@ namespace Hummingbird.WinFormsClient
 {
 	static class ServiceClient
 	{
-		private static HttpClient _client;
+		public static byte[] FromImageToBytes(Image image)
+		{
+			throw new NotImplementedException();
+		}
+
+		public static Image FromBytesToImage(byte[] bytes)
+		{
+			return (Bitmap)new ImageConverter().ConvertFrom(bytes);
+		}
+
+
+	private static HttpClient _client;
 
 		public static void Initialize()
 		{

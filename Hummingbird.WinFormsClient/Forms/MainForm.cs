@@ -20,6 +20,9 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			InitializeComponent();
 
+			CurrentUserAvatar.BackgroundImage = ServiceClient.FromBytesToImage(Properties.Settings.Default.CurrentUser.Avatar);
+			CurrentUserNameLabel.Text = Properties.Settings.Default.CurrentUser.Nickname;
+
 			var chats = ServiceClient.GetUserChats(Properties.Settings.Default.CurrentUser.ID) as Chat[];
 
 			if (chats != null && chats.Any())
@@ -49,16 +52,32 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void ExitTSM_Click(object sender, EventArgs e)
 		{
-			Properties.Settings.Default.CurrentUser = null;
-			Properties.Settings.Default.Save();
-			Close();
-			(new StartForm()).Show();
+
 		}
 
 		public void OpenChat(Chat chat)
 		{
 			var f = new MessengerForm(chat);
 			f.Show();
+		}
+
+		private void UserSearchButton_Click(object sender, EventArgs e)
+		{
+			var f = new UsersSearchForm();
+			f.Show();
+		}
+
+		private void SettingsButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void UserExit_Click(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.CurrentUser = null;
+			Properties.Settings.Default.Save();
+			Close();
+			(new StartForm()).Show();
 		}
 	}
 }
