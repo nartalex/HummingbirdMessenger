@@ -27,8 +27,7 @@ namespace Hummingbird.WinFormsClient
 			return (Bitmap)new ImageConverter().ConvertFrom(bytes);
 		}
 
-
-	private static HttpClient _client;
+		private static HttpClient _client;
 
 		public static void Initialize()
 		{
@@ -47,9 +46,9 @@ namespace Hummingbird.WinFormsClient
 
 			StringBuilder sBuilder = new StringBuilder();
 
-			for (int i = 0; i < data.Length; i++)
+			foreach(byte t in data)
 			{
-				sBuilder.Append(data[i].ToString("x2"));
+				sBuilder.Append(t.ToString("x2"));
 			}
 
 			shaM.Dispose();
@@ -104,7 +103,7 @@ namespace Hummingbird.WinFormsClient
 
 			try
 			{
-				response.EnsureSuccessStatusCode();
+				//response.EnsureSuccessStatusCode();
 
 				var chats = response.Content.ReadAsAsync<Chat[]>().Result;
 
@@ -195,7 +194,7 @@ namespace Hummingbird.WinFormsClient
 
 			try
 			{
-				response.EnsureSuccessStatusCode();
+				//response.EnsureSuccessStatusCode();
 
 				var m = response.Content.ReadAsAsync<Model.Message[]>().Result;
 

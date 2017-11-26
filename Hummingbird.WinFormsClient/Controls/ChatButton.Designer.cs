@@ -48,6 +48,7 @@
 			// 
 			this.ChatNameLabel.AutoSize = true;
 			this.ChatNameLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.ChatNameLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
 			this.ChatNameLabel.Location = new System.Drawing.Point(74, 4);
 			this.ChatNameLabel.Name = "ChatNameLabel";
 			this.ChatNameLabel.Size = new System.Drawing.Size(96, 25);
@@ -68,6 +69,7 @@
 			// 
 			this.LastMessageTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.LastMessageTime.Font = new System.Drawing.Font("Segoe UI Semilight", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.LastMessageTime.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.LastMessageTime.Location = new System.Drawing.Point(234, 6);
 			this.LastMessageTime.Name = "LastMessageTime";
 			this.LastMessageTime.Size = new System.Drawing.Size(113, 23);
@@ -78,11 +80,13 @@
 			// ChatButton
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.AutoSize = true;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.LastMessageTime);
 			this.Controls.Add(this.LastMessageLabel);
 			this.Controls.Add(this.ChatNameLabel);
 			this.Controls.Add(this.ChatAvatar);
+			this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
 			this.Name = "ChatButton";
 			this.Size = new System.Drawing.Size(350, 70);
 			this.Click += new System.EventHandler(this.ChatButton_Click);

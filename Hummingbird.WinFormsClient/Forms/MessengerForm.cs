@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -19,8 +20,6 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const int GapBetwenMessages = 7;
 		private const string MessageTextBoxPlaceholder = "Сообщение";
 
-		private delegate void UpdateMessages(IEnumerable<Model.Message> messages);
-
 		public MessengerForm(Chat chat)
 		{
 			InitializeComponent();
@@ -32,53 +31,36 @@ namespace Hummingbird.WinFormsClient.Forms
 				: _chat.Name;
 
 			// Обновляем сообщения
-			_chat.Messages = ServiceClient.GetMessages(chat.ID, 0, 20).ToList();
-			UpdateAllMessages(_chat.Messages.ToArray());
+			_chat.Messages.Clear();
+			var messages = ServiceClient.GetMessages(chat.ID, 0, 5).ToList();
+			UpdateAllMessages(messages);
+			_chat.Messages = messages;
 			ScrollToBottom(MessagesPanel);
 
 			// Ставим плейсхолдер в поле сообщения
 			ActiveControl = MessagesPanel;
 			MessageTextBox_Leave(new Object(), EventArgs.Empty);
 
-			var ts = new ThreadStart(BackgroundUpdate);
-			var backgroundThread = new Thread(ts);
-			//backgroundThread.Start();		
+			backgroundWorker.RunWorkerAsync();
 		}
 
 		#region Messages
 
 		private void UpdateAllMessages(IEnumerable<Model.Message> messages)
 		{
-			Guid lastMessageUserID = new Guid();
+			Guid lastMessageUserID = _chat.Messages.Any() ? _chat.Messages.Last().UserFromID : new Guid();
 
 			foreach (var m in messages)
 			{
 				if (lastMessageUserID == m.UserFromID)
 				{
-					AddMessage("", m.Text);
+					AddMessage(m.ID.ToString(), m.Text);
 				}
 				else
 				{
 					lastMessageUserID = m.UserFromID;
-					AddMessage("", m.Text, avatar: _chat.Members.First(x => x.UserID == m.UserFromID).User.Avatar);
+					AddMessage(m.ID.ToString(), m.Text, _chat.Members.First(x => x.UserID == m.UserFromID).User.Avatar);
 				}
-			}
-		}
-
-		private void BackgroundUpdate()
-		{
-
-			while (true)
-			{
-				Thread.Sleep(2000);
-
-				var messages = ServiceClient.GetMessages(_chat.ID, 0, 10);
-
-				var newIDs = messages.Select(x => x.ID).Except(_chat.Messages.Select(x => x.ID));
-
-				var newMessages = newIDs.Select(id => messages.First(x => x.ID == id)).ToList();
-
-				UpdateAllMessages(newMessages);
 			}
 		}
 
@@ -86,13 +68,15 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		#region Getters
 
-		private void AddMessage(string name, string text, int sizeY = LabelSizeY, byte[] avatar = null)
+		private void AddMessage(string name, string text, byte[] avatar = null)
 		{
 			MessagesPanel.RowCount++;
 			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, LabelSizeY));
 			MessagesPanel.Controls.Add(
 				new Label()
 				{
+					Anchor = AnchorStyles.Left | AnchorStyles.Right,
+					BorderStyle = BorderStyle.FixedSingle,
 					Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
 					Name = name,
 					MinimumSize = new Size(0, LabelSizeY),
@@ -103,6 +87,8 @@ namespace Hummingbird.WinFormsClient.Forms
 				1,
 				MessagesPanel.RowCount - 1);
 
+			//MessagesPanel.ScrollControlIntoView();
+
 			MessagesPanel.Controls.Add(
 				new PictureBox()
 				{
@@ -112,6 +98,8 @@ namespace Hummingbird.WinFormsClient.Forms
 				},
 				0,
 				MessagesPanel.RowCount - 1);
+
+			MessagesPanel.RowCount++;
 		}
 
 		#endregion
@@ -172,7 +160,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void ScrollToBottom(Panel p)
 		{
-			using (Control c = new Control() { Parent = p, Dock = DockStyle.Bottom })
+			using (Control c = new Control() { Parent = p, Dock = DockStyle.Top })
 			{
 				p.ScrollControlIntoView(c);
 				c.Parent = null;
@@ -180,5 +168,51 @@ namespace Hummingbird.WinFormsClient.Forms
 		}
 
 		#endregion
+
+		private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.Sleep(2000);
+
+			var messages = ServiceClient.GetMessages(_chat.ID, 0, 10);
+			var newIDs = messages
+						.Where(x=>x.UserFromID != Properties.Settings.Default.CurrentUserID)
+						.Select(x => x.ID)
+						.Except(_chat.Messages.Select(x => x.ID));
+			var newMessages = newIDs
+							 .Select(id => messages.First(x => x.ID == id))
+							 .ToList();
+
+			e.Result = newMessages;
+		}
+
+		private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			var messages = e.Result as List<Model.Message>;
+
+			if (messages.Any())
+			{
+				foreach (var m in messages)
+				{
+					_chat.Messages.Add(m);
+				}
+
+				for (int i = 0; i < messages.Count; i++)
+				{
+					messages[i].Text += "fromBG";
+				}
+
+
+				UpdateAllMessages(messages);
+			}
+
+			//ScrollToBottom(MessagesPanel);
+
+			backgroundWorker.RunWorkerAsync();
+		}
+
+		private void MessagesPanel_ControlAdded(object sender, ControlEventArgs e)
+		{
+			//MessagesPanel.ScrollControlIntoView(e.Control);
+		}
 	}
 }

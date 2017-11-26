@@ -31,6 +31,7 @@
 			this.MessageTextBox = new System.Windows.Forms.TextBox();
 			this.SendMessageButton = new System.Windows.Forms.Button();
 			this.MessagesPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
 			this.SuspendLayout();
 			// 
 			// MessageTextBox
@@ -81,6 +82,12 @@
 			this.MessagesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.MessagesPanel.Size = new System.Drawing.Size(433, 317);
 			this.MessagesPanel.TabIndex = 3;
+			this.MessagesPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.MessagesPanel_ControlAdded);
+			// 
+			// backgroundWorker
+			// 
+			this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+			this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
 			// 
 			// MessengerForm
 			// 
@@ -103,5 +110,6 @@
 		private System.Windows.Forms.TextBox MessageTextBox;
 		private System.Windows.Forms.Button SendMessageButton;
 		private System.Windows.Forms.TableLayoutPanel MessagesPanel;
+		private System.ComponentModel.BackgroundWorker backgroundWorker;
 	}
 }

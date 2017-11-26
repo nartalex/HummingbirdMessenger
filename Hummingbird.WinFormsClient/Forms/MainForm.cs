@@ -16,6 +16,13 @@ namespace Hummingbird.WinFormsClient.Forms
 {
 	public partial class MainForm : Form
 	{
+		private bool _textIsShown = false;
+		private List<Image> _backgrounds = new List<Image>();
+		private List<string> _labels = new List<string>()
+		{
+			 "Поиск", "Настройки", "Выход", "Новая группа"
+		};
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -27,32 +34,41 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			if (chats != null && chats.Any())
 			{
-				for (int i = 0; i < chats?.Count(); i++)
-				{
-					ChatButton button = new ChatButton(chats[i]);
+				//for (int i = 0; i < 5; i++)
+					foreach (var c in chats)
+					{
+						ChatsListTable.RowCount++;
+						ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
+						ChatsListTable.Controls.Add(new ChatButton(c), 0, ChatsListTable.RowCount - 1);
+					}
+				ChatsListTable.RowCount++;
+			}
 
-					button.Location = new Point(0, i * button.Height);
-					button.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-
-					ChatsListPanel.Controls.Add(button);
-				}
+			foreach (var c in UserButtonsTable.Controls.OfType<Button>())
+			{
+				_backgrounds.Add(c.BackgroundImage);
 			}
 		}
 
-		public void AddChatToForm(Chat chat)
+		public void CreateChat(Guid[] userIds)
 		{
-			ChatButton cb = new ChatButton(chat);
-		}
+			Chat chat = new Chat()
+			{
+				Members = new List<ChatMember>()
+			};
 
-		private void UsersSearchTSM_Click(object sender, EventArgs e)
-		{
-			var f = new UsersSearchForm();
-			f.Show();
-		}
+			foreach (var id in userIds)
+			{
+				chat.Members.Add(new ChatMember() { UserID = id });
+			}
 
-		private void ExitTSM_Click(object sender, EventArgs e)
-		{
+			chat.Members.Add(new ChatMember() { UserID = Properties.Settings.Default.CurrentUser.ID });
 
+			Chat createdChat = ServiceClient.CreateChat(chat);
+
+			ChatsListTable.RowCount++;
+			ChatsListTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, 70));
+			ChatsListTable.Controls.Add(new ChatButton(createdChat), 0, ChatsListTable.RowCount - 1);
 		}
 
 		public void OpenChat(Chat chat)
@@ -63,7 +79,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void UserSearchButton_Click(object sender, EventArgs e)
 		{
-			var f = new UsersSearchForm();
+			var f = new UsersSearchForm(this);
 			f.Show();
 		}
 
@@ -78,6 +94,32 @@ namespace Hummingbird.WinFormsClient.Forms
 			Properties.Settings.Default.Save();
 			Close();
 			(new StartForm()).Show();
+		}
+
+		private void UserButtonsTable_Resize(object sender, EventArgs e)
+		{
+			if (Width > 530 && !_textIsShown)
+			{
+				var controls = UserButtonsTable.Controls.OfType<Button>().ToArray();
+				_textIsShown = true;
+
+				for (int i = 0; i < controls.Length; i++)
+				{
+					controls[i].BackgroundImage = null;
+					controls[i].Text = _labels[i];
+				}
+			}
+			else if (Width <= 530 && _textIsShown)
+			{
+				var controls = UserButtonsTable.Controls.OfType<Button>().ToArray();
+				_textIsShown = false;
+
+				for (int i = 0; i < controls.Length; i++)
+				{
+					controls[i].Text = "";
+					controls[i].BackgroundImage = _backgrounds[i];
+				}
+			}
 		}
 	}
 }

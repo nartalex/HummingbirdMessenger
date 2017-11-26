@@ -28,60 +28,57 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.ChatsListPanel = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.UserButtonsTable = new System.Windows.Forms.TableLayoutPanel();
 			this.UserSearchButton = new System.Windows.Forms.Button();
 			this.SettingsButton = new System.Windows.Forms.Button();
 			this.UserExit = new System.Windows.Forms.Button();
+			this.GroupAddButton = new System.Windows.Forms.Button();
 			this.CurrentUserNameLabel = new System.Windows.Forms.Label();
 			this.CurrentUserAvatar = new System.Windows.Forms.PictureBox();
+			this.ChatsListTable = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.UserButtonsTable.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentUserAvatar)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// ChatsListPanel
-			// 
-			this.ChatsListPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatsListPanel.Location = new System.Drawing.Point(0, 76);
-			this.ChatsListPanel.Name = "ChatsListPanel";
-			this.ChatsListPanel.Size = new System.Drawing.Size(334, 325);
-			this.ChatsListPanel.TabIndex = 2;
 			// 
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
-			this.panel1.Controls.Add(this.tableLayoutPanel1);
+			this.panel1.Controls.Add(this.UserButtonsTable);
 			this.panel1.Controls.Add(this.CurrentUserNameLabel);
 			this.panel1.Controls.Add(this.CurrentUserAvatar);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(334, 70);
+			this.panel1.Size = new System.Drawing.Size(334, 72);
 			this.panel1.TabIndex = 3;
 			// 
-			// tableLayoutPanel1
+			// UserButtonsTable
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.Controls.Add(this.UserSearchButton, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.SettingsButton, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.UserExit, 2, 0);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(73, 37);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(258, 30);
-			this.tableLayoutPanel1.TabIndex = 2;
+			this.UserButtonsTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.UserButtonsTable.ColumnCount = 4;
+			this.UserButtonsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.UserButtonsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.UserButtonsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.UserButtonsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.UserButtonsTable.Controls.Add(this.UserSearchButton, 1, 0);
+			this.UserButtonsTable.Controls.Add(this.SettingsButton, 2, 0);
+			this.UserButtonsTable.Controls.Add(this.UserExit, 3, 0);
+			this.UserButtonsTable.Controls.Add(this.GroupAddButton, 0, 0);
+			this.UserButtonsTable.Location = new System.Drawing.Point(73, 36);
+			this.UserButtonsTable.Name = "UserButtonsTable";
+			this.UserButtonsTable.RowCount = 1;
+			this.UserButtonsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.UserButtonsTable.Size = new System.Drawing.Size(258, 33);
+			this.UserButtonsTable.TabIndex = 2;
+			this.UserButtonsTable.Resize += new System.EventHandler(this.UserButtonsTable_Resize);
 			// 
 			// UserSearchButton
 			// 
-			this.UserSearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.UserSearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.UserSearchButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.user_search;
 			this.UserSearchButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -90,16 +87,19 @@
 			this.UserSearchButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
 			this.UserSearchButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.UserSearchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.UserSearchButton.Location = new System.Drawing.Point(3, 3);
+			this.UserSearchButton.Font = new System.Drawing.Font("Segoe UI Semilight", 10.5F);
+			this.UserSearchButton.Location = new System.Drawing.Point(67, 3);
 			this.UserSearchButton.Name = "UserSearchButton";
-			this.UserSearchButton.Size = new System.Drawing.Size(80, 24);
+			this.UserSearchButton.Size = new System.Drawing.Size(58, 27);
 			this.UserSearchButton.TabIndex = 0;
+			this.UserSearchButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.UserSearchButton.UseVisualStyleBackColor = true;
 			this.UserSearchButton.Click += new System.EventHandler(this.UserSearchButton_Click);
 			// 
 			// SettingsButton
 			// 
-			this.SettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.SettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.SettingsButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.user_settings;
 			this.SettingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -108,16 +108,18 @@
 			this.SettingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
 			this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SettingsButton.Location = new System.Drawing.Point(89, 3);
+			this.SettingsButton.Font = new System.Drawing.Font("Segoe UI Semilight", 10.5F);
+			this.SettingsButton.Location = new System.Drawing.Point(131, 3);
 			this.SettingsButton.Name = "SettingsButton";
-			this.SettingsButton.Size = new System.Drawing.Size(80, 24);
+			this.SettingsButton.Size = new System.Drawing.Size(58, 27);
 			this.SettingsButton.TabIndex = 1;
 			this.SettingsButton.UseVisualStyleBackColor = true;
 			this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
 			// 
 			// UserExit
 			// 
-			this.UserExit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.UserExit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.UserExit.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.user_exit;
 			this.UserExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -126,21 +128,43 @@
 			this.UserExit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
 			this.UserExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.UserExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.UserExit.Location = new System.Drawing.Point(175, 3);
+			this.UserExit.Font = new System.Drawing.Font("Segoe UI Semilight", 10.5F);
+			this.UserExit.Location = new System.Drawing.Point(195, 3);
 			this.UserExit.Name = "UserExit";
-			this.UserExit.Size = new System.Drawing.Size(80, 24);
+			this.UserExit.Size = new System.Drawing.Size(60, 27);
 			this.UserExit.TabIndex = 2;
 			this.UserExit.UseVisualStyleBackColor = true;
 			this.UserExit.Click += new System.EventHandler(this.UserExit_Click);
 			// 
+			// GroupAddButton
+			// 
+			this.GroupAddButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.GroupAddButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.add_group_chat;
+			this.GroupAddButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.GroupAddButton.FlatAppearance.BorderSize = 0;
+			this.GroupAddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.GroupAddButton.Font = new System.Drawing.Font("Segoe UI Semilight", 10.5F);
+			this.GroupAddButton.Location = new System.Drawing.Point(3, 3);
+			this.GroupAddButton.Name = "GroupAddButton";
+			this.GroupAddButton.Size = new System.Drawing.Size(58, 27);
+			this.GroupAddButton.TabIndex = 3;
+			this.GroupAddButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.GroupAddButton.UseVisualStyleBackColor = true;
+			// 
 			// CurrentUserNameLabel
 			// 
+			this.CurrentUserNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.CurrentUserNameLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.CurrentUserNameLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
 			this.CurrentUserNameLabel.Location = new System.Drawing.Point(73, 3);
+			this.CurrentUserNameLabel.Margin = new System.Windows.Forms.Padding(0);
 			this.CurrentUserNameLabel.Name = "CurrentUserNameLabel";
-			this.CurrentUserNameLabel.Size = new System.Drawing.Size(258, 34);
+			this.CurrentUserNameLabel.Size = new System.Drawing.Size(258, 30);
 			this.CurrentUserNameLabel.TabIndex = 1;
-			this.CurrentUserNameLabel.Text = "username";
+			this.CurrentUserNameLabel.Text = "Uqtby";
 			this.CurrentUserNameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// CurrentUserAvatar
@@ -152,32 +176,47 @@
 			this.CurrentUserAvatar.TabIndex = 0;
 			this.CurrentUserAvatar.TabStop = false;
 			// 
+			// ChatsListTable
+			// 
+			this.ChatsListTable.AutoScroll = true;
+			this.ChatsListTable.BackColor = System.Drawing.SystemColors.Control;
+			this.ChatsListTable.ColumnCount = 1;
+			this.ChatsListTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.ChatsListTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ChatsListTable.Location = new System.Drawing.Point(0, 72);
+			this.ChatsListTable.Name = "ChatsListTable";
+			this.ChatsListTable.RowCount = 1;
+			this.ChatsListTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+			this.ChatsListTable.Size = new System.Drawing.Size(334, 329);
+			this.ChatsListTable.TabIndex = 4;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(334, 401);
+			this.Controls.Add(this.ChatsListTable);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.ChatsListPanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MinimumSize = new System.Drawing.Size(350, 440);
 			this.Name = "MainForm";
 			this.Text = "MessengerForm";
 			this.panel1.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
+			this.UserButtonsTable.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.CurrentUserAvatar)).EndInit();
 			this.ResumeLayout(false);
 
         }
 
 		#endregion
-		private System.Windows.Forms.Panel ChatsListPanel;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.PictureBox CurrentUserAvatar;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel UserButtonsTable;
 		private System.Windows.Forms.Label CurrentUserNameLabel;
 		private System.Windows.Forms.Button UserSearchButton;
 		private System.Windows.Forms.Button SettingsButton;
 		private System.Windows.Forms.Button UserExit;
+		private System.Windows.Forms.TableLayoutPanel ChatsListTable;
+		private System.Windows.Forms.Button GroupAddButton;
 	}
 }

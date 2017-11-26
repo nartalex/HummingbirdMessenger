@@ -9,13 +9,15 @@ namespace Hummingbird.WinFormsClient.Controls
 {
 	public partial class ChatButton : UserControl
 	{
-		private Chat thisChat;
+		private readonly Chat _thisChat;
 
 		public ChatButton(Chat chat)
 		{
 			InitializeComponent();
 
-			thisChat = chat;
+			_thisChat = chat;
+
+			Anchor = AnchorStyles.Left | AnchorStyles.Right;
 
 			if (chat.Private)
 			{
@@ -29,20 +31,20 @@ namespace Hummingbird.WinFormsClient.Controls
 			}
 			else
 			{
-				ChatAvatar.Image = thisChat.Avatar != null && thisChat.Avatar.Any()
-									   ? (Bitmap)new ImageConverter().ConvertFrom(thisChat.Avatar)
+				ChatAvatar.Image = _thisChat.Avatar != null && _thisChat.Avatar.Any()
+									   ? (Bitmap)new ImageConverter().ConvertFrom(_thisChat.Avatar)
 									   : Properties.Resources.empty_chat_avatar;
-				ChatNameLabel.Text = thisChat.Name;
+				ChatNameLabel.Text = _thisChat.Name;
 			}
 
-			LastMessageLabel.Text = thisChat.Messages.Any()
-									? thisChat.Messages.First().Text
+			LastMessageLabel.Text = _thisChat.Messages.Any()
+									? _thisChat.Messages.First().Text
 									: String.Empty;
 
-			LastMessageTime.Text = thisChat.Messages.Any()
-									   ? (DateTime.Now - thisChat.Messages.Last().Time).Days < 1
-											 ? thisChat.Messages.Last().Time.ToShortTimeString()
-											 : thisChat.Messages.Last().Time.ToShortDateString()
+			LastMessageTime.Text = _thisChat.Messages.Any()
+									   ? (DateTime.Now - _thisChat.Messages.Last().Time).Days < 1
+											 ? _thisChat.Messages.Last().Time.ToShortTimeString()
+											 : _thisChat.Messages.Last().Time.ToShortDateString()
 									   : String.Empty;
 		}
 
@@ -53,9 +55,7 @@ namespace Hummingbird.WinFormsClient.Controls
 
 		private void ChatButton_DoubleClick(object sender, EventArgs e)
 		{
-			
-
-			((MainForm)Parent.Parent).OpenChat(thisChat);
+			((MainForm)Parent.Parent).OpenChat(_thisChat);
 		}
 	}
 }

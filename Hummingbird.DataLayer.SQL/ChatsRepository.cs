@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Text;
 using Hummingbird.Model;
 using NLog;
 
@@ -34,29 +34,29 @@ namespace Hummingbird.DataLayer.SQL
 
 			try
 			{
-				if (!chat.Members.Any())
+				if (chat.Members.Count < 2)
 				{
 					logger.Error("Создание чата: пустой список участников. Создаем исключение.");
 					throw GenerateException("Can't create chat with no members", HttpStatusCode.BadRequest);
 				}
 
-				if (chat.Members.Count() == 2)
+				StringBuilder sb = new StringBuilder("");
+				foreach (var m in chat.Members)
 				{
-					var m0 = chat.Members.ToArray()[0];
-					var m1 = chat.Members.ToArray()[1];
-					chat.Name = DB.Users.First(x => x.ID == m0.UserID).Nickname
-						+ "-"
-						+ DB.Users.First(x => x.ID == m1.UserID).Nickname;
-					chat.Private = true;
+					sb.Append(DB.Users.First(x => x.ID == m.UserID).Nickname);
+					sb.Append(" - ");
 				}
+				
 
 				Guid newChatID = Guid.NewGuid();
 				Chat newChat = new Chat
 				{
 					ID = newChatID,
-					Name = chat.Name,
-					Avatar = chat.Avatar,
-					Members = chat.Members
+					Name = sb.ToString().Substring(0, sb.Length - 3),
+					Avatar = null,
+					Members = chat.Members,
+					Messages = new List<Message>(),
+					Private = chat.Members.Count == 2
 				};
 				DB.Chats.Add(newChat);
 				DB.SaveChanges();
@@ -176,7 +176,9 @@ namespace Hummingbird.DataLayer.SQL
 					if (m != null)
 						c.Messages.Add(m);
 				}
-				var ret = chats.OrderBy(c => c.Messages.OrderBy(m => m.Time));
+				//var ret = chats.OrderBy(c => c.Messages.OrderBy(m => m.Time.Ticks)).ToArray();
+
+				var ret = chats.OrderByDescending(t => t.Messages.Min(m => m.Time));
 
 				logger.Info($"Получение списка чатов для пользователя {userId} - успешно за {timer.ElapsedMilliseconds} мс");
 				if (timer.ElapsedMilliseconds > MAX_TIME)

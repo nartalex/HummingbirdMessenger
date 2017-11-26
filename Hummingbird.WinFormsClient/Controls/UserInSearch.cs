@@ -29,25 +29,7 @@ namespace Hummingbird.WinFormsClient.Controls
 
 		private void AddUserButton_Click(object sender, EventArgs e)
 		{
-			Chat chatToSend = new Chat()
-			{
-				Name = String.Empty,
-				Members = new List<ChatMember>()
-				{
-					new ChatMember
-					{
-						UserID = Properties.Settings.Default.CurrentUser.ID,
-					},
-					new ChatMember()
-					{
-						UserID = UserID
-					}
-				}
-			};
-
-			Chat chat = ServiceClient.CreateChat(chatToSend) as Chat;
-
-			(Parent as UsersSearchForm).AddChatToForm(chat);
+			(Parent as UsersSearchForm).AddChatToForm(UserID);
 		}
 	}
 }

@@ -148,9 +148,6 @@
   <data name="LoginPlaceholder" xml:space="preserve">
     <value>Логин</value>
   </data>
-  <data name="photo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\photo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="hummingbird_icon_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\humm-dribbble-mod-WHITE.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -171,5 +168,8 @@
   </data>
   <data name="user_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settings-128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_group_chat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\50726-200.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
