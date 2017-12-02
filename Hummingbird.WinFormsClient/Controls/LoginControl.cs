@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Resources;
+using System.Threading;
 using Hummingbird.Model;
 
 namespace Hummingbird.WinFormsClient.Controls
@@ -27,30 +28,58 @@ namespace Hummingbird.WinFormsClient.Controls
 			if (!CheckFields())
 				return;
 
+			LoginButton.Image = Properties.Resources.load_gif;
+			LoginButton.Text = "";
+
+			LoginBGW.RunWorkerAsync();
+		}
+
+		private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar != 13)
+				return;
+
+			LoginButton_Click(sender, e);
+		}
+
+		private void LoginBGW_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.Sleep(1000);
+
 			User user = new User
 			{
 				Login = LoginTextbox.Text,
 				PasswordHash = ServiceClient.GetSHA512Hash(PasswordTextbox.Text)
 			};
 
-			object result = ServiceClient.LoginUser(user);
-			if (result is User)
+			e.Result = ServiceClient.LoginUser(user);
+		}
+
+		private void LoginBGW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			LoginButton.Image = null;
+			LoginButton.Text = "Войти";
+
+			if (e.Result is User)
 			{
-				Properties.Settings.Default.CurrentUser = (User)result;
-				Properties.Settings.Default.CurrentUserID = ((User)result).ID;
+				Properties.Settings.Default.CurrentUser = (User)e.Result;
+				Properties.Settings.Default.CurrentUserID = ((User)e.Result).ID;
 				Properties.Settings.Default.Save();
 				(Parent as StartForm).CloseAndContinue();
 			}
-			else if (result is string)
+			else if (e.Result is string)
 			{
-				WarningLabel.Text = (string)result;
+				WarningLabel.Text = (string)e.Result;
+			}
+			else
+			{
+				MessageBox.Show(e.Result.ToString());
 			}
 		}
 
 		private bool CheckFields()
 		{
 			bool ret = true;
-			//WarningLabel.Text = "";
 
 			if (LoginTextbox.Text == LoginPlaceholder || String.IsNullOrWhiteSpace(LoginTextbox.Text))
 			{

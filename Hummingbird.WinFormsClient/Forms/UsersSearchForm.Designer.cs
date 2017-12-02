@@ -30,8 +30,8 @@
 		{
 			this.SearchButton = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.UsersTable = new System.Windows.Forms.TableLayoutPanel();
 			this.SearchTB = new Hummingbird.WinFormsClient.CustomTextBox();
+			this.UsersTable = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -69,20 +69,6 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(374, 38);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
-			// UsersTable
-			// 
-			this.UsersTable.ColumnCount = 3;
-			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
-			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.UsersTable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.UsersTable.Location = new System.Drawing.Point(0, 38);
-			this.UsersTable.Name = "UsersTable";
-			this.UsersTable.RowCount = 1;
-			this.UsersTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-			this.UsersTable.Size = new System.Drawing.Size(374, 423);
-			this.UsersTable.TabIndex = 4;
-			// 
 			// SearchTB
 			// 
 			this.SearchTB.BackColor = System.Drawing.Color.White;
@@ -96,6 +82,20 @@
 			this.SearchTB.Text = "Имя пользователя";
 			this.SearchTB.Enter += new System.EventHandler(this.SearchTB_Enter);
 			this.SearchTB.Leave += new System.EventHandler(this.SearchTB_Leave);
+			// 
+			// UsersTable
+			// 
+			this.UsersTable.ColumnCount = 3;
+			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.UsersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+			this.UsersTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.UsersTable.Location = new System.Drawing.Point(0, 38);
+			this.UsersTable.Name = "UsersTable";
+			this.UsersTable.RowCount = 1;
+			this.UsersTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+			this.UsersTable.Size = new System.Drawing.Size(374, 423);
+			this.UsersTable.TabIndex = 4;
 			// 
 			// UsersSearchForm
 			// 

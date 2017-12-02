@@ -143,7 +143,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.GroupAddButton.BackgroundImage = global::Hummingbird.WinFormsClient.Properties.Resources.add_group_chat;
 			this.GroupAddButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.GroupAddButton.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.GroupAddButton.FlatAppearance.BorderSize = 0;
+			this.GroupAddButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this.GroupAddButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
 			this.GroupAddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.GroupAddButton.Font = new System.Drawing.Font("Segoe UI Semilight", 10.5F);
 			this.GroupAddButton.Location = new System.Drawing.Point(3, 3);

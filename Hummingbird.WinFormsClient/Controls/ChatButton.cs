@@ -23,17 +23,14 @@ namespace Hummingbird.WinFormsClient.Controls
 			{
 				var otherPerson = chat.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User;
 
-				ChatAvatar.BackgroundImage = otherPerson.Avatar.Any()
-									   ? (Bitmap)new ImageConverter().ConvertFrom(otherPerson.Avatar)
-									   : Properties.Resources.empty_avatar;
+				ChatAvatar.BackgroundImage = ServiceClient.FromBytesToImage(otherPerson.Avatar);
 
 				ChatNameLabel.Text = otherPerson.Nickname;
 			}
 			else
 			{
-				ChatAvatar.Image = _thisChat.Avatar != null && _thisChat.Avatar.Any()
-									   ? (Bitmap)new ImageConverter().ConvertFrom(_thisChat.Avatar)
-									   : Properties.Resources.empty_chat_avatar;
+				ChatAvatar.BackgroundImage = ServiceClient.FromBytesToImage(_thisChat.Avatar, true);
+
 				ChatNameLabel.Text = _thisChat.Name;
 			}
 

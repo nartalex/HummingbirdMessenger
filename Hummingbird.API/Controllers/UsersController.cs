@@ -45,5 +45,9 @@ namespace Hummingbird.API.Controllers
 	    [HttpGet, Route("api/init")]
 		public void Initialize() 
 			=> _usersRepository.Initialize();
-    }
+
+	    [HttpGet, Route("api/clear")]
+	    public void Clear()
+		    => _usersRepository.ClearDatabase();
+	}
 }

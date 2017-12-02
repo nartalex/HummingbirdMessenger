@@ -121,6 +121,16 @@ namespace Hummingbird.WinFormsClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap load_gif {
+            get {
+                object obj = ResourceManager.GetObject("load_gif", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Логин.
         /// </summary>
         internal static string LoginPlaceholder {

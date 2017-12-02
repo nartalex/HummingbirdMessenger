@@ -39,9 +39,10 @@ namespace Hummingbird.WinFormsClient.Forms
 					UsersTable.Controls.Add(
 											   new Label()
 											   {
+												   Anchor = AnchorStyles.Left | AnchorStyles.Right,
 												   Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204),
 												   Name = u.ID.ToString(),
-												   MinimumSize = new Size(0, LabelSizeY),
+												   MinimumSize = new Size(MinimumSize.Width - LabelSizeY * 2-20, LabelSizeY),
 												   Text = u.Nickname,
 												   TextAlign = ContentAlignment.MiddleLeft,
 											   }, 1, UsersTable.RowCount - 1);
@@ -59,13 +60,22 @@ namespace Hummingbird.WinFormsClient.Forms
 						Name = u.ID.ToString(),
 						BackgroundImage = Properties.Resources.add_friend,
 						BackgroundImageLayout = ImageLayout.Zoom,
-						Size = new Size(32, 32)
+						Size = new Size(32, 32),
+						FlatAppearance = {
+							BorderSize = 0,
+							MouseDownBackColor = Color.Transparent,
+							MouseOverBackColor = Color.Transparent},
+						FlatStyle = FlatStyle.Flat,
+						Margin = new Padding(0, 16, 0, 16),
+						Padding = new Padding(0), 
+						Cursor = Cursors.Hand
 					};
 					b.Click += BOnClick;
 
 					UsersTable.Controls.Add(b, 2, UsersTable.RowCount - 1);
 				}
-			Invalidate();
+
+			UsersTable.RowCount++;
 		}
 
 		private void BOnClick(object sender, EventArgs eventArgs)

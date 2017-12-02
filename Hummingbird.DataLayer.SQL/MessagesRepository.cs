@@ -118,6 +118,7 @@ namespace Hummingbird.DataLayer.SQL
 				var ret = DB.Messages.Any(m => m.ChatToID == chatId)
 						?
 							DB.Messages
+								.Include(x => x.User)
 								.Where(m => m.ChatToID == chatId)
 								.OrderByDescending(m => m.Time)
 								.Skip(skip)
@@ -200,6 +201,7 @@ namespace Hummingbird.DataLayer.SQL
 				{
 					ID = Guid.NewGuid(),
 					UserFromID = message.UserFromID,
+					User = DB.Users.First(x => x.ID == message.UserFromID),
 					ChatToID = message.ChatToID,
 					Time = DateTime.Now,
 					TimeToLive = message.TimeToLive,

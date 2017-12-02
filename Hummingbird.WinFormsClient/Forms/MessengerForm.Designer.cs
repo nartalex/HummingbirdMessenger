@@ -28,26 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.MessageTextBox = new System.Windows.Forms.TextBox();
 			this.SendMessageButton = new System.Windows.Forms.Button();
 			this.MessagesPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+			this.MessageTextBox = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.SuspendLayout();
-			// 
-			// MessageTextBox
-			// 
-			this.MessageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.MessageTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.MessageTextBox.Location = new System.Drawing.Point(12, 323);
-			this.MessageTextBox.Margin = new System.Windows.Forms.Padding(0);
-			this.MessageTextBox.Name = "MessageTextBox";
-			this.MessageTextBox.Size = new System.Drawing.Size(372, 22);
-			this.MessageTextBox.TabIndex = 1;
-			this.MessageTextBox.Enter += new System.EventHandler(this.MessageTextBox_Enter);
-			this.MessageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageTextBox_KeyPress);
-			this.MessageTextBox.Leave += new System.EventHandler(this.MessageTextBox_Leave);
 			// 
 			// SendMessageButton
 			// 
@@ -71,10 +56,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessagesPanel.AutoScroll = true;
-			this.MessagesPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-			this.MessagesPanel.ColumnCount = 2;
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.MessagesPanel.ColumnCount = 3;
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 90F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
 			this.MessagesPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MessagesPanel.Location = new System.Drawing.Point(0, 0);
 			this.MessagesPanel.Name = "MessagesPanel";
@@ -89,27 +74,37 @@
 			this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
 			this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
 			// 
+			// MessageTextBox
+			// 
+			this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.MessageTextBox.Location = new System.Drawing.Point(12, 323);
+			this.MessageTextBox.Name = "MessageTextBox";
+			this.MessageTextBox.Size = new System.Drawing.Size(375, 32);
+			this.MessageTextBox.TabIndex = 4;
+			this.MessageTextBox.Text = " 8";
+			this.MessageTextBox.Enter += new System.EventHandler(this.MessageTextBox_Enter);
+			this.MessageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageTextBox_KeyPress);
+			this.MessageTextBox.Leave += new System.EventHandler(this.MessageTextBox_Leave);
+			// 
 			// MessengerForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
 			this.BackColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(433, 360);
+			this.Controls.Add(this.MessageTextBox);
 			this.Controls.Add(this.MessagesPanel);
 			this.Controls.Add(this.SendMessageButton);
-			this.Controls.Add(this.MessageTextBox);
 			this.Name = "MessengerForm";
 			this.Text = "MessengerForm";
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.TextBox MessageTextBox;
 		private System.Windows.Forms.Button SendMessageButton;
 		private System.Windows.Forms.TableLayoutPanel MessagesPanel;
 		private System.ComponentModel.BackgroundWorker backgroundWorker;
+		private CustomTextBox MessageTextBox;
 	}
 }

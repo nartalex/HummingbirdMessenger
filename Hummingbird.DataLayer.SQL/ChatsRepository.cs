@@ -44,7 +44,7 @@ namespace Hummingbird.DataLayer.SQL
 				foreach (var m in chat.Members)
 				{
 					sb.Append(DB.Users.First(x => x.ID == m.UserID).Nickname);
-					sb.Append(" - ");
+					sb.Append("-");
 				}
 				
 
@@ -52,7 +52,7 @@ namespace Hummingbird.DataLayer.SQL
 				Chat newChat = new Chat
 				{
 					ID = newChatID,
-					Name = sb.ToString().Substring(0, sb.Length - 3),
+					Name = sb.ToString().Substring(0, sb.Length - 1),
 					Avatar = null,
 					Members = chat.Members,
 					Messages = new List<Message>(),

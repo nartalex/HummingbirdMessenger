@@ -34,13 +34,12 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			if (chats != null && chats.Any())
 			{
-				//for (int i = 0; i < 5; i++)
-					foreach (var c in chats)
-					{
-						ChatsListTable.RowCount++;
-						ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
-						ChatsListTable.Controls.Add(new ChatButton(c), 0, ChatsListTable.RowCount - 1);
-					}
+				foreach (var c in chats)
+				{
+					ChatsListTable.RowCount++;
+					ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
+					ChatsListTable.Controls.Add(new ChatButton(c), 0, ChatsListTable.RowCount - 1);
+				}
 				ChatsListTable.RowCount++;
 			}
 
@@ -69,6 +68,7 @@ namespace Hummingbird.WinFormsClient.Forms
 			ChatsListTable.RowCount++;
 			ChatsListTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, 70));
 			ChatsListTable.Controls.Add(new ChatButton(createdChat), 0, ChatsListTable.RowCount - 1);
+			ChatsListTable.RowCount++;
 		}
 
 		public void OpenChat(Chat chat)
@@ -85,7 +85,8 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void SettingsButton_Click(object sender, EventArgs e)
 		{
-
+			Form f = new SettingsForm(this);
+			f.Show();
 		}
 
 		private void UserExit_Click(object sender, EventArgs e)
@@ -120,6 +121,16 @@ namespace Hummingbird.WinFormsClient.Forms
 					controls[i].BackgroundImage = _backgrounds[i];
 				}
 			}
+		}
+
+		public void ChangeAvatar(Image newAvatar)
+		{
+			CurrentUserAvatar.BackgroundImage = newAvatar;
+		}
+
+		public void ChangeUsername(string username)
+		{
+			CurrentUserNameLabel.Text = username;
 		}
 	}
 }

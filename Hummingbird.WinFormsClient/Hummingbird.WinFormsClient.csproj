@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ReactiveAnimation, Version=1.0.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ReactiveAnimation.1.0.26\lib\net45\ReactiveAnimation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -144,6 +141,12 @@
     <Compile Include="Forms\MessengerForm.Designer.cs">
       <DependentUpon>MessengerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessengerForm.resx">
       <DependentUpon>MessengerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
@@ -276,6 +282,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\50726-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dual Ring.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -86,7 +86,7 @@
 			this.Controls.Add(this.LastMessageLabel);
 			this.Controls.Add(this.ChatNameLabel);
 			this.Controls.Add(this.ChatAvatar);
-			this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
 			this.Name = "ChatButton";
 			this.Size = new System.Drawing.Size(350, 70);
 			this.Click += new System.EventHandler(this.ChatButton_Click);

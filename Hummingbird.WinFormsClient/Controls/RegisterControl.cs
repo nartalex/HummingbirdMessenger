@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
-
+using System.Threading;
 using Hummingbird.Model;
 
 namespace Hummingbird.WinFormsClient.Controls
@@ -29,28 +29,49 @@ namespace Hummingbird.WinFormsClient.Controls
             if (!CheckFields())
                 return;
 
-            User user = new User
-            {
-                Nickname = NicknameTextbox.Text,
-                Login = LoginTextbox.Text,
-                PasswordHash = ServiceClient.GetSHA512Hash(PasswordTextbox.Text)
-            };
+	        RegisterButton.Image = Properties.Resources.load_gif;
+	        RegisterButton.Text = "";
 
-            object result=ServiceClient.RegisterUser(user);
-            if (result is User)
-            {
-                Properties.Settings.Default.CurrentUser = (User)result;
-	            Properties.Settings.Default.CurrentUserID = ((User)result).ID;
-				Properties.Settings.Default.Save();
-				(Parent as StartForm).CloseAndContinue();
-            }
-            else if (result is string)
-            {
-                WarningLabel.Text = (string)result;
-            }
-        }
+	        RegisterBGW.RunWorkerAsync();
+		}
 
-        private bool CheckFields()
+	    private void RegisterBGW_DoWork(object sender, DoWorkEventArgs e)
+	    {
+		    Thread.Sleep(1000);
+
+		    User user = new User
+		    {
+			    Nickname = NicknameTextbox.Text,
+			    Login = LoginTextbox.Text,
+			    PasswordHash = ServiceClient.GetSHA512Hash(PasswordTextbox.Text)
+		    };
+
+		    e.Result = ServiceClient.RegisterUser(user);
+	    }
+
+	    private void RegisterBGW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+	    {
+		    RegisterButton.Image = null;
+		    RegisterButton.Text = "Регистрация";
+
+		    if (e.Result is User)
+		    {
+			    Properties.Settings.Default.CurrentUser = (User)e.Result;
+			    Properties.Settings.Default.CurrentUserID = ((User)e.Result).ID;
+			    Properties.Settings.Default.Save();
+			    (Parent as StartForm).CloseAndContinue();
+		    }
+		    else if (e.Result is string)
+		    {
+			    WarningLabel.Text = (string)e.Result;
+		    }
+		    else
+		    {
+			    MessageBox.Show(e.Result.ToString());
+		    }
+		}
+
+		private bool CheckFields()
         {
             bool ret = true;
             WarningLabel.Text = "";
@@ -129,6 +150,6 @@ namespace Hummingbird.WinFormsClient.Controls
             NicknameTextbox.AddText(NicknamePlaceholder);
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }

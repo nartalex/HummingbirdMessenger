@@ -21,29 +21,30 @@ namespace Hummingbird.WinFormsClient
             });
         }
 
-        public void RemoveText(string placeholder)
+        public void RemoveText(string placeholder, float fontSize = 16)
         {
-            if (Text != placeholder)
+	        this.Controls.Find("TextboxUnderline", true).First().BackColor = Properties.Settings.Default.PrimaryColor;
+
+			if (Text != placeholder)
                 return;
 
             ForeColor = Properties.Settings.Default.PrimaryColor;
-            Font = new Font("Segoe UI", 16f, FontStyle.Regular);
+            Font = new Font("Segoe UI", fontSize, FontStyle.Regular);
 
             this.Text = "";
-            this.Controls.Find("TextboxUnderline", true).First().BackColor = Properties.Settings.Default.PrimaryColor;
         }
 
-        public void AddText(string placeholder)
+        public void AddText(string placeholder, float fontSize = 16)
         {
-            if (String.IsNullOrWhiteSpace(this.Text))
+			if (String.IsNullOrWhiteSpace(this.Text))
             {
                 ForeColor = Color.Gray;
-                Font = new Font("Segoe UI Light", 16f, FontStyle.Regular);
+                Font = new Font("Segoe UI Light", fontSize, FontStyle.Regular);
 
                 this.Text = placeholder;
-                this.Controls.Find("TextboxUnderline", true).First().BackColor = Color.Gray;
-            }
-        }
+	            this.Controls.Find("TextboxUnderline", true).First().BackColor = Color.Gray;
+			}
+		}
 
     }
 }

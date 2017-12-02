@@ -19,6 +19,7 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const int LabelLocationX = 50;
 		private const int GapBetwenMessages = 7;
 		private const string MessageTextBoxPlaceholder = "Сообщение";
+		private Guid LastMessageUserID = new Guid();
 
 		public MessengerForm(Chat chat)
 		{
@@ -48,56 +49,64 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void UpdateAllMessages(IEnumerable<Model.Message> messages)
 		{
-			Guid lastMessageUserID = _chat.Messages.Any() ? _chat.Messages.Last().UserFromID : new Guid();
-
 			foreach (var m in messages)
 			{
-				if (lastMessageUserID == m.UserFromID)
-				{
-					AddMessage(m.ID.ToString(), m.Text);
-				}
-				else
-				{
-					lastMessageUserID = m.UserFromID;
-					AddMessage(m.ID.ToString(), m.Text, _chat.Members.First(x => x.UserID == m.UserFromID).User.Avatar);
-				}
+				AddMessage(m);
 			}
 		}
 
-		#endregion
-
-		#region Getters
-
-		private void AddMessage(string name, string text, byte[] avatar = null)
+		private void AddMessage(Model.Message message)
 		{
+			if (LastMessageUserID == new Guid() || LastMessageUserID != message.UserFromID)
+			{
+				LastMessageUserID = message.UserFromID;
+
+				MessagesPanel.RowCount++;
+				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, LabelSizeY / 2));
+				MessagesPanel.Controls.Add(
+				                           new Label()
+				                           {
+					                           Anchor = AnchorStyles.Left | AnchorStyles.Right,
+					                           //BorderStyle = BorderStyle.FixedSingle,
+											   ForeColor = Properties.Settings.Default.PrimaryColor,
+					                           Font = new Font("Segoe UI Light", 10F, FontStyle.Regular, GraphicsUnit.Point, 204),
+					                           Name = message.UserFromID.ToString(),
+					                           MinimumSize = new Size(0, LabelSizeY / 2),
+											   Margin = new Padding(3,5,0,0),
+					                           Text = message.User.Nickname,
+					                           TextAlign = ContentAlignment.MiddleLeft,
+				                           },
+				                           1,
+				                           MessagesPanel.RowCount - 1);
+			}
+
 			MessagesPanel.RowCount++;
 			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize, LabelSizeY));
 			MessagesPanel.Controls.Add(
-				new Label()
-				{
-					Anchor = AnchorStyles.Left | AnchorStyles.Right,
-					BorderStyle = BorderStyle.FixedSingle,
-					Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
-					Name = name,
-					MinimumSize = new Size(0, LabelSizeY),
-					//Height = sizeY,
-					Text = text,
-					TextAlign = ContentAlignment.MiddleLeft,
-				},
-				1,
-				MessagesPanel.RowCount - 1);
+			                           new Label()
+			                           {
+				                           Anchor = AnchorStyles.Left | AnchorStyles.Right,
+				                           //BorderStyle = BorderStyle.FixedSingle,
+				                           Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
+				                           Name = message.ID.ToString(),
+				                           MinimumSize = new Size(0, LabelSizeY),
+				                           Text = message.Text,
+				                           TextAlign = ContentAlignment.MiddleLeft,
+			                           },
+			                           1,
+			                           MessagesPanel.RowCount - 1);
 
 			//MessagesPanel.ScrollControlIntoView();
 
-			MessagesPanel.Controls.Add(
-				new PictureBox()
-				{
-					BackgroundImage = avatar == null ? null : (Bitmap)new ImageConverter().ConvertFrom(avatar),
-					BackgroundImageLayout = ImageLayout.Zoom,
-					Size = new Size(PictureSize, PictureSize),
-				},
-				0,
-				MessagesPanel.RowCount - 1);
+			//MessagesPanel.Controls.Add(
+			//	new PictureBox()
+			//	{
+			//		BackgroundImage = avatar == null ? null : ServiceClient.FromBytesToImage(avatar),
+			//		BackgroundImageLayout = ImageLayout.Zoom,
+			//		Size = new Size(PictureSize, PictureSize),
+			//	},
+			//	0,
+			//	MessagesPanel.RowCount - 1);
 
 			MessagesPanel.RowCount++;
 		}
@@ -108,30 +117,37 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void MessageTextBox_Enter(object sender, EventArgs e)
 		{
-			if (MessageTextBox.Text != MessageTextBoxPlaceholder)
-				return;
-
+			MessageTextBox.RemoveText(MessageTextBoxPlaceholder);
 			MessageTextBox.ForeColor = Color.Black;
-			MessageTextBox.Font = new Font("Segoe UI", 14f, FontStyle.Regular);
 
-			MessageTextBox.Text = "";
+			//if (MessageTextBox.Text != MessageTextBoxPlaceholder)
+			//	return;
+
+			//MessageTextBox.ForeColor = Color.Black;
+			//MessageTextBox.Font = new Font("Segoe UI", 14f, FontStyle.Regular);
+
+			//MessageTextBox.Text = "";
 		}
 
 		private void MessageTextBox_Leave(object sender, EventArgs e)
 		{
-			if (String.IsNullOrWhiteSpace(MessageTextBox.Text))
-			{
-				MessageTextBox.ForeColor = Color.Gray;
-				MessageTextBox.Font = new Font("Segoe UI Light", 14f, FontStyle.Regular);
+			MessageTextBox.AddText(MessageTextBoxPlaceholder);
 
-				MessageTextBox.Text = MessageTextBoxPlaceholder;
-			}
+			//if (String.IsNullOrWhiteSpace(MessageTextBox.Text))
+			//{
+			//	MessageTextBox.ForeColor = Color.Gray;
+			//	MessageTextBox.Font = new Font("Segoe UI Light", 14f, FontStyle.Regular);
+
+			//	MessageTextBox.Text = MessageTextBoxPlaceholder;
+			//}
 		}
 
 		private void MessageTextBox_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar != 13)
 				return;
+
+			e.Handled = true;
 
 			SendMessageButton.PerformClick();
 		}
@@ -143,17 +159,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			Model.Message returned = ServiceClient.SendMessage(_chat.ID, MessageTextBox.Text);
 
-			if (!_chat.Messages.Any())
-			{
-				AddMessage(returned.ID.ToString(), returned.Text, avatar: Properties.Settings.Default.CurrentUser.Avatar);
-				return;
-			}
-
-			if (_chat.Messages.Last().UserFromID == Properties.Settings.Default.CurrentUser.ID)
-				AddMessage(returned.ID.ToString(), returned.Text);
-
-			else
-				AddMessage(returned.ID.ToString(), returned.Text, avatar: Properties.Settings.Default.CurrentUser.Avatar);
+			AddMessage(returned);
 
 			MessageTextBox.Text = "";
 		}
@@ -173,9 +179,9 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			Thread.Sleep(2000);
 
-			var messages = ServiceClient.GetMessages(_chat.ID, 0, 10);
+			var messages = ServiceClient.GetMessages(_chat.ID, 0, 5);
 			var newIDs = messages
-						.Where(x=>x.UserFromID != Properties.Settings.Default.CurrentUserID)
+						.Where(x => x.UserFromID != Properties.Settings.Default.CurrentUserID)
 						.Select(x => x.ID)
 						.Except(_chat.Messages.Select(x => x.ID));
 			var newMessages = newIDs

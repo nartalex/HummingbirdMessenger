@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -19,11 +20,18 @@ namespace Hummingbird.WinFormsClient
 	{
 		public static byte[] FromImageToBytes(Image image)
 		{
-			throw new NotImplementedException();
+			if (image == null)
+				return new byte[0];
+
+			return (byte[])new ImageConverter().ConvertTo(image, typeof(byte[]));
 		}
 
-		public static Image FromBytesToImage(byte[] bytes)
+		public static Image FromBytesToImage(byte[] bytes, bool chat = false)
 		{
+			if (bytes == null || !bytes.Any())
+				return chat ? Properties.Resources.empty_chat_avatar : Properties.Resources.empty_avatar;
+
+
 			return (Bitmap)new ImageConverter().ConvertFrom(bytes);
 		}
 
@@ -33,7 +41,7 @@ namespace Hummingbird.WinFormsClient
 		{
 			_client = new HttpClient
 			{
-				BaseAddress = new Uri(@"http://localhost:12345/api/")
+				BaseAddress = new Uri(@"http://hummingbirdapi.azurewebsites.net/api/")
 			};
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			_client.GetAsync(@"init");
@@ -46,7 +54,7 @@ namespace Hummingbird.WinFormsClient
 
 			StringBuilder sBuilder = new StringBuilder();
 
-			foreach(byte t in data)
+			foreach (byte t in data)
 			{
 				sBuilder.Append(t.ToString("x2"));
 			}
@@ -238,6 +246,63 @@ namespace Hummingbird.WinFormsClient
 			}
 
 			return null;
+		}
+
+		public static void ChangeAvatar(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changeAvatar/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void ChangeUsername(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changeNickname/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void ChangePassword(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changePassword/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
 		}
 	}
 }

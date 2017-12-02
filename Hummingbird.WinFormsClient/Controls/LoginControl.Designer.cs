@@ -33,6 +33,7 @@
 			this.PasswordTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.LoginTextbox = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.WarningLabel = new System.Windows.Forms.Label();
+			this.LoginBGW = new System.ComponentModel.BackgroundWorker();
 			this.SuspendLayout();
 			// 
 			// LoginButton
@@ -40,6 +41,7 @@
 			this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.LoginButton.BackColor = System.Drawing.Color.Transparent;
+			this.LoginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.LoginButton.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.LoginButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
@@ -92,6 +94,7 @@
 			this.PasswordTextbox.Size = new System.Drawing.Size(250, 35);
 			this.PasswordTextbox.TabIndex = 1;
 			this.PasswordTextbox.Text = "Пароль";
+	        this.LoginTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.PasswordTextbox.Enter += new System.EventHandler(this.PasswordTextbox_Enter);
 			this.PasswordTextbox.Leave += new System.EventHandler(this.PasswordTextbox_Leave);
 			// 
@@ -108,6 +111,7 @@
 			this.LoginTextbox.TabIndex = 0;
 			this.LoginTextbox.Text = "Логин";
 			this.LoginTextbox.Enter += new System.EventHandler(this.LoginTextbox_Enter);
+			this.LoginTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.LoginTextbox.Leave += new System.EventHandler(this.LoginTextbox_Leave);
 			// 
 			// WarningLabel
@@ -119,6 +123,11 @@
 			this.WarningLabel.Name = "WarningLabel";
 			this.WarningLabel.Size = new System.Drawing.Size(0, 25);
 			this.WarningLabel.TabIndex = 5;
+			// 
+			// LoginBGW
+			// 
+			this.LoginBGW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.LoginBGW_DoWork);
+			this.LoginBGW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.LoginBGW_RunWorkerCompleted);
 			// 
 			// LoginControl
 			// 
@@ -143,5 +152,6 @@
         private System.Windows.Forms.Button LoginButton;
         private System.Windows.Forms.Button BackToStartButton;
         private System.Windows.Forms.Label WarningLabel;
-    }
+		private System.ComponentModel.BackgroundWorker LoginBGW;
+	}
 }

@@ -28,7 +28,7 @@ namespace Hummingbird.DataLayer.SQL
 		/// <param name="newAvatar">Новый аватар</param>
 		public void ChangeAvatar(Guid userId, byte[] newAvatar)
 		{
-			logger.Info($"Изменение аватара пользователя {userId}, размер аватара: {newAvatar.Length}");
+			logger.Info($"Изменение аватара пользователя {userId}, размер аватара: {newAvatar.Length} / Changing avatar of user {userId}, avatar zise: {newAvatar.Length} ");
 
 			try
 			{
@@ -165,7 +165,7 @@ namespace Hummingbird.DataLayer.SQL
 		/// <returns>Объект User в случае успеха</returns>
 		public User Get(Guid userId)
 		{
-			logger.Info($"Получение информации о пользователе {userId}");
+			logger.Info($"Получение информации о пользователе {userId} / Getting info about user {userId}");
 
 			try
 			{
@@ -182,7 +182,7 @@ namespace Hummingbird.DataLayer.SQL
 			}
 			catch (Exception e)
 			{
-				logger.Error(e, $"Oшибка при получении информации о пользователе {userId}");
+				logger.Error(e.Message, $"Oшибка при получении информации о пользователе {userId} / Getting info about user {userId} is failed");
 				throw;
 			}
 			finally
@@ -262,21 +262,21 @@ namespace Hummingbird.DataLayer.SQL
 					throw GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
 				}
 
-				byte[] avatar;
-				{
-					Random rnd = new Random();
-					string path = Directory.GetFiles(
-						Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Avatars"), "*.png")
-						.OrderBy(x => rnd.Next()).First();
-					ImageConverter converter = new ImageConverter();
-					avatar = (byte[])converter.ConvertTo(Image.FromFile(path), typeof(byte[]));
-				}
+				//byte[] avatar;
+				//{
+				//	Random rnd = new Random();
+				//	string path = Directory.GetFiles(
+				//		Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Avatars"), "*.png")
+				//		.OrderBy(x => rnd.Next()).First();
+				//	ImageConverter converter = new ImageConverter();
+				//	avatar = (byte[])converter.ConvertTo(Image.FromFile(path), typeof(byte[]));
+				//}
 
 				User newUser = new User
 				{
 					ID = Guid.NewGuid(),
 					Nickname = user.Nickname,
-					Avatar = avatar,
+					//Avatar = avatar,
 					Login = user.Login,
 					PasswordHash = user.PasswordHash,
 					Disabled = false
@@ -293,7 +293,7 @@ namespace Hummingbird.DataLayer.SQL
 			}
 			catch (Exception e)
 			{
-				logger.Error(e, $"Ошибка при регистрации пользователя.");
+				logger.Error(e.Message, $"Ошибка при регистрации пользователя.");
 				throw;
 			}
 			finally
@@ -343,20 +343,15 @@ namespace Hummingbird.DataLayer.SQL
 		public void Initialize()
 		{
 			DB.Users.Any();
+		}
 
-			foreach (var u in DB.Users)
-			{
-				Random rnd = new Random();
-				string path = Directory.GetFiles(
-												 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Avatars"), "*.png")
-									   .OrderBy(x => rnd.Next()).First();
-				ImageConverter converter = new ImageConverter();
-				u.Avatar = (byte[])converter.ConvertTo(Image.FromFile(path), typeof(byte[]));
+		public void ClearDatabase()
+		{
+			DB.Messages.RemoveRange(DB.Messages);
+			DB.ChatMembers.RemoveRange(DB.ChatMembers);
+			DB.Chats.RemoveRange(DB.Chats);
 
-				Thread.Sleep(150);
-			}
-
-			//DB.SaveChanges();
+			DB.SaveChanges();
 		}
 
 		private Exception GenerateException(string message, HttpStatusCode code)
