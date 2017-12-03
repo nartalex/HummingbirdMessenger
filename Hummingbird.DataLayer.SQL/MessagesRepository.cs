@@ -58,11 +58,11 @@ namespace Hummingbird.DataLayer.SQL
 			string log = $"Изменение сообщения {edits.ID} с исправлениями: ";
 			if (edits.Text.Any())
 				log += "текста, ";
-			if (edits.AttachType != null)
+			if (edits.AttachType != Message.AttachTypes.Null)
 				log += "типа аттача, ";
-			if (edits.AttachPath.Any())
+			if (edits.Attach != null && edits.Attach.Any())
 				log += "аттача";
-			logger.Info(log.TrimEnd(new[] { ',', ' ' }));
+			//logger.Info(log.TrimEnd(new[] { ',', ' ' }));
 			timer.Restart();
 
 			try
@@ -71,10 +71,12 @@ namespace Hummingbird.DataLayer.SQL
 				Message toEdit = DB.Messages.First(m => m.ID == edits.ID);
 				if (edits.Text.Any())
 					toEdit.Text = edits.Text;
-				if (edits.AttachType != null)
+				if (edits.AttachType != Message.AttachTypes.Null)
 					toEdit.AttachType = edits.AttachType;
-				if (edits.AttachPath.Any())
-					toEdit.AttachPath = edits.AttachPath;
+				if (edits.Attach != null && edits.Attach.Any())
+					toEdit.Attach = edits.Attach;
+				if(String.IsNullOrWhiteSpace(edits.AttachName))
+					toEdit.AttachName = edits.AttachName;
 				toEdit.Edited = true;
 				DB.SaveChanges();
 
@@ -206,7 +208,8 @@ namespace Hummingbird.DataLayer.SQL
 					Time = DateTime.Now,
 					TimeToLive = message.TimeToLive,
 					AttachType = message.AttachType,
-					AttachPath = message.AttachPath,
+					Attach = message.Attach,
+					AttachName = message.AttachName,
 					Text = message.Text,
 					Edited = false
 				};

@@ -142,9 +142,6 @@
   <data name="send_message_purple" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\send_purple.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="logo_teal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logo_teal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LoginPlaceholder" xml:space="preserve">
     <value>Логин</value>
   </data>
@@ -174,5 +171,14 @@
   </data>
   <data name="load_gif" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dual Ring.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="attach" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\attach.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="attach_active" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\attach_active.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="file" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

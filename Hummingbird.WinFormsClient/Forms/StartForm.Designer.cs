@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Hummingbird.WinFormsClient
+﻿namespace Hummingbird.WinFormsClient.Forms
 {
     partial class StartForm
     {

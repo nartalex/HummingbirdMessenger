@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Resources;
 using System.Threading;
 using Hummingbird.Model;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient.Controls
 {

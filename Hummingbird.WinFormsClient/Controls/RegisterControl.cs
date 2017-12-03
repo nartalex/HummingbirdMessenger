@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Security.Cryptography;
 using System.Threading;
 using Hummingbird.Model;
+using Hummingbird.WinFormsClient.Forms;
 
 namespace Hummingbird.WinFormsClient.Controls
 {

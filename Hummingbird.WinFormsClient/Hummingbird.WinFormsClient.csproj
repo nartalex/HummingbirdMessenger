@@ -84,6 +84,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AttachedFileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AttachedFileControl.Designer.cs">
+      <DependentUpon>AttachedFileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ChatButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,6 +135,12 @@
     <Compile Include="Controls\UserInSearch.Designer.cs">
       <DependentUpon>UserInSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AttachedImageViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AttachedImageViewForm.Designer.cs">
+      <DependentUpon>AttachedImageViewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,8 +173,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ServiceClient.cs" />
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Controls\AttachedFileControl.resx">
+      <DependentUpon>AttachedFileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ChatButton.resx">
       <DependentUpon>ChatButton.cs</DependentUpon>
     </EmbeddedResource>
@@ -184,6 +204,9 @@
     <EmbeddedResource Include="Controls\UserInSearch.resx">
       <DependentUpon>UserInSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AttachedImageViewForm.resx">
+      <DependentUpon>AttachedImageViewForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -201,14 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -285,6 +303,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Dual Ring.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attach.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attach_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\file.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

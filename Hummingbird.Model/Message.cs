@@ -25,7 +25,8 @@ namespace Hummingbird.Model
         public int TimeToLive { get; set; }
         public string Text { get; set; }
         public AttachTypes AttachType { get; set; }
-        public string AttachPath { get; set; }
-        public bool Edited { get; set; }
+        public byte[] Attach { get; set; }
+	    public string AttachName { get; set; }
+	    public bool Edited { get; set; }
     }
 }

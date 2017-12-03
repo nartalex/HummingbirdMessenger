@@ -83,6 +83,26 @@ namespace Hummingbird.WinFormsClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap attach {
+            get {
+                object obj = ResourceManager.GetObject("attach", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap attach_active {
+            get {
+                object obj = ResourceManager.GetObject("attach_active", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap empty_avatar {
             get {
                 object obj = ResourceManager.GetObject("empty_avatar", resourceCulture);
@@ -96,6 +116,16 @@ namespace Hummingbird.WinFormsClient.Properties {
         internal static System.Drawing.Bitmap empty_chat_avatar {
             get {
                 object obj = ResourceManager.GetObject("empty_chat_avatar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap file {
+            get {
+                object obj = ResourceManager.GetObject("file", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -136,16 +166,6 @@ namespace Hummingbird.WinFormsClient.Properties {
         internal static string LoginPlaceholder {
             get {
                 return ResourceManager.GetString("LoginPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap logo_teal {
-            get {
-                object obj = ResourceManager.GetObject("logo_teal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

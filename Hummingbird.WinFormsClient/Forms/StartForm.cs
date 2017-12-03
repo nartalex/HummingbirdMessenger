@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-
 using Hummingbird.WinFormsClient.Controls;
-using Hummingbird.WinFormsClient.Forms;
 
-namespace Hummingbird.WinFormsClient
+namespace Hummingbird.WinFormsClient.Forms
 {
     public partial class StartForm : Form
     {
@@ -26,7 +24,7 @@ namespace Hummingbird.WinFormsClient
                 Top = h,
                 Left = w
             };
-            this.Controls.Add(loginControl);
+			Controls.Add(loginControl);
         }
 
         public void ShowRegisterForm()
@@ -38,7 +36,7 @@ namespace Hummingbird.WinFormsClient
                 Top = h,
                 Left = w
             };
-            this.Controls.Add(registerControl);
+			Controls.Add(registerControl);
         }
 
         private void StartForm_Shown(object sender, EventArgs e)

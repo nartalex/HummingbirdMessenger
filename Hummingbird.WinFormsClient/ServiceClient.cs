@@ -220,16 +220,9 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
-		public static Model.Message SendMessage(Guid chatId, string text)
+		public static Model.Message SendMessage(Model.Message message)
 		{
-			Model.Message m = new Model.Message()
-			{
-				Text = text,
-				ChatToID = chatId,
-				UserFromID = Properties.Settings.Default.CurrentUser.ID
-			};
-
-			var pesponse = _client.PostAsJsonAsync(@"messages/send", m).Result.Content;
+			var pesponse = _client.PostAsJsonAsync(@"messages/send", message).Result.Content;
 
 			try
 			{

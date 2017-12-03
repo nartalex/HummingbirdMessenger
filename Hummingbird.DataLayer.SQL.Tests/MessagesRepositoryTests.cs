@@ -70,7 +70,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
 				UserFromID = chat.Members.ToArray()[0].UserID,
 				ChatToID = chat.ID,
 				AttachType = Message.AttachTypes.Image,
-				AttachPath = "path"
+				//AttachPath = "path"
 			};
 
 			var shouldBeMessage = messagesRepository.SendMessage(message);
@@ -82,7 +82,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
 			Assert.AreEqual(message.UserFromID, gottenMessage.UserFromID);
 			Assert.IsNotNull(gottenMessage.Time);
 			Assert.IsNull(gottenMessage.Text);
-			Assert.AreEqual("path", gottenMessage.AttachPath);
+			//Assert.AreEqual("path", gottenMessage.AttachPath);
 		}
 
 		[TestMethod]
@@ -128,13 +128,13 @@ namespace Hummingbird.DataLayer.SQL.Tests
 			message = (Message)messagesRepository.SendMessage(message);
 
 			message.AttachType = Message.AttachTypes.Image;
-			message.AttachPath = "path";
+		//message.AttachPath = "path";
 
 			//var shouldBeTrue = messagesRepository.EditMessage(message);
 			//Assert.AreEqual(true, shouldBeTrue);
 
 			Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);
-			Assert.IsNotNull(gottenMessage.AttachPath);
+			//Assert.IsNotNull(gottenMessage.AttachPath);
 		}
 
 		[TestMethod]

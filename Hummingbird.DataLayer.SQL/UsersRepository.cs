@@ -219,7 +219,7 @@ namespace Hummingbird.DataLayer.SQL
 			}
 			catch (Exception e)
 			{
-				logger.Error(e, $"Ошибка при попытке входа с логином {login} и хэшем {passwordHash}");
+				logger.Error($"Ошибка при попытке входа с логином {login}: " + e.Message);
 				throw;
 			}
 		}
@@ -293,7 +293,7 @@ namespace Hummingbird.DataLayer.SQL
 			}
 			catch (Exception e)
 			{
-				logger.Error(e.Message, $"Ошибка при регистрации пользователя.");
+				logger.Error($"Ошибка при регистрации пользователя: " + e.Message);
 				throw;
 			}
 			finally
@@ -347,11 +347,12 @@ namespace Hummingbird.DataLayer.SQL
 
 		public void ClearDatabase()
 		{
-			DB.Messages.RemoveRange(DB.Messages);
-			DB.ChatMembers.RemoveRange(DB.ChatMembers);
-			DB.Chats.RemoveRange(DB.Chats);
+			//DB.Messages.RemoveRange(DB.Messages);
+			//DB.ChatMembers.RemoveRange(DB.ChatMembers);
+			//DB.Chats.RemoveRange(DB.Chats);
 
-			DB.SaveChanges();
+			//DB.SaveChanges();
+			Database.SetInitializer(new AppDbInitializer());
 		}
 
 		private Exception GenerateException(string message, HttpStatusCode code)
