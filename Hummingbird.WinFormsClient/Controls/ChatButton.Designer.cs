@@ -68,14 +68,14 @@
 			// LastMessageTime
 			// 
 			this.LastMessageTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.LastMessageTime.Font = new System.Drawing.Font("Segoe UI Semilight", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.LastMessageTime.Font = new System.Drawing.Font("Segoe UI Semilight", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.LastMessageTime.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.LastMessageTime.Location = new System.Drawing.Point(234, 6);
+			this.LastMessageTime.Location = new System.Drawing.Point(283, 6);
 			this.LastMessageTime.Name = "LastMessageTime";
-			this.LastMessageTime.Size = new System.Drawing.Size(113, 23);
+			this.LastMessageTime.Size = new System.Drawing.Size(64, 23);
 			this.LastMessageTime.TabIndex = 3;
-			this.LastMessageTime.Text = "LastMessageTime";
-			this.LastMessageTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.LastMessageTime.Text = "00.00.0000";
+			this.LastMessageTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ChatButton
 			// 

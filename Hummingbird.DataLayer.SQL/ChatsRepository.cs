@@ -40,20 +40,27 @@ namespace Hummingbird.DataLayer.SQL
 					throw GenerateException("Can't create chat with no members", HttpStatusCode.BadRequest);
 				}
 
-				StringBuilder sb = new StringBuilder("");
-				foreach (var m in chat.Members)
+				string name;
+				if (chat.Members.Count == 2 || String.IsNullOrWhiteSpace(chat.Name))
 				{
-					sb.Append(DB.Users.First(x => x.ID == m.UserID).Nickname);
-					sb.Append("-");
-				}
-				
+					StringBuilder sb = new StringBuilder("");
+					foreach (var m in chat.Members)
+					{
+						sb.Append(DB.Users.First(x => x.ID == m.UserID).Nickname);
+						sb.Append("-");
+					}
 
+					name = sb.ToString().Substring(0, sb.Length - 1);
+				}
+				else
+					name = chat.Name;
+				
 				Guid newChatID = Guid.NewGuid();
 				Chat newChat = new Chat
 				{
 					ID = newChatID,
-					Name = sb.ToString().Substring(0, sb.Length - 1),
-					Avatar = null,
+					Name = name,
+					Avatar = chat.Avatar,
 					Members = chat.Members,
 					Messages = new List<Message>(),
 					Private = chat.Members.Count == 2
@@ -173,7 +180,9 @@ namespace Hummingbird.DataLayer.SQL
 					c.Messages = new List<Message>();
 
 					var m = _messagesRepository.GetLastMessage(c.ID);
-					if (m != null)
+					if (m == null)
+						c.Messages.Add(new Message());
+					else
 						c.Messages.Add(m);
 				}
 				//var ret = chats.OrderBy(c => c.Messages.OrderBy(m => m.Time.Ticks)).ToArray();

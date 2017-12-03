@@ -22,9 +22,15 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			InitializeComponent();
 			_parentForm = parent;
-			AvatarPB.BackgroundImage = ServiceClient.FromBytesToImage(Properties.Settings.Default.CurrentUser.Avatar);
+			//AvatarPB.BackgroundImage = ServiceClient.FromBytesToImage(Properties.Settings.Default.CurrentUser.Avatar);
 			UsernameTB.Text = Properties.Settings.Default.CurrentUser.Nickname;
 			UsernameTB.Controls.Find("TextboxUnderline", true).First().BackColor = Properties.Settings.Default.PrimaryColor;
+
+			if (Properties.Settings.Default.CurrentUser.Avatar != null && Properties.Settings.Default.CurrentUser.Avatar.Any())
+				AvatarPB.BackgroundImage = ServiceClient.FromBytesToImage(Properties.Settings.Default.CurrentUser.Avatar);
+			else
+				AvatarPB.BackgroundImage = Properties.Resources.empty_avatar_big;
+
 		}
 
 		#region Avatar
@@ -172,12 +178,12 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void SaveNewPassword_Click(object sender, EventArgs e)
 		{
-			if(!CheckFields())
+			if (!CheckFields())
 				return;
 
-			if(!CheckEquality())
+			if (!CheckEquality())
 				return;
-			
+
 			SaveNewPassword.Image = Properties.Resources.load_gif;
 			SaveNewPassword.Text = "";
 			PasswordBGW.RunWorkerAsync();
@@ -196,7 +202,7 @@ namespace Hummingbird.WinFormsClient.Forms
 				ret = false;
 			}
 			else
-				CurrentPasswordTB.Controls.Find("TextboxUnderline", true).First().BackColor 
+				CurrentPasswordTB.Controls.Find("TextboxUnderline", true).First().BackColor
 					= Properties.Settings.Default.PrimaryColor;
 
 			if (NewPasswordTB.Text == NewPasswordTBPlaceholder
@@ -211,7 +217,7 @@ namespace Hummingbird.WinFormsClient.Forms
 					= Properties.Settings.Default.PrimaryColor;
 
 			if (NewPasswordAgainTB.Text == NewPasswordAgainTBPlaceholder
-			    || String.IsNullOrWhiteSpace(NewPasswordAgainTB.Text))
+				|| String.IsNullOrWhiteSpace(NewPasswordAgainTB.Text))
 			{
 				NewPasswordAgainTB.Controls.Find("TextboxUnderline", true).First().BackColor
 					= Properties.Settings.Default.WarnColor;
@@ -228,7 +234,7 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			bool ret = true;
 
-			if(NewPasswordTB.Text != NewPasswordAgainTB.Text)
+			if (NewPasswordTB.Text != NewPasswordAgainTB.Text)
 			{
 				NewPasswordTB.Controls.Find("TextboxUnderline", true).First().BackColor
 					= Properties.Settings.Default.WarnColor;

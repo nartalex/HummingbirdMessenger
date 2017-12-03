@@ -41,7 +41,8 @@ namespace Hummingbird.WinFormsClient
 		{
 			_client = new HttpClient
 			{
-				BaseAddress = new Uri(@"http://hummingbirdapi.azurewebsites.net/api/")
+				//BaseAddress = new Uri(@"http://hummingbirdapi.azurewebsites.net/api/")
+				BaseAddress = new Uri(@"http://localhost:12345/api/")
 			};
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			_client.GetAsync(@"init");

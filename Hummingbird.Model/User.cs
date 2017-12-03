@@ -17,7 +17,7 @@ namespace Hummingbird.Model
 
         public override string ToString()
         {
-            return $"ID: {ID}, Nickname: {Nickname}, Login: {Login}, Disabled: {Disabled}";
+            return $"{Nickname} ({Login})";
         }
     }
 }

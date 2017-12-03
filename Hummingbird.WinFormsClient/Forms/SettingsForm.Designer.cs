@@ -89,10 +89,11 @@ namespace Hummingbird.WinFormsClient.Forms
 			this.groupBox1.Controls.Add(this.SaveNewAvatar);
 			this.groupBox1.Controls.Add(this.AvatarPB);
 			this.groupBox1.Controls.Add(this.ChooseNewAvatar);
+			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.groupBox1.ForeColor = System.Drawing.Color.Black;
 			this.groupBox1.Location = new System.Drawing.Point(12, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(461, 184);
+			this.groupBox1.Size = new System.Drawing.Size(460, 184);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Аватар";
@@ -120,10 +121,11 @@ namespace Hummingbird.WinFormsClient.Forms
 			// 
 			this.groupBox2.Controls.Add(this.SaveNewUsername);
 			this.groupBox2.Controls.Add(this.UsernameTB);
+			this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.groupBox2.ForeColor = System.Drawing.Color.Black;
 			this.groupBox2.Location = new System.Drawing.Point(12, 202);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(461, 78);
+			this.groupBox2.Size = new System.Drawing.Size(460, 78);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Имя пользователя";
@@ -165,9 +167,10 @@ namespace Hummingbird.WinFormsClient.Forms
 			this.groupBox3.Controls.Add(this.NewPasswordAgainTB);
 			this.groupBox3.Controls.Add(this.NewPasswordTB);
 			this.groupBox3.Controls.Add(this.CurrentPasswordTB);
+			this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.groupBox3.Location = new System.Drawing.Point(12, 286);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(461, 141);
+			this.groupBox3.Size = new System.Drawing.Size(460, 141);
 			this.groupBox3.TabIndex = 4;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Пароль";
@@ -252,11 +255,11 @@ namespace Hummingbird.WinFormsClient.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(485, 443);
+			this.ClientSize = new System.Drawing.Size(484, 443);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "SettingsForm";
 			this.Text = "Настройки профиля";
 			((System.ComponentModel.ISupportInitialize)(this.AvatarPB)).EndInit();

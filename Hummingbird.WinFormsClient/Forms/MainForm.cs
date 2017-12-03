@@ -18,6 +18,7 @@ namespace Hummingbird.WinFormsClient.Forms
 	{
 		private bool _textIsShown = false;
 		private List<Image> _backgrounds = new List<Image>();
+		private List<User> Friends = new List<User>();
 		private List<string> _labels = new List<string>()
 		{
 			 "Поиск", "Настройки", "Выход", "Новая группа"
@@ -39,6 +40,9 @@ namespace Hummingbird.WinFormsClient.Forms
 					ChatsListTable.RowCount++;
 					ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
 					ChatsListTable.Controls.Add(new ChatButton(c), 0, ChatsListTable.RowCount - 1);
+
+					if (c.Private)
+						Friends.Add(c.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User);
 				}
 				ChatsListTable.RowCount++;
 			}
@@ -63,6 +67,16 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			chat.Members.Add(new ChatMember() { UserID = Properties.Settings.Default.CurrentUser.ID });
 
+			Chat createdChat = ServiceClient.CreateChat(chat);
+
+			ChatsListTable.RowCount++;
+			ChatsListTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, 70));
+			ChatsListTable.Controls.Add(new ChatButton(createdChat), 0, ChatsListTable.RowCount - 1);
+			ChatsListTable.RowCount++;
+		}
+
+		public void AddChatToForm(Chat chat)
+		{
 			Chat createdChat = ServiceClient.CreateChat(chat);
 
 			ChatsListTable.RowCount++;
@@ -131,6 +145,12 @@ namespace Hummingbird.WinFormsClient.Forms
 		public void ChangeUsername(string username)
 		{
 			CurrentUserNameLabel.Text = username;
+		}
+
+		private void GroupAddButton_Click(object sender, EventArgs e)
+		{
+			AddGroupChatForm f = new AddGroupChatForm(Friends, this);
+			f.Show();
 		}
 	}
 }
