@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Data.Entity;
 using Hummingbird.Model;
-using NLog;
 
 namespace Hummingbird.DBInitializer
 {
@@ -10,14 +9,6 @@ namespace Hummingbird.DBInitializer
     {
         private static void Main()
         {
-            //Logger logger = LogManager.GetLogger("foo");
-            //logger.Trace("Sample trace message");
-            //logger.Debug("Sample debug message");
-            //logger.Info("Sample informational message");
-            //logger.Warn("Sample warning message");
-            //logger.Error("Sample error message");
-            //logger.Fatal("Sample fatal error message");
-
 			Console.Write("Установка инициализатора. ");
 			Database.SetInitializer(new AppDbInitializer());
 			Console.WriteLine("Успешно.");

@@ -96,6 +96,7 @@
 			this.NicknameTextbox.TabIndex = 0;
 			this.NicknameTextbox.Text = "Имя пользователя";
 			this.NicknameTextbox.Enter += new System.EventHandler(this.NicknameTextbox_Enter);
+			this.NicknameTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.NicknameTextbox.Leave += new System.EventHandler(this.NicknameTextbox_Leave);
 			// 
 			// PasswordTextbox
@@ -111,6 +112,7 @@
 			this.PasswordTextbox.TabIndex = 2;
 			this.PasswordTextbox.Text = "Пароль";
 			this.PasswordTextbox.Enter += new System.EventHandler(this.PasswordTextbox_Enter);
+			this.PasswordTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.PasswordTextbox.Leave += new System.EventHandler(this.PasswordTextbox_Leave);
 			// 
 			// LoginTextbox
@@ -126,6 +128,7 @@
 			this.LoginTextbox.TabIndex = 1;
 			this.LoginTextbox.Text = "Логин";
 			this.LoginTextbox.Enter += new System.EventHandler(this.LoginTextbox_Enter);
+			this.LoginTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.LoginTextbox.Leave += new System.EventHandler(this.LoginTextbox_Leave);
 			// 
 			// WarningLabel

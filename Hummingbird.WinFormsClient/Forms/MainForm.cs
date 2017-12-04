@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
+
 using Hummingbird.Model;
 using Hummingbird.WinFormsClient.Controls;
 
@@ -16,13 +12,8 @@ namespace Hummingbird.WinFormsClient.Forms
 {
 	public partial class MainForm : Form
 	{
-		private bool _textIsShown = false;
-		private List<Image> _backgrounds = new List<Image>();
-		private List<User> Friends = new List<User>();
-		private List<string> _labels = new List<string>()
-		{
-			 "Поиск", "Настройки", "Выход", "Новая группа"
-		};
+		internal Dictionary<User, Chat> Friends = new Dictionary<User, Chat>();
+		private int UpdaterDelay = 0;
 
 		public MainForm()
 		{
@@ -31,26 +22,12 @@ namespace Hummingbird.WinFormsClient.Forms
 			CurrentUserAvatar.BackgroundImage = ServiceClient.FromBytesToImage(Properties.Settings.Default.CurrentUser.Avatar);
 			CurrentUserNameLabel.Text = Properties.Settings.Default.CurrentUser.Nickname;
 
-			var chats = ServiceClient.GetUserChats(Properties.Settings.Default.CurrentUser.ID) as Chat[];
-
-			if (chats != null && chats.Any())
-			{
-				foreach (var c in chats)
-				{
-					ChatsListTable.RowCount++;
-					ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
-					ChatsListTable.Controls.Add(new ChatButton(c), 0, ChatsListTable.RowCount - 1);
-
-					if (c.Private)
-						Friends.Add(c.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User);
-				}
-				ChatsListTable.RowCount++;
-			}
-
 			foreach (var c in UserButtonsTable.Controls.OfType<Button>())
 			{
 				_backgrounds.Add(c.BackgroundImage);
 			}
+
+			ChatsUpdateBGW.RunWorkerAsync();
 		}
 
 		public void CreateChat(Guid[] userIds)
@@ -69,9 +46,12 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			Chat createdChat = ServiceClient.CreateChat(chat);
 
+			if (createdChat.Private)
+				Friends.Add(createdChat.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User, createdChat);
+
 			ChatsListTable.RowCount++;
 			ChatsListTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, 70));
-			ChatsListTable.Controls.Add(new ChatButton(createdChat), 0, ChatsListTable.RowCount - 1);
+			ChatsListTable.Controls.Add(new ChatButton(createdChat, this), 0, ChatsListTable.RowCount - 1);
 			ChatsListTable.RowCount++;
 		}
 
@@ -79,9 +59,12 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			Chat createdChat = ServiceClient.CreateChat(chat);
 
+			if (createdChat.Private)
+				Friends.Add(createdChat.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User, createdChat);
+
 			ChatsListTable.RowCount++;
 			ChatsListTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, 70));
-			ChatsListTable.Controls.Add(new ChatButton(createdChat), 0, ChatsListTable.RowCount - 1);
+			ChatsListTable.Controls.Add(new ChatButton(createdChat, this), 0, ChatsListTable.RowCount - 1);
 			ChatsListTable.RowCount++;
 		}
 
@@ -91,9 +74,17 @@ namespace Hummingbird.WinFormsClient.Forms
 			f.Show();
 		}
 
+		#region Шапка
+
+		private void GroupAddButton_Click(object sender, EventArgs e)
+		{
+			AddGroupChatForm f = new AddGroupChatForm(Friends.Keys.ToArray(), this);
+			f.Show();
+		}
+
 		private void UserSearchButton_Click(object sender, EventArgs e)
 		{
-			var f = new UsersSearchForm(this);
+			var f = new UsersSearchForm(Friends, this);
 			f.Show();
 		}
 
@@ -110,6 +101,13 @@ namespace Hummingbird.WinFormsClient.Forms
 			Close();
 			(new StartForm()).Show();
 		}
+
+		private bool _textIsShown = false;
+		private List<Image> _backgrounds = new List<Image>();
+		private List<string> _labels = new List<string>()
+		{
+			"Поиск", "Настройки", "Выход", "Новая группа"
+		};
 
 		private void UserButtonsTable_Resize(object sender, EventArgs e)
 		{
@@ -137,6 +135,8 @@ namespace Hummingbird.WinFormsClient.Forms
 			}
 		}
 
+		#endregion
+
 		public void ChangeAvatar(Image newAvatar)
 		{
 			CurrentUserAvatar.BackgroundImage = newAvatar;
@@ -147,10 +147,40 @@ namespace Hummingbird.WinFormsClient.Forms
 			CurrentUserNameLabel.Text = username;
 		}
 
-		private void GroupAddButton_Click(object sender, EventArgs e)
+		private void ChatsUpdateBGW_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			AddGroupChatForm f = new AddGroupChatForm(Friends, this);
-			f.Show();
+			Thread.Sleep(UpdaterDelay);
+
+			e.Result = ServiceClient.GetUserChats(Properties.Settings.Default.CurrentUser.ID) as Chat[];
+		}
+
+		private void ChatsUpdateBGW_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+		{
+			ChatsListTable.Controls.Clear();
+			ChatsListTable.RowCount = 1;
+
+			foreach (var c in e.Result as Chat[])
+			{
+				ChatsListTable.RowCount++;
+				ChatsListTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
+				ChatsListTable.Controls.Add(new ChatButton(c, this), 0, ChatsListTable.RowCount - 1);
+
+				if (c.Private)
+					Friends.Add(c.Members.First(x => x.UserID != Properties.Settings.Default.CurrentUser.ID).User, c);
+			}
+			ChatsListTable.RowCount++;
+
+			if (UpdaterDelay == 0)
+				UpdaterDelay = 3000;
+
+			ChatsUpdateBGW.RunWorkerAsync();
+		}
+
+		protected override bool ShowWithoutActivation => true;
+
+		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Application.Exit();
 		}
 	}
 }

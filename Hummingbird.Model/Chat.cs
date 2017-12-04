@@ -8,6 +8,7 @@ namespace Hummingbird.Model
     {
         public Guid ID { get; set; }
         public byte[] Avatar { get; set; }
+		public int TimeToLive { get; set; }
 		[Required] public string Name { get; set; }
 		[Required] public bool Private { get; set; }
 	    [Required] public ICollection<ChatMember> Members { get; set; }

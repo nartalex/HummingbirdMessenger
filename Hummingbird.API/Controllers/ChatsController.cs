@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Hummingbird.Model;
-using Hummingbird.DataLayer;
 using Hummingbird.DataLayer.SQL;
 
 namespace Hummingbird.API.Controllers
@@ -45,5 +42,9 @@ namespace Hummingbird.API.Controllers
         [HttpPost, Route("api/chats/changeName")]
         public void ChangeName([FromBody] Chat chat)
             => _chatsRepository.ChangeName(chat.ID, chat.Name);
-    }
+
+	    [HttpPost, Route("api/chats/changeTTL")]
+	    public void ChangeTTL([FromBody] Chat chat)
+		    => _chatsRepository.ChangeTTL(chat.ID, chat.TimeToLive);
+	}
 }

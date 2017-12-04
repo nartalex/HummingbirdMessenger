@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Text;
-
 
 using Hummingbird.Model;
 
@@ -47,6 +43,8 @@ namespace Hummingbird.WinFormsClient
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			_client.GetAsync(@"init");
 		}
+
+		#region Users
 
 		public static string GetSHA512Hash(string input)
 		{
@@ -105,6 +103,89 @@ namespace Hummingbird.WinFormsClient
 
 			return new User();
 		}
+
+		public static IEnumerable<User> SearchUsers(string nick)
+		{
+			var response = _client.GetAsync(@"users/search/" + nick).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+				var ret = response.Content.ReadAsAsync<User[]>().Result;
+				return ret;
+			}
+			catch (UnsupportedMediaTypeException)
+			{
+				MessageBox.Show(response.Content.ReadAsStringAsync().Result);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message);
+			}
+
+			return null;
+		}
+
+		public static void ChangeAvatar(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changeAvatar/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void ChangeUsername(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changeNickname/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void ChangePassword(User user)
+		{
+			var response = _client.PostAsJsonAsync(@"users/changePassword/", user).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		#endregion
+
+		#region Chats	
 
 		public static IEnumerable<Chat> GetUserChats(Guid id)
 		{
@@ -175,27 +256,123 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
-		public static IEnumerable<User> SearchUsers(string nick)
+		public static void ChangeChatname(Chat chat)
 		{
-			var response = _client.GetAsync(@"users/search/" + nick).Result;
+			var response = _client.PostAsJsonAsync(@"chats/changeName/", chat).Result;
 
 			try
 			{
 				response.EnsureSuccessStatusCode();
-				var ret = response.Content.ReadAsAsync<User[]>().Result;
-				return ret;
-			}
-			catch (UnsupportedMediaTypeException)
-			{
-				MessageBox.Show(response.Content.ReadAsStringAsync().Result);
 			}
 			catch (Exception e)
 			{
-				MessageBox.Show(e.Message);
-			}
+				string s = response.Content.ReadAsStringAsync().Result;
 
-			return null;
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
 		}
+
+		public static void ChangeChatAvatar(Chat chat)
+		{
+			var response = _client.PostAsJsonAsync(@"chats/changeAvatar/", chat).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void AddMembersToChat(Chat chat)
+		{
+			var response = _client.PostAsJsonAsync(@"chats/addMembers/", chat).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void RemoveMembersFromChat(Chat chat)
+		{
+			var response = _client.PostAsJsonAsync(@"chats/deleteMembers/", chat).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void ChangeTTL(Chat chat)
+		{
+			var response = _client.PostAsJsonAsync(@"chats/changettl/", chat).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		public static void DeleteChat(Guid chatId)
+		{
+			var response = _client.DeleteAsync(@"chats/"+chatId).Result;
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception e)
+			{
+				string s = response.Content.ReadAsStringAsync().Result;
+
+				if (String.IsNullOrWhiteSpace(s))
+					MessageBox.Show(e.Message);
+				else
+					MessageBox.Show(s);
+			}
+		}
+
+		#endregion
+
+		#region Messages
 
 		public static IEnumerable<Model.Message> GetMessages(Guid chatId, int skip, int amount)
 		{
@@ -242,9 +419,9 @@ namespace Hummingbird.WinFormsClient
 			return null;
 		}
 
-		public static void ChangeAvatar(User user)
+		public static void DeleteMessage(Guid id)
 		{
-			var response = _client.PostAsJsonAsync(@"users/changeAvatar/", user).Result;
+			var response = _client.DeleteAsync(@"messages/" + id).Result;
 
 			try
 			{
@@ -261,42 +438,6 @@ namespace Hummingbird.WinFormsClient
 			}
 		}
 
-		public static void ChangeUsername(User user)
-		{
-			var response = _client.PostAsJsonAsync(@"users/changeNickname/", user).Result;
-
-			try
-			{
-				response.EnsureSuccessStatusCode();
-			}
-			catch (Exception e)
-			{
-				string s = response.Content.ReadAsStringAsync().Result;
-
-				if (String.IsNullOrWhiteSpace(s))
-					MessageBox.Show(e.Message);
-				else
-					MessageBox.Show(s);
-			}
-		}
-
-		public static void ChangePassword(User user)
-		{
-			var response = _client.PostAsJsonAsync(@"users/changePassword/", user).Result;
-
-			try
-			{
-				response.EnsureSuccessStatusCode();
-			}
-			catch (Exception e)
-			{
-				string s = response.Content.ReadAsStringAsync().Result;
-
-				if (String.IsNullOrWhiteSpace(s))
-					MessageBox.Show(e.Message);
-				else
-					MessageBox.Show(s);
-			}
-		}
+		#endregion
 	}
 }

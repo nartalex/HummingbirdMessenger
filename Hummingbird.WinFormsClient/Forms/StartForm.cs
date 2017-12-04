@@ -39,17 +39,17 @@ namespace Hummingbird.WinFormsClient.Forms
 			Controls.Add(registerControl);
         }
 
-        private void StartForm_Shown(object sender, EventArgs e)
-        {
-
-        }
-
         public void BackToStartForm()
         {
             startControl.Show();
         }
 
-        public void CloseAndContinue()
+		private void StartForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Application.Exit();
+		}
+
+		public void CloseAndContinue()
         {
             Close();
             var newForm = new MainForm();

@@ -11,7 +11,7 @@ namespace Hummingbird.Model
 
         public DatabaseContext() : base("name=AzureConnection")
         {
-            this.Configuration.LazyLoadingEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
         }
     }
     public class AppDbInitializer : DropCreateDatabaseAlways<DatabaseContext>

@@ -22,7 +22,6 @@ namespace Hummingbird.Model
         [ForeignKey("ChatToID")] public Chat Chat { get; set; }
 
         [Required] public DateTime Time { get; set; }
-        public int TimeToLive { get; set; }
         public string Text { get; set; }
         public AttachTypes AttachType { get; set; }
         public byte[] Attach { get; set; }

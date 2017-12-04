@@ -94,8 +94,8 @@
 			this.PasswordTextbox.Size = new System.Drawing.Size(250, 35);
 			this.PasswordTextbox.TabIndex = 1;
 			this.PasswordTextbox.Text = "Пароль";
-	        this.LoginTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.PasswordTextbox.Enter += new System.EventHandler(this.PasswordTextbox_Enter);
+			this.PasswordTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
 			this.PasswordTextbox.Leave += new System.EventHandler(this.PasswordTextbox_Leave);
 			// 
 			// LoginTextbox

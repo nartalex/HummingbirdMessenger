@@ -40,6 +40,8 @@ namespace Hummingbird.WinFormsClient.Controls
 			if (e.KeyChar != 13)
 				return;
 
+			e.Handled = true;
+
 			LoginButton_Click(sender, e);
 		}
 

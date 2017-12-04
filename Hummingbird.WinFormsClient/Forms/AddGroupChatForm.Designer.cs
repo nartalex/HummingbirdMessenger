@@ -116,7 +116,7 @@
 			this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.groupBox3.Location = new System.Drawing.Point(13, 286);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(459, 173);
+			this.groupBox3.Size = new System.Drawing.Size(459, 185);
 			this.groupBox3.TabIndex = 5;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Пользователи";
@@ -129,7 +129,7 @@
 			this.UsersCheckBoxList.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.UsersCheckBoxList.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.UsersCheckBoxList.FormattingEnabled = true;
-			this.UsersCheckBoxList.Location = new System.Drawing.Point(6, 23);
+			this.UsersCheckBoxList.Location = new System.Drawing.Point(6, 24);
 			this.UsersCheckBoxList.Name = "UsersCheckBoxList";
 			this.UsersCheckBoxList.Size = new System.Drawing.Size(447, 144);
 			this.UsersCheckBoxList.Sorted = true;
@@ -150,7 +150,7 @@
 			this.CreateChatButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.CreateChatButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.CreateChatButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
-			this.CreateChatButton.Location = new System.Drawing.Point(13, 465);
+			this.CreateChatButton.Location = new System.Drawing.Point(12, 477);
 			this.CreateChatButton.Name = "CreateChatButton";
 			this.CreateChatButton.Size = new System.Drawing.Size(459, 39);
 			this.CreateChatButton.TabIndex = 6;
@@ -163,13 +163,13 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(484, 516);
+			this.ClientSize = new System.Drawing.Size(484, 521);
 			this.Controls.Add(this.CreateChatButton);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Name = "AddGroupChatForm";
-			this.Text = "AddGroupChatForm";
+			this.Text = "Настройки чата";
 			this.groupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ChatAvatarPB)).EndInit();
 			this.groupBox2.ResumeLayout(false);

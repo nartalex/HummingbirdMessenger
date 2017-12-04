@@ -103,6 +103,16 @@ namespace Hummingbird.WinFormsClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chat_black {
+            get {
+                object obj = ResourceManager.GetObject("chat_black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap empty_avatar {
             get {
                 object obj = ResourceManager.GetObject("empty_avatar", resourceCulture);
@@ -244,6 +254,16 @@ namespace Hummingbird.WinFormsClient.Properties {
         internal static System.Drawing.Bitmap send_message_purple {
             get {
                 object obj = ResourceManager.GetObject("send_message_purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap timer {
+            get {
+                object obj = ResourceManager.GetObject("timer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

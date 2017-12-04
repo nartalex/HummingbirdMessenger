@@ -34,9 +34,10 @@
 			this.SettingsButton = new System.Windows.Forms.Button();
 			this.UserExit = new System.Windows.Forms.Button();
 			this.GroupAddButton = new System.Windows.Forms.Button();
+			this.CurrentUserNameLabel = new System.Windows.Forms.Label();
 			this.CurrentUserAvatar = new System.Windows.Forms.PictureBox();
 			this.ChatsListTable = new System.Windows.Forms.TableLayoutPanel();
-			this.CurrentUserNameLabel = new System.Windows.Forms.Label();
+			this.ChatsUpdateBGW = new System.ComponentModel.BackgroundWorker();
 			this.panel1.SuspendLayout();
 			this.UserButtonsTable.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentUserAvatar)).BeginInit();
@@ -157,6 +158,20 @@
 			this.GroupAddButton.UseVisualStyleBackColor = true;
 			this.GroupAddButton.Click += new System.EventHandler(this.GroupAddButton_Click);
 			// 
+			// CurrentUserNameLabel
+			// 
+			this.CurrentUserNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.CurrentUserNameLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.CurrentUserNameLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+			this.CurrentUserNameLabel.Location = new System.Drawing.Point(73, 3);
+			this.CurrentUserNameLabel.Margin = new System.Windows.Forms.Padding(0);
+			this.CurrentUserNameLabel.Name = "CurrentUserNameLabel";
+			this.CurrentUserNameLabel.Size = new System.Drawing.Size(258, 30);
+			this.CurrentUserNameLabel.TabIndex = 1;
+			this.CurrentUserNameLabel.Text = "Uqtby";
+			this.CurrentUserNameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// CurrentUserAvatar
 			// 
 			this.CurrentUserAvatar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -180,19 +195,10 @@
 			this.ChatsListTable.Size = new System.Drawing.Size(334, 329);
 			this.ChatsListTable.TabIndex = 4;
 			// 
-			// CurrentUserNameLabel
+			// ChatsUpdateBGW
 			// 
-			this.CurrentUserNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.CurrentUserNameLabel.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.CurrentUserNameLabel.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
-			this.CurrentUserNameLabel.Location = new System.Drawing.Point(73, 3);
-			this.CurrentUserNameLabel.Margin = new System.Windows.Forms.Padding(0);
-			this.CurrentUserNameLabel.Name = "CurrentUserNameLabel";
-			this.CurrentUserNameLabel.Size = new System.Drawing.Size(258, 30);
-			this.CurrentUserNameLabel.TabIndex = 1;
-			this.CurrentUserNameLabel.Text = "Uqtby";
-			this.CurrentUserNameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.ChatsUpdateBGW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ChatsUpdateBGW_DoWork);
+			this.ChatsUpdateBGW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ChatsUpdateBGW_RunWorkerCompleted);
 			// 
 			// MainForm
 			// 
@@ -205,6 +211,7 @@
 			this.MinimumSize = new System.Drawing.Size(350, 440);
 			this.Name = "MainForm";
 			this.Text = "MessengerForm";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
 			this.panel1.ResumeLayout(false);
 			this.UserButtonsTable.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.CurrentUserAvatar)).EndInit();
@@ -222,5 +229,6 @@
 		private System.Windows.Forms.Button UserExit;
 		private System.Windows.Forms.TableLayoutPanel ChatsListTable;
 		private System.Windows.Forms.Button GroupAddButton;
+		private System.ComponentModel.BackgroundWorker ChatsUpdateBGW;
 	}
 }

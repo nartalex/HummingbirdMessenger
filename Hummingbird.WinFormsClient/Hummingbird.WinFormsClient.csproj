@@ -96,18 +96,6 @@
     <Compile Include="Controls\ChatButton.Designer.cs">
       <DependentUpon>ChatButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChatHeader.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ChatHeader.Designer.cs">
-      <DependentUpon>ChatHeader.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ChatsList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ChatsList.Designer.cs">
-      <DependentUpon>ChatsList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\LoginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,17 +117,17 @@
     <Compile Include="Controls\CustomTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\UserInSearch.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\UserInSearch.Designer.cs">
-      <DependentUpon>UserInSearch.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AddGroupChatForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\AddGroupChatForm.Designer.cs">
       <DependentUpon>AddGroupChatForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChatSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChatSettingsForm.Designer.cs">
+      <DependentUpon>ChatSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -186,12 +174,6 @@
     <EmbeddedResource Include="Controls\ChatButton.resx">
       <DependentUpon>ChatButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ChatHeader.resx">
-      <DependentUpon>ChatHeader.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ChatsList.resx">
-      <DependentUpon>ChatsList.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\LoginControl.resx">
       <DependentUpon>LoginControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -201,11 +183,11 @@
     <EmbeddedResource Include="Controls\StartControl.resx">
       <DependentUpon>StartControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\UserInSearch.resx">
-      <DependentUpon>UserInSearch.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddGroupChatForm.resx">
       <DependentUpon>AddGroupChatForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChatSettingsForm.resx">
+      <DependentUpon>ChatSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -257,9 +239,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo_teal.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\transparent_bird.png" />
   </ItemGroup>
   <ItemGroup>
@@ -282,9 +261,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\send_purple.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\photo.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\send %281%29.png" />
@@ -318,6 +294,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\empty_avatar_big.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chat_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

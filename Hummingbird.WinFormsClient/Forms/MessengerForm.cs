@@ -25,6 +25,7 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const string MessageTextBoxPlaceholder = "Сообщение";
 		private Guid _lastMessageUserID = new Guid();
 		private Attach _attachedFile = null;
+		private bool KeepUpdating = true;
 
 		public MessengerForm(Chat chat)
 		{
@@ -67,88 +68,38 @@ namespace Hummingbird.WinFormsClient.Forms
 				_lastMessageUserID = message.UserFromID;
 
 				MessagesPanel.RowCount++;
-				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize/*, LabelSizeY / 2*/));
-				MessagesPanel.Controls.Add(
-										   new Label()
-										   {
-											   Anchor = AnchorStyles.Left | AnchorStyles.Right,
-											   //BorderStyle = BorderStyle.FixedSingle,
-											   ForeColor = Properties.Settings.Default.PrimaryColor,
-											   Font = new Font("Segoe UI Light", 10F, FontStyle.Regular, GraphicsUnit.Point, 204),
-											   Name = message.UserFromID.ToString(),
-											   MinimumSize = new Size(0, LabelSizeY / 2),
-											   Margin = new Padding(3, 5, 0, 0),
-											   Text = message.User.Nickname,
-											   TextAlign = ContentAlignment.MiddleLeft,
-										   },
-										   1,
-										   MessagesPanel.RowCount - 1);
+				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+				MessagesPanel.Controls.Add(GetUsername(message), 1, MessagesPanel.RowCount - 1);
 			}
 
 			MessagesPanel.RowCount++;
-			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize/*, LabelSizeY*/));
-			MessagesPanel.Controls.Add(
-									   new Label()
-									   {
-										   Anchor = AnchorStyles.Left | AnchorStyles.Right,
-										   //BorderStyle = BorderStyle.FixedSingle,
-										   Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
-										   Name = message.ID.ToString(),
-										   MinimumSize = new Size(0, LabelSizeY),
-										   Text = message.Text,
-										   TextAlign = ContentAlignment.MiddleLeft,
-									   },
-									   1,
-									   MessagesPanel.RowCount - 1);
+			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+			MessagesPanel.Controls.Add(GetLabel(message), 1, MessagesPanel.RowCount - 1);
+
+			//if(_chat.TimeToLive > 0)
+			//{
+			//	MessagesPanel.Controls.Add(new PictureBox
+			//	{
+			//		BackgroundImage = Properties.Resources.timer,
+			//		BackgroundImageLayout = ImageLayout.Zoom,
+			//		Width = Height = 16,
+			//		//Anchor = AnchorStyles.Left | AnchorStyles.Right
+			//	},
+			//	0, MessagesPanel.RowCount - 1);
+			//}
 
 			if (message.AttachType == Message.AttachTypes.File)
 			{
 				MessagesPanel.RowCount++;
-				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize/*, LabelSizeY*/));
+				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 				MessagesPanel.Controls.Add(new AttachedFileControl(message.AttachName, message.Attach), 1, MessagesPanel.RowCount - 1);
 			}
 			else if (message.AttachType == Message.AttachTypes.Image)
 			{
-				PictureBox pb = new PictureBox()
-				{
-					BackgroundImageLayout = ImageLayout.Zoom,
-					BackgroundImage = ServiceClient.FromBytesToImage(message.Attach),
-					Size = ServiceClient.FromBytesToImage(message.Attach).Size,
-					MaximumSize = new Size(200, 200),
-					Cursor = Cursors.Hand
-				};
-				pb.Click += (sender, args) =>
-							{
-								string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
-														   "Hummingbird Pictures");
-
-								if (!Directory.Exists(path))
-									Directory.CreateDirectory(path);
-
-								path = Path.Combine(path, message.ID + "." + message.AttachName.Split('.').Last());
-								if (!File.Exists(path))
-									File.WriteAllBytes(path, message.Attach);
-
-								Process.Start(path);
-							};
-
-
 				MessagesPanel.RowCount++;
 				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize/*, LabelSizeY*/));
-				MessagesPanel.Controls.Add(pb, 1, MessagesPanel.RowCount - 1);
+				MessagesPanel.Controls.Add(GetPictureBox(message), 1, MessagesPanel.RowCount - 1);
 			}
-
-			//MessagesPanel.ScrollControlIntoView();
-
-			//MessagesPanel.Controls.Add(
-			//	new PictureBox()
-			//	{
-			//		BackgroundImage = avatar == null ? null : ServiceClient.FromBytesToImage(avatar),
-			//		BackgroundImageLayout = ImageLayout.Zoom,
-			//		Size = new Size(PictureSize, PictureSize),
-			//	},
-			//	0,
-			//	MessagesPanel.RowCount - 1);
 
 			MessagesPanel.RowCount++;
 		}
@@ -171,11 +122,78 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			Message returned = ServiceClient.SendMessage(m);
 
+			if (_chat.TimeToLive > 0)
+			{
+				BackgroundWorker bgw = new BackgroundWorker();
+				bgw.DoWork += SelfDestroyMessage_DoWork;
+				bgw.RunWorkerCompleted += SelfDestroyMessage_RunWorkerCompleted;
+				bgw.RunWorkerAsync(returned.ID);
+			}
+
 			AddMessage(returned);
 
 			MessageTextBox.Text = "";
 		}
 
+		#endregion
+
+		#region Getters
+
+		private Label GetLabel(Model.Message message)
+		{
+			return new Label()
+			{
+				Anchor = AnchorStyles.Left | AnchorStyles.Right,
+				Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
+				Name = message.ID.ToString(),
+				MinimumSize = new Size(0, LabelSizeY),
+				Text = message.Text,
+				TextAlign = ContentAlignment.MiddleLeft,
+			};
+		}
+
+		private Label GetUsername(Model.Message message)
+		{
+			return new Label()
+			{
+				Anchor = AnchorStyles.Left | AnchorStyles.Right,
+				ForeColor = Properties.Settings.Default.PrimaryColor,
+				Font = new Font("Segoe UI Light", 10F, FontStyle.Regular, GraphicsUnit.Point, 204),
+				Name = message.UserFromID.ToString(),
+				MinimumSize = new Size(0, LabelSizeY / 2),
+				Margin = new Padding(3, 5, 0, 0),
+				Text = message.User.Nickname,
+				TextAlign = ContentAlignment.MiddleLeft,
+			};
+		}
+
+		private PictureBox GetPictureBox(Model.Message message)
+		{
+			PictureBox pb = new PictureBox()
+			{
+				BackgroundImageLayout = ImageLayout.Zoom,
+				BackgroundImage = ServiceClient.FromBytesToImage(message.Attach),
+				Size = ServiceClient.FromBytesToImage(message.Attach).Size,
+				MaximumSize = new Size(200, 200),
+				Cursor = Cursors.Hand
+			};
+			pb.Click += (sender, args) =>
+						{
+							string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+													   "Hummingbird Pictures");
+
+							if (!Directory.Exists(path))
+								Directory.CreateDirectory(path);
+
+							path = Path.Combine(path, message.ID + "." + message.AttachName.Split('.').Last());
+							if (!File.Exists(path))
+								File.WriteAllBytes(path, message.Attach);
+
+							Process.Start(path);
+						};
+
+			return pb;
+		}
 		#endregion
 
 		#region Controls
@@ -272,8 +290,8 @@ namespace Hummingbird.WinFormsClient.Forms
 			}
 
 			//ScrollToBottom(MessagesPanel);
-
-			MessageUpdateBGW.RunWorkerAsync();
+			if (KeepUpdating)
+				MessageUpdateBGW.RunWorkerAsync();
 		}
 
 		private void MessagesPanel_ControlAdded(object sender, ControlEventArgs e)
@@ -320,6 +338,42 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			AttachButton.BackgroundImage = Properties.Resources.attach;
 			_attachedFile = new Attach();
+		}
+
+		private void SelfDestroyMessage_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.Sleep(_chat.TimeToLive * 1000);
+
+			ServiceClient.DeleteMessage((Guid)e.Argument);
+		}
+
+		private void SelfDestroyMessage_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			var messages = e.Result as List<Model.Message>;
+
+			if (messages.Any())
+			{
+				foreach (var m in messages)
+				{
+					_chat.Messages.Add(m);
+				}
+
+				for (int i = 0; i < messages.Count; i++)
+				{
+					messages[i].Text += "fromBG";
+				}
+
+				UpdateAllMessages(messages);
+			}
+
+			//ScrollToBottom(MessagesPanel);
+
+			MessageUpdateBGW.RunWorkerAsync();
+		}
+
+		private void MessengerForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			KeepUpdating = false;
 		}
 	}
 

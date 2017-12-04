@@ -63,9 +63,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessagesPanel.AutoScroll = true;
 			this.MessagesPanel.ColumnCount = 3;
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 90F));
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.MessagesPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MessagesPanel.Location = new System.Drawing.Point(0, 0);
 			this.MessagesPanel.Name = "MessagesPanel";
@@ -116,7 +116,7 @@
 			this.AttachContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RemoveAttachButton});
 			this.AttachContextMenu.Name = "AttachContextMenu";
-			this.AttachContextMenu.Size = new System.Drawing.Size(177, 48);
+			this.AttachContextMenu.Size = new System.Drawing.Size(177, 26);
 			// 
 			// RemoveAttachButton
 			// 
@@ -141,6 +141,7 @@
 			this.Controls.Add(this.SendMessageButton);
 			this.Name = "MessengerForm";
 			this.Text = "MessengerForm";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MessengerForm_FormClosing);
 			this.AttachContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 

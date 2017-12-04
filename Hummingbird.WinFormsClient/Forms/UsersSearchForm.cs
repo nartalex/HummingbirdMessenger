@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hummingbird.Model;
-using Hummingbird.WinFormsClient.Controls;
 
 namespace Hummingbird.WinFormsClient.Forms
 {
@@ -18,78 +13,104 @@ namespace Hummingbird.WinFormsClient.Forms
 		private const int PictureSize = 48;
 		private const int LabelSizeY = 48;
 		private readonly MainForm _parentForm;
+		private readonly Dictionary<User, Chat> _friendsList;
 
-		public UsersSearchForm(MainForm parent)
+		public UsersSearchForm(Dictionary<User, Chat> friendsList, MainForm parent)
 		{
 			InitializeComponent();
 			_parentForm = parent;
-
-			//ActiveControl = tableLayoutPanel2;
+			_friendsList = friendsList;
 		}
 
 		private void SearchButton_Click(object sender, EventArgs e)
 		{
-			User[] users = ServiceClient.SearchUsers(SearchTB.Text) as User[];
-
-			if (users != null)
+			if (ServiceClient.SearchUsers(SearchTB.Text) is User[] users)
 				foreach (var u in users)
 				{
+					if(u.ID==Properties.Settings.Default.CurrentUser.ID)
+						continue;
+
+					var frinendsIds = _friendsList.Keys.Select(x => x.ID).ToArray();
+
 					UsersTable.RowCount++;
 					UsersTable.RowStyles.Add(new RowStyle(SizeType.AutoSize, LabelSizeY));
-					UsersTable.Controls.Add(
-											   new Label()
-											   {
-												   Anchor = AnchorStyles.Left | AnchorStyles.Right,
-												   Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204),
-												   Name = u.ID.ToString(),
-												   MinimumSize = new Size(MinimumSize.Width - LabelSizeY * 2-20, LabelSizeY),
-												   Text = u.Nickname,
-												   TextAlign = ContentAlignment.MiddleLeft,
-											   }, 1, UsersTable.RowCount - 1);
-
-					UsersTable.Controls.Add(
-											   new PictureBox()
-											   {
-												   BackgroundImage = ServiceClient.FromBytesToImage(u.Avatar),
-												   BackgroundImageLayout = ImageLayout.Zoom,
-												   Size = new Size(PictureSize, PictureSize),
-											   }, 0, UsersTable.RowCount - 1);
-
-					Button b = new Button()
-					{
-						Name = u.ID.ToString(),
-						BackgroundImage = Properties.Resources.add_friend,
-						BackgroundImageLayout = ImageLayout.Zoom,
-						Size = new Size(32, 32),
-						FlatAppearance = {
-							BorderSize = 0,
-							MouseDownBackColor = Color.Transparent,
-							MouseOverBackColor = Color.Transparent},
-						FlatStyle = FlatStyle.Flat,
-						Margin = new Padding(0, 16, 0, 16),
-						Padding = new Padding(0), 
-						Cursor = Cursors.Hand
-					};
-					b.Click += BOnClick;
-
-					UsersTable.Controls.Add(b, 2, UsersTable.RowCount - 1);
+					UsersTable.Controls.Add(GetPictureBox(u), 0, UsersTable.RowCount - 1);
+					UsersTable.Controls.Add(GetLabel(u), 1, UsersTable.RowCount - 1);
+					UsersTable.Controls.Add(GetButton(u, frinendsIds.Contains(u.ID)), 2, UsersTable.RowCount - 1);
 				}
-
 			UsersTable.RowCount++;
 		}
 
-		private void BOnClick(object sender, EventArgs eventArgs)
+		private void AddUser(object sender, EventArgs eventArgs)
 		{
 			string id = ((Button)sender).Name;
-
-			AddChatToForm(Guid.Parse(id));
-		}
-
-		internal void AddChatToForm(Guid id)
-		{
+			_parentForm.CreateChat(new[] { Guid.Parse(id) });
 			Close();
-			_parentForm.CreateChat(new[] { id });
 		}
+
+		private void OpenChat(object sender, EventArgs eventArgs)
+		{
+			string id = ((Button)sender).Name;
+			_parentForm.OpenChat(_friendsList[_friendsList.Keys.First(x => x.ID == Guid.Parse(id))]);
+			Close();
+		}
+
+		#region Getters
+
+		private Label GetLabel(User user)
+		{
+			return new Label()
+			{
+				Anchor = AnchorStyles.Left | AnchorStyles.Right,
+				Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204),
+				Name = user.ID.ToString(),
+				MinimumSize = new Size(MinimumSize.Width - LabelSizeY * 2 - 20, LabelSizeY),
+				Text = user.Nickname,
+				TextAlign = ContentAlignment.MiddleLeft,
+			};
+		}
+
+		private PictureBox GetPictureBox(User user)
+		{
+			return new PictureBox()
+			{
+				BackgroundImage = ServiceClient.FromBytesToImage(user.Avatar),
+				BackgroundImageLayout = ImageLayout.Zoom,
+				Size = new Size(PictureSize, PictureSize),
+			};
+		}
+
+		private Button GetButton(User user, bool isFriend)
+		{
+			Button b = new Button()
+			{
+				Name = user.ID.ToString(),
+				BackgroundImage = isFriend
+					                  ? Properties.Resources.chat_black
+					                  : Properties.Resources.add_friend,
+				BackgroundImageLayout = ImageLayout.Zoom,
+				Size = new Size(32, 32),
+				FlatAppearance = {
+					BorderSize = 0,
+					MouseDownBackColor = Color.Transparent,
+					MouseOverBackColor = Color.Transparent},
+				FlatStyle = FlatStyle.Flat,
+				Margin = new Padding(0, 16, 0, 16),
+				Padding = new Padding(0),
+				Cursor = Cursors.Hand
+			};
+
+			if (isFriend)
+				b.Click += OpenChat;
+			else
+				b.Click += AddUser;
+
+			return b;
+		}
+
+		#endregion
+
+		#region Controls
 
 		private void SearchTB_Enter(object sender, EventArgs e)
 		{
@@ -100,5 +121,7 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			SearchTB.AddText(SearchPlaceholder);
 		}
+
+		#endregion
 	}
 }

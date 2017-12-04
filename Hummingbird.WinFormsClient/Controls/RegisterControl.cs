@@ -29,7 +29,18 @@ namespace Hummingbird.WinFormsClient.Controls
 	        RegisterBGW.RunWorkerAsync();
 		}
 
-	    private void RegisterBGW_DoWork(object sender, DoWorkEventArgs e)
+	    private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
+	    {
+		    if (e.KeyChar != 13)
+			    return;
+
+		    e.Handled = true;
+
+		    RegisterButton_Click(sender, e);
+	    }
+
+
+		private void RegisterBGW_DoWork(object sender, DoWorkEventArgs e)
 	    {
 		    Thread.Sleep(1000);
 
