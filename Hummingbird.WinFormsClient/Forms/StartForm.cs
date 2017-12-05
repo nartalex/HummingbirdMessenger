@@ -46,7 +46,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void StartForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			Application.Exit();
+			//Application.Exit();
 		}
 
 		public void CloseAndContinue()

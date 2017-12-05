@@ -14,6 +14,7 @@ namespace Hummingbird.WinFormsClient.Forms
 	{
 		internal Dictionary<User, Chat> Friends = new Dictionary<User, Chat>();
 		private int UpdaterDelay = 0;
+		private bool KeepUpdating = true;
 
 		public MainForm()
 		{
@@ -26,6 +27,8 @@ namespace Hummingbird.WinFormsClient.Forms
 			{
 				_backgrounds.Add(c.BackgroundImage);
 			}
+
+			Text = Properties.Settings.Default.CurrentUser.Login + " - Hummingbird";
 
 			ChatsUpdateBGW.RunWorkerAsync();
 		}
@@ -96,8 +99,10 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void UserExit_Click(object sender, EventArgs e)
 		{
-			Properties.Settings.Default.CurrentUser = null;
-			Properties.Settings.Default.Save();
+			KeepUpdating = false;
+
+			//Properties.Settings.Default.CurrentUser = null;
+			//Properties.Settings.Default.Save();
 			Close();
 			(new StartForm()).Show();
 		}
@@ -151,7 +156,9 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			Thread.Sleep(UpdaterDelay);
 
-			e.Result = ServiceClient.GetUserChats(Properties.Settings.Default.CurrentUser.ID) as Chat[];
+			e.Result = KeepUpdating
+						? ServiceClient.GetUserChats(Properties.Settings.Default.CurrentUser.ID) as Chat[]
+						: new Chat[0];
 		}
 
 		private void ChatsUpdateBGW_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -173,14 +180,15 @@ namespace Hummingbird.WinFormsClient.Forms
 			if (UpdaterDelay == 0)
 				UpdaterDelay = 3000;
 
-			ChatsUpdateBGW.RunWorkerAsync();
+			if (KeepUpdating)
+				ChatsUpdateBGW.RunWorkerAsync();
 		}
 
 		protected override bool ShowWithoutActivation => true;
 
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			Application.Exit();
+
 		}
 	}
 }

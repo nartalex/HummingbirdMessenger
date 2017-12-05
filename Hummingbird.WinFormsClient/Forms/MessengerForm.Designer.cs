@@ -32,11 +32,11 @@
 			this.SendMessageButton = new System.Windows.Forms.Button();
 			this.MessagesPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.MessageUpdateBGW = new System.ComponentModel.BackgroundWorker();
-			this.MessageTextBox = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.AttachButton = new System.Windows.Forms.Button();
 			this.AttachContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.RemoveAttachButton = new System.Windows.Forms.ToolStripMenuItem();
 			this.AttachOFD = new System.Windows.Forms.OpenFileDialog();
+			this.MessageTextBox = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.AttachContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -63,9 +63,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.MessagesPanel.AutoScroll = true;
 			this.MessagesPanel.ColumnCount = 3;
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 90F));
+			this.MessagesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
 			this.MessagesPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MessagesPanel.Location = new System.Drawing.Point(0, 0);
 			this.MessagesPanel.Name = "MessagesPanel";
@@ -79,20 +79,6 @@
 			// 
 			this.MessageUpdateBGW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
 			this.MessageUpdateBGW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
-			// 
-			// MessageTextBox
-			// 
-			this.MessageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.MessageTextBox.Location = new System.Drawing.Point(12, 407);
-			this.MessageTextBox.Name = "MessageTextBox";
-			this.MessageTextBox.Size = new System.Drawing.Size(427, 32);
-			this.MessageTextBox.TabIndex = 4;
-			this.MessageTextBox.Text = " ";
-			this.MessageTextBox.Enter += new System.EventHandler(this.MessageTextBox_Enter);
-			this.MessageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageTextBox_KeyPress);
-			this.MessageTextBox.Leave += new System.EventHandler(this.MessageTextBox_Leave);
 			// 
 			// AttachButton
 			// 
@@ -128,6 +114,20 @@
 			// AttachOFD
 			// 
 			this.AttachOFD.Filter = "Изображения|*.jpg;*.jpeg;*.gif;*.bmp;*.png|Все файлы|*.*";
+			// 
+			// MessageTextBox
+			// 
+			this.MessageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.MessageTextBox.Location = new System.Drawing.Point(12, 407);
+			this.MessageTextBox.Name = "MessageTextBox";
+			this.MessageTextBox.Size = new System.Drawing.Size(427, 32);
+			this.MessageTextBox.TabIndex = 4;
+			this.MessageTextBox.Text = " ";
+			this.MessageTextBox.Enter += new System.EventHandler(this.MessageTextBox_Enter);
+			this.MessageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageTextBox_KeyPress);
+			this.MessageTextBox.Leave += new System.EventHandler(this.MessageTextBox_Leave);
 			// 
 			// MessengerForm
 			// 

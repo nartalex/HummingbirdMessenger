@@ -40,7 +40,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictureBox1.BackColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
 			this.pictureBox1.Image = global::Hummingbird.WinFormsClient.Properties.Resources.transparent_bird;
-			this.pictureBox1.Location = new System.Drawing.Point(100, 50);
+			this.pictureBox1.Location = new System.Drawing.Point(95, 50);
 			this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(200, 200);
@@ -64,12 +64,12 @@
 			this.Controls.Add(this.startControl);
 			this.Controls.Add(this.pictureBox1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.MaximizeBox = false;
 			this.Name = "StartForm";
-			this.Text = "Hummingbird messenger";
+			this.Text = "Hummingbird";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.StartForm_FormClosed);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);

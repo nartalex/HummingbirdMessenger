@@ -42,7 +42,7 @@ namespace Hummingbird.WinFormsClient.Forms
 			var messages = ServiceClient.GetMessages(chat.ID, 0, 5).ToList();
 			UpdateAllMessages(messages);
 			_chat.Messages = messages;
-			ScrollToBottom(MessagesPanel);
+			//ScrollToBottom(MessagesPanel);
 
 			// Ставим плейсхолдер в поле сообщения
 			ActiveControl = MessagesPanel;
@@ -76,7 +76,7 @@ namespace Hummingbird.WinFormsClient.Forms
 			MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 			MessagesPanel.Controls.Add(GetLabel(message), 1, MessagesPanel.RowCount - 1);
 
-			//if(_chat.TimeToLive > 0)
+			//if (_chat.TimeToLive > 0)
 			//{
 			//	MessagesPanel.Controls.Add(new PictureBox
 			//	{
@@ -97,15 +97,21 @@ namespace Hummingbird.WinFormsClient.Forms
 			else if (message.AttachType == Message.AttachTypes.Image)
 			{
 				MessagesPanel.RowCount++;
-				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize/*, LabelSizeY*/));
+				MessagesPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 				MessagesPanel.Controls.Add(GetPictureBox(message), 1, MessagesPanel.RowCount - 1);
 			}
 
 			MessagesPanel.RowCount++;
+
 		}
 
 		private void SendMessage()
 		{
+			if ((String.IsNullOrWhiteSpace(MessageTextBox.Text)
+				|| MessageTextBox.Text == MessageTextBoxPlaceholder)
+				&& _attachedFile == null)
+				return;
+
 			Message m = new Message
 			{
 				Text = MessageTextBox.Text,
@@ -118,19 +124,29 @@ namespace Hummingbird.WinFormsClient.Forms
 				m.AttachType = _attachedFile.Type;
 				m.Attach = _attachedFile.File;
 				m.AttachName = _attachedFile.Path.Split('\\').Last();
+				AttachButton.BackgroundImage = Properties.Resources.attach;
+				_attachedFile = null;
 			}
 
 			Message returned = ServiceClient.SendMessage(m);
 
+			AddMessage(returned);
+
 			if (_chat.TimeToLive > 0)
 			{
+				Dictionary<Guid, int> arg = new Dictionary<Guid, int>()
+				{
+					{
+						returned.ID,
+						MessagesPanel.GetRow(MessagesPanel.Controls.Find(returned.ID.ToString(), true).First())
+					}
+				};
+
 				BackgroundWorker bgw = new BackgroundWorker();
 				bgw.DoWork += SelfDestroyMessage_DoWork;
 				bgw.RunWorkerCompleted += SelfDestroyMessage_RunWorkerCompleted;
-				bgw.RunWorkerAsync(returned.ID);
+				bgw.RunWorkerAsync(arg);
 			}
-
-			AddMessage(returned);
 
 			MessageTextBox.Text = "";
 		}
@@ -144,12 +160,14 @@ namespace Hummingbird.WinFormsClient.Forms
 			return new Label()
 			{
 				Anchor = AnchorStyles.Left | AnchorStyles.Right,
+				//BorderStyle = BorderStyle.FixedSingle,
 				Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204),
 				Name = message.ID.ToString(),
 				MinimumSize = new Size(0, LabelSizeY),
 				Text = message.Text,
 				TextAlign = ContentAlignment.MiddleLeft,
-			};
+				Width = MessagesPanel.GetColumnWidths()[0] - 20
+		};
 		}
 
 		private Label GetUsername(Model.Message message)
@@ -194,6 +212,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 			return pb;
 		}
+
 		#endregion
 
 		#region Controls
@@ -243,60 +262,12 @@ namespace Hummingbird.WinFormsClient.Forms
 			SendMessage();
 		}
 
-		private void ScrollToBottom(Panel p)
-		{
-			using (Control c = new Control() { Parent = p, Dock = DockStyle.Top })
-			{
-				p.ScrollControlIntoView(c);
-				c.Parent = null;
-			}
-		}
-
-		#endregion
-
-		private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			Thread.Sleep(2000);
-
-			var messages = ServiceClient.GetMessages(_chat.ID, 0, 5);
-			var newIDs = messages
-						.Where(x => x.UserFromID != Properties.Settings.Default.CurrentUserID)
-						.Select(x => x.ID)
-						.Except(_chat.Messages.Select(x => x.ID));
-			var newMessages = newIDs
-							 .Select(id => messages.First(x => x.ID == id))
-							 .ToList();
-
-			e.Result = newMessages;
-		}
-
-		private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			var messages = e.Result as List<Model.Message>;
-
-			if (messages.Any())
-			{
-				foreach (var m in messages)
-				{
-					_chat.Messages.Add(m);
-				}
-
-				for (int i = 0; i < messages.Count; i++)
-				{
-					messages[i].Text += "fromBG";
-				}
-
-				UpdateAllMessages(messages);
-			}
-
-			//ScrollToBottom(MessagesPanel);
-			if (KeepUpdating)
-				MessageUpdateBGW.RunWorkerAsync();
-		}
-
 		private void MessagesPanel_ControlAdded(object sender, ControlEventArgs e)
 		{
 			//MessagesPanel.ScrollControlIntoView(e.Control);
+			MessagesPanel.VerticalScroll.Value = MessagesPanel.VerticalScroll.Maximum;
+			MessagesPanel.PerformLayout();
+
 		}
 
 		private void AttachButton_Click(object sender, EventArgs e)
@@ -340,14 +311,53 @@ namespace Hummingbird.WinFormsClient.Forms
 			_attachedFile = new Attach();
 		}
 
-		private void SelfDestroyMessage_DoWork(object sender, DoWorkEventArgs e)
+		public void RemoveRow(TableLayoutPanel panel, int index)
 		{
-			Thread.Sleep(_chat.TimeToLive * 1000);
+			if (index >= panel.RowCount)
+			{
+				return;
+			}
 
-			ServiceClient.DeleteMessage((Guid)e.Argument);
+			// delete all controls of row that we want to delete
+			for (int i = 0; i < panel.ColumnCount; i++)
+			{
+				var control = panel.GetControlFromPosition(i, index);
+				panel.Controls.Remove(control);
+			}
+
+			// move up row controls that comes after row we want to remove
+			for (int i = index + 1; i < panel.RowCount; i++)
+			{
+				for (int j = 0; j < panel.ColumnCount; j++)
+				{
+					var control = panel.GetControlFromPosition(j, i);
+					if (control != null)
+					{
+						panel.SetRow(control, i - 1);
+					}
+				}
+			}
 		}
 
-		private void SelfDestroyMessage_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		#endregion
+
+		private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.Sleep(2000);
+
+			var messages = ServiceClient.GetMessages(_chat.ID, 0, 5);
+			var newIDs = messages
+						.Where(x => x.UserFromID != Properties.Settings.Default.CurrentUserID)
+						.Select(x => x.ID)
+						.Except(_chat.Messages.Select(x => x.ID));
+			var newMessages = newIDs
+							 .Select(id => messages.First(x => x.ID == id))
+							 .ToList();
+
+			e.Result = newMessages;
+		}
+
+		private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			var messages = e.Result as List<Model.Message>;
 
@@ -366,9 +376,24 @@ namespace Hummingbird.WinFormsClient.Forms
 				UpdateAllMessages(messages);
 			}
 
-			//ScrollToBottom(MessagesPanel);
+			if (KeepUpdating)
+				MessageUpdateBGW.RunWorkerAsync();
+		}
 
-			MessageUpdateBGW.RunWorkerAsync();
+		private void SelfDestroyMessage_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.Sleep(_chat.TimeToLive * 1000);
+
+			Dictionary<Guid, int> arg = (Dictionary<Guid, int>)e.Argument;
+
+			ServiceClient.DeleteMessage(arg.Keys.ToArray()[0]);
+
+			e.Result = arg.Values.ToArray()[0];
+		}
+
+		private void SelfDestroyMessage_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			//RemoveRow(MessagesPanel, (int)e.Result);
 		}
 
 		private void MessengerForm_FormClosing(object sender, FormClosingEventArgs e)

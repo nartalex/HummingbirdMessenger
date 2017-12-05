@@ -42,11 +42,16 @@ namespace Hummingbird.WinFormsClient.Controls
 									? _thisChat.Messages.First().Text
 									: String.Empty;
 
-			LastMessageTime.Text = _thisChat.Messages.Any()
-									   ? (DateTime.Now - _thisChat.Messages.Last().Time).Days < 1
-											 ? _thisChat.Messages.Last().Time.ToShortTimeString()
-											 : _thisChat.Messages.Last().Time.ToShortDateString()
-									   : String.Empty;
+
+			if(_thisChat.Messages.Any())
+			{
+				if(_thisChat.Messages.Last().Time == new DateTime())
+					LastMessageTime.Text = String.Empty;
+				else
+					LastMessageTime.Text = (DateTime.Now - _thisChat.Messages.Last().Time).Days < 1
+						                       ? _thisChat.Messages.Last().Time.ToShortTimeString()
+						                       : _thisChat.Messages.Last().Time.ToShortDateString();
+			}
 		}
 
 		private void ChatButton_DoubleClick(object sender, EventArgs e)
@@ -64,7 +69,7 @@ namespace Hummingbird.WinFormsClient.Controls
 		{
 			string variant = _thisChat.Private ? "удалить этот чат" : "выйти из этого чата";
 
-			if(MessageBox.Show($"Действительно {variant}? Обратить действие будет невозможно.", "", MessageBoxButtons.YesNo)
+			if (MessageBox.Show($"Действительно {variant}? Обратить действие будет невозможно.", "", MessageBoxButtons.YesNo)
 			   != DialogResult.Yes)
 				return;
 
