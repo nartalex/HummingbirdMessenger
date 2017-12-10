@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Hummingbird.Model;
-using System.Threading;
 
 namespace Hummingbird.DataLayer.SQL.Tests
 {
@@ -10,36 +9,12 @@ namespace Hummingbird.DataLayer.SQL.Tests
 	public class MessagesRepositoryTests
 	{
 		DatabaseContext DB = new DatabaseContext();
-		ChatsRepository chatsRepository = new ChatsRepository();
-		UsersRepository usersRepository = new UsersRepository();
 		MessagesRepository messagesRepository = new MessagesRepository();
-
-		[TestMethod]
-		public void MessagesSending()
-		{
-			var user1 = DB.Users.First(x => x.Login.Contains("Nartalex"));
-			var user2 = DB.Users.First(x => x.Login.Contains("orange"));
-			var chatid = DB.ChatMembers.First(x => x.UserID == user1.ID).ChatID;
-
-			for (int i = 0; i < 20; i++)
-			{
-				Message m = new Message()
-				{
-					ChatToID = chatid,
-					Text = "message" + i,
-					UserFromID = i % 4 == 0 ? user1.ID : user2.ID
-				};
-
-				messagesRepository.SendMessage(m);
-
-				Thread.Sleep(2000);
-			}
-		}
 
 		[TestMethod]
 		public void ShouldSendSimpleMessage()
 		{
-			Chat chat = (Chat)Create.Chat();
+			Chat chat = Create.Chat();
 
 			Message message = new Message
 			{
@@ -51,44 +26,46 @@ namespace Hummingbird.DataLayer.SQL.Tests
 			var shouldBeMessage = messagesRepository.SendMessage(message);
 			Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
 
-			Message gottenMessage = DB.Messages.First(m => m.ID == ((Message)shouldBeMessage).ID);
+			Message gottenMessage = DB.Messages.First(m => m.ID == shouldBeMessage.ID);
 
 			Assert.AreEqual(chat.ID, gottenMessage.ChatToID);
 			Assert.AreEqual(message.UserFromID, gottenMessage.UserFromID);
 			Assert.AreEqual(message.Text, gottenMessage.Text);
 			Assert.IsNotNull(gottenMessage.Time);
-			Assert.IsNotNull(gottenMessage.ID);
+			Assert.AreNotEqual(gottenMessage.ID, new Guid());
 		}
 
 		[TestMethod]
 		public void ShouldSendMessageWithAttach()
 		{
-			Chat chat = (Chat)Create.Chat();
+			Chat chat = Create.Chat();
 
 			Message message = new Message
 			{
 				UserFromID = chat.Members.ToArray()[0].UserID,
 				ChatToID = chat.ID,
 				AttachType = Message.AttachTypes.Image,
-				//AttachPath = "path"
+				Attach = new byte[] { 1, 2, 3, 4 },
+				AttachName = "name"
 			};
 
 			var shouldBeMessage = messagesRepository.SendMessage(message);
 			Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
 
-			Message gottenMessage = DB.Messages.First(m => m.ID == ((Message)shouldBeMessage).ID);
+			Message gottenMessage = DB.Messages.First(m => m.ID == (shouldBeMessage).ID);
 
 			Assert.AreEqual(chat.ID, gottenMessage.ChatToID);
 			Assert.AreEqual(message.UserFromID, gottenMessage.UserFromID);
 			Assert.IsNotNull(gottenMessage.Time);
-			Assert.IsNull(gottenMessage.Text);
-			//Assert.AreEqual("path", gottenMessage.AttachPath);
+			Assert.IsTrue(String.IsNullOrWhiteSpace(gottenMessage.Text));
+			Assert.IsTrue(gottenMessage.Attach.SequenceEqual(message.Attach));
+			Assert.AreEqual("name", gottenMessage.AttachName);
 		}
 
 		[TestMethod]
 		public void ShouldDeleteMessage()
 		{
-			Chat chat = (Chat)Create.Chat();
+			Chat chat = Create.Chat();
 
 			Message message = new Message
 			{
@@ -97,50 +74,17 @@ namespace Hummingbird.DataLayer.SQL.Tests
 				Text = "TextMessage"
 			};
 
-			var shouldBeMessage = messagesRepository.SendMessage(message);
-			Assert.IsInstanceOfType(shouldBeMessage, typeof(Message));
-			Guid messageID = ((Message)shouldBeMessage).ID;
-
-			int countBefore = DB.Messages.Count(m => m.ID == messageID);
-			Assert.AreEqual(1, countBefore);
-
-			//var shouldBeTrue = messagesRepository.DeleteMessage(messageID);
-			//Assert.AreEqual(true, shouldBeTrue);
+			Guid messageID = messagesRepository.SendMessage(message).ID;
+			messagesRepository.DeleteMessage(messageID);
 
 			int countAfter = DB.Messages.Count(m => m.ID == messageID);
 			Assert.AreEqual(0, countAfter);
 		}
 
-
-
-		[TestMethod]
-		public void ShouldEditMessage()
-		{
-			Chat chat = (Chat)Create.Chat();
-
-			Message message = new Message
-			{
-				UserFromID = chat.Members.ToArray()[0].UserID,
-				ChatToID = chat.ID,
-				Text = "TextMessage"
-			};
-
-			message = (Message)messagesRepository.SendMessage(message);
-
-			message.AttachType = Message.AttachTypes.Image;
-		//message.AttachPath = "path";
-
-			//var shouldBeTrue = messagesRepository.EditMessage(message);
-			//Assert.AreEqual(true, shouldBeTrue);
-
-			Message gottenMessage = DB.Messages.First(m => m.ID == message.ID);
-			//Assert.IsNotNull(gottenMessage.AttachPath);
-		}
-
 		[TestMethod]
 		public void ShouldGetLastMessage()
 		{
-			Chat chat = (Chat)Create.Chat();
+			Chat chat = Create.Chat();
 
 			Message last = null;
 			string text = String.Empty;
@@ -156,10 +100,10 @@ namespace Hummingbird.DataLayer.SQL.Tests
 
 				text = message.Text;
 
-				last = (Message)messagesRepository.SendMessage(message);
+				last = messagesRepository.SendMessage(message);
 			}
 
-			Message gottenMessage = (Message)messagesRepository.GetLastMessage(chat.ID);
+			Message gottenMessage = messagesRepository.GetLastMessage(chat.ID);
 
 			Assert.AreEqual(last.ID, gottenMessage.ID);
 			Assert.AreEqual(text, gottenMessage.Text);
@@ -168,7 +112,7 @@ namespace Hummingbird.DataLayer.SQL.Tests
 		[TestMethod]
 		public void ShouldGetAmountOfMessages()
 		{
-			Chat chat = (Chat)Create.Chat();
+			Chat chat = Create.Chat();
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -180,9 +124,10 @@ namespace Hummingbird.DataLayer.SQL.Tests
 				};
 
 				messagesRepository.SendMessage(message);
-
-				Thread.Sleep(2000);
 			}
+
+			var messages = messagesRepository.GetAmountOfMessages(chat.ID, 0, 5);
+			Assert.AreEqual(5, messages.Count());
 		}
 	}
 }

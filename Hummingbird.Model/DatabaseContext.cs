@@ -9,7 +9,7 @@ namespace Hummingbird.Model
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMember> ChatMembers { get; set; }
 
-        public DatabaseContext() : base("name=AzureConnection")
+        public DatabaseContext() : base("name=DefaultConnection")
         {
             Configuration.LazyLoadingEnabled = false;
         }

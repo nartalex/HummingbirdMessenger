@@ -148,10 +148,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Hummingbird.DataLayer.SQL\Hummingbird.DataLayer.SQL.csproj">
       <Project>{42006684-21b1-43b1-95d5-49b70c39881b}</Project>

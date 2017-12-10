@@ -8,7 +8,7 @@ namespace Hummingbird.API.Controllers
 {
     public class MessagesController : ApiController
     {
-        MessagesRepository _messagesRepository = new MessagesRepository();
+	    private readonly MessagesRepository _messagesRepository = new MessagesRepository();
 
         [HttpPost, Route("api/messages/send")]
         public Message SendMessage([FromBody] Message message)
