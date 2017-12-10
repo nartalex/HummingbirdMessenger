@@ -16,7 +16,7 @@ namespace Hummingbird.DataLayer.SQL
 		private readonly DatabaseContext _db = new DatabaseContext();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly Stopwatch _timer = new Stopwatch();
-		private const int MAX_TIME = 1000;
+		private const int MaxTime = 1000;
 
 		/// <summary>
 		/// Меняет аватар указанного пользователя
@@ -25,24 +25,28 @@ namespace Hummingbird.DataLayer.SQL
 		/// <param name="newAvatar">Новый аватар</param>
 		public void ChangeAvatar(Guid userId, byte[] newAvatar)
 		{
-			_logger.Info($"Изменение аватара пользователя {userId}, размер аватара: {newAvatar.Length} / Changing avatar of user {userId}, avatar zise: {newAvatar.Length} ");
+			_logger.Info($"Изменение аватара пользователя {userId}, размер аватара: {newAvatar.Length}");
 
 			try
 			{
 				_timer.Restart();
 
-				CheckUser(userId);
-				_db.Users.First(u => u.ID == userId).Avatar = (newAvatar.Any() ? newAvatar : null);
+				Helper.CheckUser(userId);
+				_db.Users.First(u => u.ID == userId).Avatar = newAvatar.Any() ? newAvatar : null;
 				_db.SaveChanges();
 
 				_logger.Info($"Изменение аватара пользователя {userId} при аватаре размером {newAvatar.Length} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Изменение аватара пользователя {userId} при аватаре размером {newAvatar.Length} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при изменении аватара пользователя {userId} при аватаре размером {newAvatar.Length}");
-				throw;
+				_logger.Error($"Ошибка при изменении аватара пользователя {userId} при аватаре размером {newAvatar.Length}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -63,23 +67,27 @@ namespace Hummingbird.DataLayer.SQL
 			{
 				_timer.Restart();
 
-				CheckUser(userId);
+				Helper.CheckUser(userId);
 				if (!newNickname.Any())
 				{
 					_logger.Error($"Изменение имени пользователя {userId}: новое имя пусто. Создаем исключение.");
-					throw GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
 				}
 				_db.Users.First(u => u.ID == userId).Nickname = newNickname;
 				_db.SaveChanges();
 
 				_logger.Info($"Изменение имени пользователя {userId} при новом имени {newNickname} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Изменение имени пользователя {userId} при новом имени {newNickname} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при изменении имени пользователя {userId} при новом имени {newNickname}");
-				throw;
+				_logger.Error($"Ошибка при изменении имени пользователя {userId} при новом имени {newNickname}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -94,29 +102,33 @@ namespace Hummingbird.DataLayer.SQL
 		/// <param name="newPasswordHash">Новый пароль</param>
 		public void ChangePassword(Guid userId, string newPasswordHash)
 		{
-			_logger.Info($"Изменение пароля пользователя {userId}, новый хэш: {newPasswordHash}");
+			_logger.Info($"Изменение пароля пользователя {userId}");
 
 			try
 			{
 				_timer.Restart();
 
-				CheckUser(userId);
+				Helper.CheckUser(userId);
 				if (!newPasswordHash.Any())
 				{
 					_logger.Error($"Изменение пароля пользователя {userId}: новый пароль пустой. Создаем исключение.");
-					throw GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
 				}
 				_db.Users.First(u => u.ID == userId).PasswordHash = newPasswordHash;
 				_db.SaveChanges();
 
-				_logger.Info($"Изменение пароля пользователя {userId} при новом хэше {newPasswordHash} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
-					_logger.Warn($"Изменение пароля пользователя {userId} при новом хэше {newPasswordHash} заняло {_timer.ElapsedMilliseconds} мс");
+				_logger.Info($"Изменение пароля пользователя {userId} - успешно за {_timer.ElapsedMilliseconds} мс");
+				if (_timer.ElapsedMilliseconds > MaxTime)
+					_logger.Warn($"Изменение пароля пользователя {userId} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при изменении пароля пользователя {userId} при новом хэше {newPasswordHash}");
-				throw;
+				_logger.Error($"Ошибка при изменении пароля пользователя {userId}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -136,18 +148,22 @@ namespace Hummingbird.DataLayer.SQL
 			{
 				_timer.Restart();
 
-				CheckUser(userId);
+				Helper.CheckUser(userId);
 				_db.Users.First(u => u.ID == userId).Disabled = true;
 				_db.SaveChanges();
 
 				_logger.Info($"Отключение пользователя {userId} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Отключение пользователя {userId} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при отключении пользователя {userId}");
-				throw;
+				_logger.Error($"Ошибка при отключении пользователя {userId}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -168,19 +184,23 @@ namespace Hummingbird.DataLayer.SQL
 			{
 				_timer.Restart();
 
-				CheckUser(userId);
+				Helper.CheckUser(userId);
 				var ret = _db.Users.First(u => u.ID == userId);
 
 				_logger.Info($"Получение информации о пользователе {userId} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Получение информации о пользователе {userId} заняло {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error(e.Message, $"Oшибка при получении информации о пользователе {userId} / Getting info about user {userId} is failed");
-				throw;
+				_logger.Error($"Oшибка при получении информации о пользователе {userId}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -196,28 +216,49 @@ namespace Hummingbird.DataLayer.SQL
 		/// <returns>Объект User в случае успеха</returns>
 		public User Login(string login, string passwordHash)
 		{
-			_logger.Info($"Попытка входа с логином {login} и хэшем {passwordHash}");
+			_logger.Info($"Попытка входа с логином {login}");
 
 			try
 			{
+				_timer.Restart();
+
 				if (!_db.Users.Any(u => u.Login == login))
 				{
 					_logger.Error($"Попытка входа с логином {login}: логин не найден. Создаем исключение.");
-					throw GenerateException("Login is invalid", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Login is invalid", HttpStatusCode.BadRequest);
 				}
 				User user = _db.Users.First(u => u.Login == login);
 
 				if (user.PasswordHash != passwordHash)
 				{
-					_logger.Error($"Попытка входа с логином {login} и хэшем {passwordHash}: пароль неверный. Создаем исключение.");
-					throw GenerateException("Password is invalid", HttpStatusCode.BadRequest);
+					_logger.Error($"Попытка входа с логином {login}: пароль неверный. Создаем исключение.");
+					throw Helper.GenerateException("Password is invalid", HttpStatusCode.BadRequest);
 				}
+
+				if (user.Disabled)
+				{
+					_logger.Error($"Попытка входа с логином {login}: профиль отключен. Создаем исключение.");
+					throw Helper.GenerateException("Accuount is disabled", HttpStatusCode.BadRequest);
+				}
+
+				_logger.Info($"Вход пользователя {user.ID} - успешно за {_timer.ElapsedMilliseconds} мс");
+				if (_timer.ElapsedMilliseconds > MaxTime)
+					_logger.Warn($"Вход пользователя {user.ID} занял {_timer.ElapsedMilliseconds} мс");
+
 				return user;
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error($"Ошибка при попытке входа с логином {login}: " + e.Message);
-				throw;
+				_logger.Error($"Ошибка при попытке входа с логином {login}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
+			}
+			finally
+			{
+				_timer.Stop();
 			}
 		}
 
@@ -228,11 +269,7 @@ namespace Hummingbird.DataLayer.SQL
 		/// <returns>Объект User в случае успеха</returns>
 		public User Register(User user)
 		{
-			string log = $"Попытка регистрации с логином {user.Login}, именем {user.Nickname}, хэшем {user.PasswordHash}";
-			if (user.Avatar != null)
-				log += $", аватаром длиной { user.Avatar.Length}";
-
-			_logger.Info(log);
+			_logger.Info($"Попытка регистрации с логином {user.Login}, именем {user.Nickname}");
 
 			try
 			{
@@ -241,39 +278,28 @@ namespace Hummingbird.DataLayer.SQL
 				if (!user.Login.Any())
 				{
 					_logger.Error($"Попытка регистрации: пустой логин. Создаем исключение.");
-					throw GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
 				}
 				if (_db.Users.Any(u => u.Login == user.Login))
 				{
 					_logger.Error($"Попытка регистрации: логин уже занят. Создаем исключение.");
-					throw GenerateException("Login is already taken", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Login is already taken", HttpStatusCode.BadRequest);
 				}
 				if (!user.Nickname.Any())
 				{
 					_logger.Error($"Попытка регистрации: пустой ник. Создаем исключение.");
-					throw GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Nickname can't be empty", HttpStatusCode.BadRequest);
 				}
 				if (!user.PasswordHash.Any())
 				{
 					_logger.Error($"Попытка регистрации: пустой пароль. Создаем исключение.");
-					throw GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Password can't be empty", HttpStatusCode.BadRequest);
 				}
-
-				//byte[] avatar;
-				//{
-				//	Random rnd = new Random();
-				//	string path = Directory.GetFiles(
-				//		Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Avatars"), "*.png")
-				//		.OrderBy(x => rnd.Next()).First();
-				//	ImageConverter converter = new ImageConverter();
-				//	avatar = (byte[])converter.ConvertTo(Image.FromFile(path), typeof(byte[]));
-				//}
 
 				User newUser = new User
 				{
 					ID = Guid.NewGuid(),
 					Nickname = user.Nickname,
-					//Avatar = avatar,
 					Login = user.Login,
 					PasswordHash = user.PasswordHash,
 					Disabled = false
@@ -283,15 +309,19 @@ namespace Hummingbird.DataLayer.SQL
 				_db.SaveChanges();
 
 				_logger.Info($"Регистрация пользователя {newUser.ID} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Регистрация пользователя {newUser.ID} заняла {_timer.ElapsedMilliseconds} мс");
 
 				return newUser;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error($"Ошибка при регистрации пользователя: " + e.Message);
-				throw;
+				_logger.Error($"Ошибка при регистрации пользователя: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -315,59 +345,29 @@ namespace Hummingbird.DataLayer.SQL
 				if (!login.Any())
 				{
 					_logger.Error($"Поиск: пустой логин. Создаем исключение.");
-					throw GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Login can't be empty", HttpStatusCode.BadRequest);
 				}
 				var ret = _db.Users.Where(u => u.Login.Contains(login)).ToArray();
 
 				_timer.Stop();
 				_logger.Info($"Поиск пользователей по логину {login} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Поиск пользователей по логину {login} заняла {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при поиске пользователей по логину {login}");
-				throw;
+				_logger.Error($"Ошибка при поиске пользователей по логину {login}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
 				_timer.Stop();
-			}
-		}
-
-		public void Initialize()
-		{
-			_db.Users.Any();
-		}
-
-		public void ClearDatabase()
-		{
-			//DB.Messages.RemoveRange(DB.Messages);
-			//DB.ChatMembers.RemoveRange(DB.ChatMembers);
-			//DB.Chats.RemoveRange(DB.Chats);
-
-			//DB.SaveChanges();
-			Database.SetInitializer(new AppDbInitializer());
-		}
-
-		private Exception GenerateException(string message, HttpStatusCode code)
-		{
-			var ex = new HttpResponseMessage(code)
-			{
-				Content = new StringContent(message),
-			};
-
-			return new HttpResponseException(ex);
-		}
-
-		public void CheckUser(Guid id)
-		{
-			if (!_db.Users.Any(u => u.ID == id))
-			{
-				_logger.Error($"User ID is invalid: {id}");
-				throw GenerateException("User ID is invalid", HttpStatusCode.BadRequest);
 			}
 		}
 	}

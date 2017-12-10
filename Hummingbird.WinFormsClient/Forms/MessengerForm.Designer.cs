@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessengerForm));
 			this.SendMessageButton = new System.Windows.Forms.Button();
 			this.MessagesPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.MessageUpdateBGW = new System.ComponentModel.BackgroundWorker();
@@ -139,6 +140,7 @@
 			this.Controls.Add(this.MessageTextBox);
 			this.Controls.Add(this.MessagesPanel);
 			this.Controls.Add(this.SendMessageButton);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MessengerForm";
 			this.Text = "MessengerForm";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MessengerForm_FormClosing);

@@ -11,7 +11,7 @@ namespace Hummingbird.DataLayer
         void DeleteChat(Guid chatId);
         void ChangeName(Guid chatId, string newName);
         void ChangeAvatar(Guid chatId, byte[] newAvatar);
-        void AddMembers(Guid chatId, IEnumerable<Guid> userIds);
-        void DeleteMembers(Guid chatId, IEnumerable<Guid> userIds);
+        void AddMembers(Guid chatId, IEnumerable<Guid> userIdsEnum);
+        void DeleteMembers(Guid chatId, IEnumerable<Guid> userIdsEnum);
     }
 }

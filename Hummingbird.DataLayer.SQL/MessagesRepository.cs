@@ -17,7 +17,7 @@ namespace Hummingbird.DataLayer.SQL
 		private readonly DatabaseContext _db = new DatabaseContext();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly Stopwatch _timer = new Stopwatch();
-		private const int MAX_TIME = 1000;
+		private const int MaxTime = 1000;
 
 		/// <summary>
 		/// Удаляет сообщение с указанным ID
@@ -26,22 +26,26 @@ namespace Hummingbird.DataLayer.SQL
 		public void DeleteMessage(Guid id)
 		{
 			_logger.Info($"Удаление сообщения {id}");
-			_timer.Restart();
 
 			try
 			{
-				//CheckMessage(id);
+				_timer.Restart();
+
 				_db.Messages.Remove(_db.Messages.First(m => m.ID == id));
 				_db.SaveChanges();
 
 				_logger.Info($"Удаление сообщения {id} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Удаление сообщения {id} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
 				_logger.Error(e, $"Ошибка при удалении сообщения {id}");
-				throw;
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -62,12 +66,13 @@ namespace Hummingbird.DataLayer.SQL
 				log += "типа аттача, ";
 			if (edits.Attach != null && edits.Attach.Any())
 				log += "аттача";
-			_logger.Info(log.TrimEnd(new[] { ',', ' ' }));
-			_timer.Restart();
+			_logger.Info(log.TrimEnd(',', ' '));
 
 			try
 			{
-				CheckMessage(edits.ID);
+				_timer.Restart();
+
+				Helper.CheckMessage(edits.ID);
 				Message toEdit = _db.Messages.First(m => m.ID == edits.ID);
 				if (edits.Text.Any())
 					toEdit.Text = edits.Text;
@@ -81,13 +86,17 @@ namespace Hummingbird.DataLayer.SQL
 				_db.SaveChanges();
 
 				_logger.Info($"Изменение сообщения {edits.ID} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Изменение сообщения {edits.ID} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
 				_logger.Error(e, $"Ошибка при изменении сообщения {edits.ID}");
-				throw;
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -105,16 +114,16 @@ namespace Hummingbird.DataLayer.SQL
 		public IEnumerable<Message> GetAmountOfMessages(Guid chatId, int skip, int amount)
 		{
 			_logger.Info($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip}");
-			_timer.Restart();
 
 			try
 			{
-				ChatsRepository chatsRepository = new ChatsRepository();
-				chatsRepository.CheckChat(chatId);
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
 				if (amount <= 0)
 				{
 					_logger.Info($"Получение сообщений в чате {chatId}: ноль сообщений запрошено. Создаем исключение.");
-					throw GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Can't get zero messages", HttpStatusCode.BadRequest);
 				}
 
 				var ret = _db.Messages.Any(m => m.ChatToID == chatId)
@@ -131,15 +140,19 @@ namespace Hummingbird.DataLayer.SQL
 							new Message[0];
 
 				_logger.Info($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Получение сообщений в чате {chatId} в количестве {amount} с пропуском {skip} заняло {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
 				_logger.Error(e, $"Ошибка при получении сообщений в чате {chatId}");
-				throw;
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -155,12 +168,10 @@ namespace Hummingbird.DataLayer.SQL
 		public Message GetLastMessage(Guid chatId)
 		{
 			_logger.Info($"Получение последнего сообщения в чате {chatId}");
-			_timer.Restart();
 
 			try
 			{
-				ChatsRepository chatsRepository = new ChatsRepository();
-				chatsRepository.CheckChat(chatId);
+				_timer.Restart();
 
 				Message ret = _db.Messages.Any(m => m.ChatToID == chatId)
 							?
@@ -172,15 +183,19 @@ namespace Hummingbird.DataLayer.SQL
 								null;
 
 				_logger.Info($"Получение последнего сообщения в чате {chatId} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Получение последнего сообщения в чате {chatId} заняло {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
 				_logger.Error(e, $"Ошибка при получении последнего сообщения в чате  {chatId}");
-				throw;
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -195,10 +210,11 @@ namespace Hummingbird.DataLayer.SQL
 		public Message SendMessage(Message message)
 		{
 			_logger.Info($"Отправление сообщения в чат {message.ChatToID} от пользователя {message.UserFromID}");
-			_timer.Restart();
 
 			try
 			{
+				_timer.Restart();
+
 				Message newMessage = new Message
 				{
 					ID = Guid.NewGuid(),
@@ -217,39 +233,24 @@ namespace Hummingbird.DataLayer.SQL
 				_db.SaveChanges();
 
 				_logger.Info($"Отправление сообщения в чат - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Отправление сообщения в чат заняло {_timer.ElapsedMilliseconds} мс");
 
 				return newMessage;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
 				_logger.Error(e, $"Ошибка при отправлении сообщения в чат {message.ChatToID} от пользователя {message.UserFromID}");
-				throw;
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
 				_timer.Stop();
 			}
-		}
-
-		private void CheckMessage(Guid id)
-		{
-			if (_db.Messages.Any(m => m.ID == id))
-			{
-				_logger.Error($"Message ID is invalid: {id}");
-				throw GenerateException("Message ID is invalid", HttpStatusCode.BadRequest);
-			}
-		}
-
-		private Exception GenerateException(string message, HttpStatusCode code)
-		{
-			var ex = new HttpResponseMessage(code)
-			{
-				Content = new StringContent(message)
-			};
-
-			return new HttpResponseException(ex);
 		}
 	}
 }

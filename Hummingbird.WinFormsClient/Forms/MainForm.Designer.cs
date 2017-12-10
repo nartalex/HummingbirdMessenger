@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.UserButtonsTable = new System.Windows.Forms.TableLayoutPanel();
 			this.UserSearchButton = new System.Windows.Forms.Button();
@@ -208,6 +209,7 @@
 			this.Controls.Add(this.ChatsListTable);
 			this.Controls.Add(this.panel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(350, 440);
 			this.Name = "MainForm";
 			this.Text = "MessengerForm";

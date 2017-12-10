@@ -165,6 +165,7 @@ namespace Hummingbird.WinFormsClient.Forms
 		{
 			ChatsListTable.Controls.Clear();
 			ChatsListTable.RowCount = 1;
+			Friends.Clear();
 
 			foreach (var c in e.Result as Chat[])
 			{
@@ -188,7 +189,7 @@ namespace Hummingbird.WinFormsClient.Forms
 
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-
+			Application.Exit();
 		}
 	}
 }

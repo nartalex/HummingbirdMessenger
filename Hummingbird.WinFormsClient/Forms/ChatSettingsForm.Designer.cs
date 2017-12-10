@@ -34,16 +34,16 @@
 			this.RemoveMemersCLB = new System.Windows.Forms.CheckedListBox();
 			this.AddMembersCLB = new System.Windows.Forms.CheckedListBox();
 			this.NameGB = new System.Windows.Forms.GroupBox();
+			this.ChatnameTB = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.AvatarGB = new System.Windows.Forms.GroupBox();
 			this.ChatAvatarPB = new System.Windows.Forms.PictureBox();
 			this.ChooseNewAvatar = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.TimerGB = new System.Windows.Forms.GroupBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.TimeToLiveNUD = new System.Windows.Forms.NumericUpDown();
 			this.AvatarOFD = new System.Windows.Forms.OpenFileDialog();
 			this.SaveChatButton = new System.Windows.Forms.Button();
-			this.TimeToLiveNUD = new System.Windows.Forms.NumericUpDown();
-			this.label4 = new System.Windows.Forms.Label();
-			this.ChatnameTB = new Hummingbird.WinFormsClient.CustomTextBox();
 			this.UsersGB.SuspendLayout();
 			this.NameGB.SuspendLayout();
 			this.AvatarGB.SuspendLayout();
@@ -124,6 +124,18 @@
 			this.NameGB.TabStop = false;
 			this.NameGB.Text = "Название чата";
 			// 
+			// ChatnameTB
+			// 
+			this.ChatnameTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.ChatnameTB.Font = new System.Drawing.Font("Segoe UI", 15.75F);
+			this.ChatnameTB.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+			this.ChatnameTB.Location = new System.Drawing.Point(7, 32);
+			this.ChatnameTB.Name = "ChatnameTB";
+			this.ChatnameTB.Size = new System.Drawing.Size(447, 33);
+			this.ChatnameTB.TabIndex = 0;
+			this.ChatnameTB.Text = "Введите название чата";
+			this.ChatnameTB.TextChanged += new System.EventHandler(this.ChatnameTB_TextChanged);
+			// 
 			// AvatarGB
 			// 
 			this.AvatarGB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -189,23 +201,15 @@
 			this.TimerGB.TabStop = false;
 			this.TimerGB.Text = "Сообщения";
 			// 
-			// SaveChatButton
+			// label4
 			// 
-			this.SaveChatButton.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.SaveChatButton.Enabled = false;
-			this.SaveChatButton.FlatAppearance.BorderSize = 0;
-			this.SaveChatButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this.SaveChatButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-			this.SaveChatButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SaveChatButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.SaveChatButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
-			this.SaveChatButton.Location = new System.Drawing.Point(13, 565);
-			this.SaveChatButton.Name = "SaveChatButton";
-			this.SaveChatButton.Size = new System.Drawing.Size(460, 39);
-			this.SaveChatButton.TabIndex = 11;
-			this.SaveChatButton.Text = "Сохранить";
-			this.SaveChatButton.UseVisualStyleBackColor = true;
-			this.SaveChatButton.Click += new System.EventHandler(this.SaveChatButton_Click);
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label4.Location = new System.Drawing.Point(348, 25);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(49, 30);
+			this.label4.TabIndex = 11;
+			this.label4.Text = "сек.";
 			// 
 			// TimeToLiveNUD
 			// 
@@ -226,27 +230,23 @@
 			this.TimeToLiveNUD.Size = new System.Drawing.Size(60, 31);
 			this.TimeToLiveNUD.TabIndex = 10;
 			// 
-			// label4
+			// SaveChatButton
 			// 
-			this.label4.AutoSize = true;
-			this.label4.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label4.Location = new System.Drawing.Point(348, 25);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(49, 30);
-			this.label4.TabIndex = 11;
-			this.label4.Text = "сек.";
-			// 
-			// ChatnameTB
-			// 
-			this.ChatnameTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.ChatnameTB.Font = new System.Drawing.Font("Segoe UI", 15.75F);
-			this.ChatnameTB.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
-			this.ChatnameTB.Location = new System.Drawing.Point(7, 32);
-			this.ChatnameTB.Name = "ChatnameTB";
-			this.ChatnameTB.Size = new System.Drawing.Size(447, 33);
-			this.ChatnameTB.TabIndex = 0;
-			this.ChatnameTB.Text = "Введите название чата";
-			this.ChatnameTB.TextChanged += new System.EventHandler(this.ChatnameTB_TextChanged);
+			this.SaveChatButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.SaveChatButton.Enabled = false;
+			this.SaveChatButton.FlatAppearance.BorderSize = 0;
+			this.SaveChatButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this.SaveChatButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this.SaveChatButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.SaveChatButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.SaveChatButton.ForeColor = global::Hummingbird.WinFormsClient.Properties.Settings.Default.PrimaryColor;
+			this.SaveChatButton.Location = new System.Drawing.Point(13, 565);
+			this.SaveChatButton.Name = "SaveChatButton";
+			this.SaveChatButton.Size = new System.Drawing.Size(460, 39);
+			this.SaveChatButton.TabIndex = 11;
+			this.SaveChatButton.Text = "Сохранить";
+			this.SaveChatButton.UseVisualStyleBackColor = true;
+			this.SaveChatButton.Click += new System.EventHandler(this.SaveChatButton_Click);
 			// 
 			// ChatSettingsForm
 			// 
@@ -260,7 +260,7 @@
 			this.Controls.Add(this.NameGB);
 			this.Controls.Add(this.AvatarGB);
 			this.Name = "ChatSettingsForm";
-			this.Text = "ChatSettingsForm";
+			this.Text = "Настройки чата";
 			this.UsersGB.ResumeLayout(false);
 			this.NameGB.ResumeLayout(false);
 			this.AvatarGB.ResumeLayout(false);

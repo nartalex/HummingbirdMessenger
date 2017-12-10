@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatsRepository.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="MessagesRepository.cs" />
     <Compile Include="UsersRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

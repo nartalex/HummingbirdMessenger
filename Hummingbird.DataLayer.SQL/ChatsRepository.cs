@@ -15,10 +15,9 @@ namespace Hummingbird.DataLayer.SQL
 	public class ChatsRepository : IChatsRepository
 	{
 		private readonly DatabaseContext _db = new DatabaseContext();
-		private readonly UsersRepository _usersRepository = new UsersRepository();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly Stopwatch _timer = new Stopwatch();
-		private const int MAX_TIME = 1000;
+		private const int MaxTime = 1000;
 
 		/// <summary>
 		/// Создание чата
@@ -27,15 +26,16 @@ namespace Hummingbird.DataLayer.SQL
 		/// <returns>Объект Chat в случае успеха</returns>
 		public Chat Create(Chat chat)
 		{
-			_logger.Info($"Создание чата с количеством участников {chat.Members.Count()}");
-			_timer.Restart();
+			_logger.Info($"Создание чата с количеством участников {chat.Members.Count}");
 
 			try
 			{
+				_timer.Restart();
+
 				if (chat.Members.Count < 2)
 				{
 					_logger.Error("Создание чата: пустой список участников. Создаем исключение.");
-					throw GenerateException("Can't create chat with no members", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Can't create chat with no members", HttpStatusCode.BadRequest);
 				}
 
 				string name;
@@ -52,7 +52,7 @@ namespace Hummingbird.DataLayer.SQL
 				}
 				else
 					name = chat.Name;
-				
+
 				Guid newChatID = Guid.NewGuid();
 				Chat newChat = new Chat
 				{
@@ -67,15 +67,19 @@ namespace Hummingbird.DataLayer.SQL
 				_db.SaveChanges();
 
 				_logger.Info($"Создание чата {newChatID} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Регистрация пользователя {newChatID} заняла {_timer.ElapsedMilliseconds} мс");
 
 				return newChat;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при cоздании чата с количеством участников {chat.Members.Count}");
-				throw;
+				_logger.Error($"Ошибка при cоздании чата с количеством участников {chat.Members.Count}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -83,36 +87,44 @@ namespace Hummingbird.DataLayer.SQL
 			}
 		}
 
+		/// <summary>
+		/// Возвращает информацию о чате
+		/// </summary>
+		/// <param name="id">ID чата</param>
+		/// <returns>Объект Chat</returns>
 		public Chat GetChat(Guid id)
 		{
 			_logger.Info($"Получение информации о чате {id}");
-			_timer.Restart();
 
 			try
 			{
-				CheckChat(id);
+				_timer.Restart();
+
+				Helper.CheckChat(id);
 				var ret = _db.Chats
 					.Include(c => c.Members.Select(cm => cm.User))
 					.First(c => c.ID == id);
 
-				MessagesRepository messagesRepository = new MessagesRepository();
-
 				ret.Messages = new List<Message>();
 
-				var m = messagesRepository.GetLastMessage(ret.ID);
+				var m = new MessagesRepository().GetLastMessage(ret.ID);
 				if (m != null)
 					ret.Messages.Add(m);
 
 				_logger.Info($"Получение информации о чате {id} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Получение информации о чате {id} заняло {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при получении информации о чате {id}");
-				throw;
+				_logger.Error($"Ошибка при получении информации о чате {id}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -127,23 +139,28 @@ namespace Hummingbird.DataLayer.SQL
 		public void DeleteChat(Guid id)
 		{
 			_logger.Info($"Удаление чата {id}");
-			_timer.Restart();
 
 			try
 			{
-				CheckChat(id);
+				_timer.Restart();
+
+				Helper.CheckChat(id);
 				_db.Messages.RemoveRange(_db.Messages.Where(c => c.ChatToID == id));
 				_db.Chats.Remove(_db.Chats.First(c => c.ID == id));
 				_db.SaveChanges();
 
 				_logger.Info($"Удаление чата {id} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Удаление чата {id} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при удалении чата {id}");
-				throw;
+				_logger.Error($"Ошибка при удалении чата {id}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -159,43 +176,47 @@ namespace Hummingbird.DataLayer.SQL
 		public IEnumerable<Chat> GetUserChats(Guid userId)
 		{
 			_logger.Info($"Получение списка чатов для пользователя {userId}");
-			_timer.Restart();
 
 			try
 			{
-				_usersRepository.CheckUser(userId);
+				_timer.Restart();
+
+				Helper.CheckUser(userId);
+
 				MessagesRepository messagesRepository = new MessagesRepository();
 
 				var chats = _db.ChatMembers
-							.Include(c => c.Chat)
-							.Where(u => u.UserID == userId)
-							.Select(c => c.Chat)
-							.Include(c => c.Members.Select(u => u.User))
-							.ToArray();
+							   .Include(c => c.Chat)
+							   .Where(u => u.UserID == userId)
+							   .Select(c => c.Chat)
+							   .Include(c => c.Members.Select(u => u.User))
+							   .ToArray();
+
+				// Достаем последнее сообщение для каждого чата
 				foreach (var c in chats)
 				{
 					c.Messages = new List<Message>();
 
 					var m = messagesRepository.GetLastMessage(c.ID);
-					if (m == null)
-						c.Messages.Add(new Message());
-					else
-						c.Messages.Add(m);
+					c.Messages.Add(m ?? new Message());
 				}
-				//var ret = chats.OrderBy(c => c.Messages.OrderBy(m => m.Time.Ticks)).ToArray();
 
 				var ret = chats.OrderByDescending(t => t.Messages.Min(m => m.Time));
 
 				_logger.Info($"Получение списка чатов для пользователя {userId} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Получение списка чатов для пользователя {userId} заняло {_timer.ElapsedMilliseconds} мс");
 
 				return ret;
 			}
+			catch (HttpResponseException)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при получении списка чатов для пользователя {userId}");
-				throw;
+				_logger.Error($"Ошибка при получении списка чатов для пользователя {userId}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -207,20 +228,22 @@ namespace Hummingbird.DataLayer.SQL
 		/// Добавление пользователей в чат
 		/// </summary>
 		/// <param name="chatId">ID чата</param>
-		/// <param name="userIds">Массив с ID пользователей</param>
-		public void AddMembers(Guid chatId, IEnumerable<Guid> userIds)
+		/// <param name="userIdsEnum">Массив с ID пользователей</param>
+		public void AddMembers(Guid chatId, IEnumerable<Guid> userIdsEnum)
 		{
-			var userIdsEnum = userIds as Guid[] ?? userIds.ToArray();
+			var userIds = userIdsEnum as Guid[] ?? userIdsEnum.ToArray();
 
-			_logger.Info($"Добавление в чат {chatId} пользователей в количестве {userIdsEnum.Count()}");
-			_timer.Restart();
+			_logger.Info($"Добавление в чат {chatId} пользователей в количестве {userIds.Length}");
 
 			try
 			{
-				CheckChat(chatId);
-				if (!userIdsEnum.Any())
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
+				if (!userIds.Any())
 					throw new Exception("Can't add zero members");
-				foreach (var u in userIdsEnum)
+
+				foreach (var u in userIds)
 				{
 					ChatMember member = new ChatMember
 					{
@@ -231,14 +254,18 @@ namespace Hummingbird.DataLayer.SQL
 				}
 				_db.SaveChanges();
 
-				_logger.Info($"Добавление в чат {chatId} пользователей в количестве {userIdsEnum.Count()} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
-					_logger.Warn($"Добавление в чат {chatId} пользователей в количестве {userIdsEnum.Count()} заняло {_timer.ElapsedMilliseconds} мс");
+				_logger.Info($"Добавление в чат {chatId} пользователей в количестве {userIds.Count()} - успешно за {_timer.ElapsedMilliseconds} мс");
+				if (_timer.ElapsedMilliseconds > MaxTime)
+					_logger.Warn($"Добавление в чат {chatId} пользователей в количестве {userIds.Count()} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при добавлении в чат {chatId} пользователей в количестве {userIdsEnum.Count()}");
-				throw;
+				_logger.Error($"Ошибка при добавлении в чат {chatId} пользователей в количестве {userIds.Length}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -250,34 +277,40 @@ namespace Hummingbird.DataLayer.SQL
 		/// Удаление пользователей из чата
 		/// </summary>
 		/// <param name="chatId">ID чата</param>
-		/// <param name="userIds">Массив с ID пользователей</param>
-		public void DeleteMembers(Guid chatId, IEnumerable<Guid> userIds)
+		/// <param name="userIdsEnum">Массив с ID пользователей</param>
+		public void DeleteMembers(Guid chatId, IEnumerable<Guid> userIdsEnum)
 		{
-			var userIdsEnum = userIds as Guid[] ?? userIds.ToArray();
+			var userIds = userIdsEnum as Guid[] ?? userIdsEnum.ToArray();
 
-			_logger.Info($"Удаление из чата {chatId} пользователей в количестве {userIdsEnum.Count()}");
-			_timer.Restart();
+			_logger.Info($"Удаление из чата {chatId} пользователей в количестве {userIds.Length}");
 
 			try
 			{
-				CheckChat(chatId);
-				if (!userIdsEnum.Any())
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
+				if (!userIds.Any())
 				{
 					_logger.Error($"Удаление из чата {chatId}: список пользователей пуст. Создаем исключение.");
-					throw GenerateException("Can't delete zero members", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Can't delete zero members", HttpStatusCode.BadRequest);
 				}
-				foreach (var u in userIdsEnum)
+
+				foreach (var u in userIds)
 					_db.ChatMembers.Remove(_db.ChatMembers.First(m => m.UserID == u && m.ChatID == chatId));
 				_db.SaveChanges();
 
-				_logger.Info($"Удаление из чата {chatId} пользователей в количестве {userIdsEnum.Count()} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
-					_logger.Warn($"Удаление из чата {chatId} пользователей в количестве {userIdsEnum.Count()} заняло {_timer.ElapsedMilliseconds} мс");
+				_logger.Info($"Удаление из чата {chatId} пользователей в количестве {userIds.Length} - успешно за {_timer.ElapsedMilliseconds} мс");
+				if (_timer.ElapsedMilliseconds > MaxTime)
+					_logger.Warn($"Удаление из чата {chatId} пользователей в количестве {userIds.Length} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при удалении из чата {chatId} пользователей в количестве {userIdsEnum.Count()}");
-				throw;
+				_logger.Error($"Ошибка при удалении из чата {chatId} пользователей в количестве {userIds.Length}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -293,25 +326,31 @@ namespace Hummingbird.DataLayer.SQL
 		public void ChangeAvatar(Guid chatId, byte[] newAvatar)
 		{
 			_logger.Info($"Изменение аватара в чате {chatId}, размер нового аватара {newAvatar.Length}");
-			_timer.Restart();
+
 			try
 			{
-				CheckChat(chatId);
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
 
 				_db.Chats.
 					Include(m => m.Members)
 					.First(c => c.ID == chatId)
-					.Avatar = (newAvatar.Any() ? newAvatar : null);
+					.Avatar = newAvatar.Any() ? newAvatar : null;
 				_db.SaveChanges();
 
 				_logger.Info($"Изменение аватара в чате {chatId} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Изменение аватара в чате {chatId}, размер нового аватара {newAvatar.Length} заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при изменении аватара в чате {chatId}, размер нового аватара {newAvatar.Length}");
-				throw;
+				_logger.Error($"Ошибка при изменении аватара в чате {chatId}, размер нового аватара {newAvatar.Length}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -327,28 +366,34 @@ namespace Hummingbird.DataLayer.SQL
 		public void ChangeName(Guid chatId, string newName)
 		{
 			_logger.Info($"Изменение имени чата {chatId}, новое имя: {newName}");
-			_timer.Restart();
 
 			try
 			{
-				CheckChat(chatId);
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
 
 				if (!newName.Any())
 				{
 					_logger.Error($"Изменение имени чата {chatId}: пустое название. СОздаем исключение.");
-					throw GenerateException("Chat name can't be empty", HttpStatusCode.BadRequest);
+					throw Helper.GenerateException("Chat name can't be empty", HttpStatusCode.BadRequest);
 				}
+
 				_db.Chats.Include(m => m.Members).First(c => c.ID == chatId).Name = newName;
 				_db.SaveChanges();
 
 				_logger.Info($"Изменение имени чата {chatId}, новое имя: {newName} - успешно за {_timer.ElapsedMilliseconds} мс");
-				if (_timer.ElapsedMilliseconds > MAX_TIME)
+				if (_timer.ElapsedMilliseconds > MaxTime)
 					_logger.Warn($"Изменение имени чата {chatId}, новое имя: {newName}, заняло {_timer.ElapsedMilliseconds} мс");
+			}
+			catch (HttpResponseException)
+			{
+				throw;
 			}
 			catch (Exception e)
 			{
-				_logger.Error(e, $"Ошибка при изменении имени чата {chatId}, новое имя: {newName}");
-				throw;
+				_logger.Error($"Ошибка при изменении имени чата {chatId}, новое имя: {newName}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
 			finally
 			{
@@ -356,39 +401,41 @@ namespace Hummingbird.DataLayer.SQL
 			}
 		}
 
+		/// <summary>
+		/// Изменяет время жизни сообщений в чате
+		/// </summary>
+		/// <param name="chatId">ИД чата</param>
+		/// <param name="newTTL">Новое время жизни. 0 - бесконечно</param>
 		public void ChangeTTL(Guid chatId, int newTTL)
 		{
+			_logger.Info($"Изменение TTL сообщений чата {chatId}, новое значение: {newTTL}");
+
 			try
 			{
-				CheckChat(chatId);
+				_timer.Restart();
+
+				Helper.CheckChat(chatId);
 
 				_db.Chats.First(x => x.ID == chatId).TimeToLive = newTTL;
 				_db.SaveChanges();
 
+				_logger.Info($"Изменение TTL сообщений чата {chatId}, новое значение: {newTTL} - успешно за {_timer.ElapsedMilliseconds} мс");
+				if (_timer.ElapsedMilliseconds > MaxTime)
+					_logger.Warn($"Изменение TTL сообщений чата {chatId}, новое значение: {newTTL}, заняло {_timer.ElapsedMilliseconds} мс");
 			}
-			catch (Exception e)
+			catch (HttpResponseException)
 			{
 				throw;
 			}
-		}
-
-		internal void CheckChat(Guid id)
-		{
-			if (!_db.Chats.Any(c => c.ID == id))
+			catch (Exception e)
 			{
-				_logger.Error($"Chat ID is invalid: {id}");
-				throw GenerateException("Chat ID is invalid", HttpStatusCode.BadRequest);
+				_logger.Error($"Ошибка при изменении TTL сообщений чата {chatId}, новое значение: {newTTL}: {e.Message}");
+				throw Helper.GenerateException(e.Message, HttpStatusCode.InternalServerError);
 			}
-		}
-
-		private Exception GenerateException(string message, HttpStatusCode code)
-		{
-			var ex = new HttpResponseMessage(code)
+			finally
 			{
-				Content = new StringContent(message)
-			};
-
-			return new HttpResponseException(ex);
+				_timer.Stop();
+			}
 		}
 	}
 }
